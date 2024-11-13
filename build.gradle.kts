@@ -82,11 +82,11 @@ configurations {
 		resolutionStrategy.activateDependencyLocking()
 	}
 }
-/* TODO decomment when define first API into openApi file
+
 tasks.compileJava {
 	dependsOn("openApiGenerate")
 }
-*/
+
 
 configure<SourceSetContainer> {
 	named("main") {
