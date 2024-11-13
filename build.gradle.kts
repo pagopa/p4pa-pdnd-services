@@ -82,11 +82,7 @@ configurations {
 		resolutionStrategy.activateDependencyLocking()
 	}
 }
-/* TODO decomment when define first API into openApi file
-tasks.compileJava {
-	dependsOn("openApiGenerate")
-}
-*/
+
 configure<SourceSetContainer> {
 	named("main") {
 		java.srcDir("$projectDir/build/generated/src/main/java")
@@ -95,22 +91,4 @@ configure<SourceSetContainer> {
 
 springBoot {
 	mainClass.value("it.gov.pagopa.payhub.pdnd.PayhubPdndApplication")
-}
-
-openApiGenerate {
-	generatorName.set("spring")
-	inputSpec.set("$rootDir/openapi/p4pa-pdnd.openapi.yaml")
-	outputDir.set("$projectDir/build/generated")
-	apiPackage.set("it.gov.pagopa.payhub.controller.generated")
-	modelPackage.set("it.gov.pagopa.payhub.model.generated")
-	configOptions.set(mapOf(
-		"dateLibrary" to "java8",
-		"requestMappingMode" to "api_interface",
-		"useSpringBoot3" to "true",
-		"interfaceOnly" to "true",
-		"useTags" to "true",
-		"generateConstructorWithAllArgs" to "false",
-		"generatedConstructorWithRequiredArgs" to "false",
-		"additionalModelTypeAnnotations" to "@lombok.Data @lombok.Builder @lombok.AllArgsConstructor @lombok.RequiredArgsConstructor"
-	))
 }

@@ -1,8 +1,0 @@
-openapi: 3.0.1
-info:
-  title: p4pa-pdnd
-  description: Api and Models
-  version: 0.0.1
-servers:
-  - url: "http://localhost:8080/payhub"
-paths:
