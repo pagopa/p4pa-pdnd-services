@@ -34,26 +34,28 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 #v4.1.1
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag localbuild/testimage:latest
-      - name: Run the Trivy scan action itself with GitHub Advanced Security code scanning integration enabled
+        run: docker build . --file mypay4-be/Dockerfile --tag localbuild/testimage:latest
+      - name: Run the Trivy scan action
         id: scan
-        uses: aquasecurity/trivy-action@0.24.0 #v0.24.0
+        uses: aquasecurity/trivy-action@6e7b7d1fd3e4fef0c5fa8cce1229c54b2c9bd0d8 # 0.24.0
         with:
           trivy-config: 'config/trivy.yaml'
           image-ref: "localbuild/testimage:latest"
           format: 'sarif'
           output: 'results.sarif'
-      - name: Upload Anchore Scan Report
-        uses: github/codeql-action/upload-sarif@99c9897648dded3fe63d6f328c46089dd57735ca #codeql bundle v2.17.0
-        with:
-          sarif_file: 'results.sarif'
-      - name: CVE Description escaped extraction and print
+      - name: Save SARIF file for later review
         run: |
-          SCAN_RESULTS=$(jq -r 'try .runs[0].tool.driver.rules | map(.help.text) | join("\\n")' results.sarif)
+          echo "### Scan Results Summary" >> $GITHUB_STEP_SUMMARY
+          jq -r 'try .runs[0].tool.driver.rules | map(.help.text) | join("\\n")' results.sarif | sed 's/\\n/\n/g' >> $GITHUB_STEP_SUMMARY
+          echo "Saving SARIF file for later use..."
+          mkdir -p artifact
+          mv results.sarif artifact/results.sarif
+      - name: CVE Description extraction and print
+        run: |
+          SCAN_RESULTS=$(jq -r 'try .runs[0].tool.driver.rules | map(.help.text) | join("\\n")' artifact/results.sarif)
           echo "CVE_CRITICAL=$(echo $SCAN_RESULTS | grep -o CRITICAL | wc -l)" >> $GITHUB_ENV
           echo "CVE_HIGH=$(echo $SCAN_RESULTS | grep -o HIGH | wc -l)" >> $GITHUB_ENV
           echo "CVE_MEDIUM=$(echo $SCAN_RESULTS | grep -o MEDIUM | wc -l)" >> $GITHUB_ENV
-
           echo $SCAN_RESULTS
       - name: Fails if CVE HIGH or CRITICAL are detected
         id: cve-threshold
