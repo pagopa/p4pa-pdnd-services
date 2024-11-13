@@ -1,4 +1,4 @@
-name: MyPay - Code Review
+name: P4PA-PDND - Code Review
 
 on:
   push:
@@ -11,9 +11,6 @@ on:
       - opened
       - edited
       - synchronize
-    paths:
-      - 'mypay4-be/**'
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,11 +27,11 @@ jobs:
           java-version: 17
 
       - name: Build with Gradle
-        working-directory: ./mypay4-be
+        working-directory: ./
         run: ./gradlew clean build jacocoTestReport
 
       - name: Sonar Scan
-        working-directory: ./mypay4-be
+        working-directory: ./
         run: >
           ./gradlew sonar
           -Dorg.gradle.jvmargs=-Xmx4096M
