@@ -27,11 +27,11 @@ jobs:
           java-version: 17
 
       - name: Build with Gradle
-        working-directory: ./p4pa-pdnd-services
+        working-directory: ./
         run: ./gradlew clean build jacocoTestReport
 
       - name: Sonar Scan
-        working-directory: ./p4pa-pdnd-services
+        working-directory: ./
         run: >
           ./gradlew sonar
           -Dorg.gradle.jvmargs=-Xmx4096M
