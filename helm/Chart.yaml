@@ -1,6 +1,6 @@
 apiVersion: v2
-name: p4pa-pdnd
-description: P4PA PDND
+name: p4pa-pdnd-services
+description: P4PA PDND SERVICES
 type: application
 version: 1.0.0
 appVersion: 1.0.0
