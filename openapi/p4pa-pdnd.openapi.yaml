@@ -1,0 +1,31 @@
+openapi: 3.0.1
+info:
+  title: Fake API
+  description: "Una semplice API di esempio"
+  version: "1.0.0"
+paths:
+  /api/v1/greet:
+    get:
+      summary: "Ottieni un saluto"
+      description: "Endpoint di esempio che restituisce un saluto"
+      responses:
+        '200':
+          description: "Successo"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Hello, World!"
+        '500':
+          description: "Errore interno del server"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Errore interno del server"
