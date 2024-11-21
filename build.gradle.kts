@@ -31,6 +31,10 @@ repositories {
 val springDocOpenApiVersion = "2.6.0"
 val openApiToolsVersion = "0.2.6"
 val findbugsVersion = "3.0.2"
+val javaJwtVersion = "4.4.0"
+val jwksRsaVersion = "0.22.1"
+val nimbusJoseJwtVersion = "9.47"
+val jjwtVersion = "0.12.6"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
@@ -44,6 +48,12 @@ dependencies {
 
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
+
+	// validation token jwt
+	implementation("com.auth0:java-jwt:$javaJwtVersion")
+	implementation("com.auth0:jwks-rsa:$jwksRsaVersion")
+	implementation("com.nimbusds:nimbus-jose-jwt:$nimbusJoseJwtVersion")
+	implementation("io.jsonwebtoken:jjwt-api:$jjwtVersion")
 
 	//	Testing
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
