@@ -17,7 +17,7 @@ management:
         exposure.include: info, health
 app:
     pdnd:
-      base-url: "\${PDND_BASE_URL:https://auth.uat.interop.pagopa.it/token.oauth2}"
+      base-url: "\${PDND_BASE_URL:https://auth.uat.interop.pagopa.it}"
       config:
         audience: "\${PDND_ACCESS_TOKEN_AUDIENCE:auth.uat.interop.pagopa.it/client-assertion}"
         client-id: "\${PAGOPA_PDND_CONFIGURATION_CLIENT_ID:890b7ca9-b402-4dce-9e8d-9a333d22d76d}"

@@ -41,6 +41,6 @@ public class PdndClientImpl implements PdndClient {
     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
     HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(formData, headers);
 
-    return restTemplate.postForObject(pdndBaseUrl, request, AccessTokenDTO.class);
+    return restTemplate.postForObject(pdndBaseUrl+"/token.oauth2", request, AccessTokenDTO.class);
   }
 }
