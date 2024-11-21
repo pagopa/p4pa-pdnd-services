@@ -1,7 +1,11 @@
 package it.gov.pagopa.payhub.pdnd.service;
 
+import com.nimbusds.jose.JOSEException;
 import it.gov.pagopa.payhub.pdnd.dto.AccessTokenDTO;
 import it.gov.pagopa.payhub.pdnd.utils.PdndUtils;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
@@ -10,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -29,7 +34,8 @@ public class PdndClientImpl implements PdndClient {
   }
 
   @Override
-  public AccessTokenDTO getAccessToken() throws Exception {
+  public AccessTokenDTO getAccessToken()
+      throws HttpClientErrorException, InvalidKeySpecException, NoSuchAlgorithmException, IOException, JOSEException {
     String clientAssertion = pdndUtils.buildPdndClientAssertion();
 
     MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();

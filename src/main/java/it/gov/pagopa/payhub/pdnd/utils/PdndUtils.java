@@ -1,5 +1,6 @@
 package it.gov.pagopa.payhub.pdnd.utils;
 
+import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JOSEObjectType;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
@@ -8,6 +9,9 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import it.gov.pagopa.payhub.pdnd.config.PdndConfig;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
@@ -22,7 +26,7 @@ public class PdndUtils {
   }
 
   public String buildPdndClientAssertion()
-      throws Exception {
+      throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, JOSEException {
     JWTClaimsSet claims = buildPdndClientAssertionClaims();
     return signPdndJWT(claims);
   }
@@ -40,7 +44,8 @@ public class PdndUtils {
         .build();
   }
 
-  public String signPdndJWT(JWTClaimsSet claims) throws Exception {
+  public String signPdndJWT(JWTClaimsSet claims)
+      throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, JOSEException {
     JWSSigner signer = new RSASSASigner(CertUtils.pemKey2PrivateKey(pdndConfig.getKey()));
     SignedJWT signedJWT = new SignedJWT(
         new JWSHeader.Builder(JWSAlgorithm.RS256)
