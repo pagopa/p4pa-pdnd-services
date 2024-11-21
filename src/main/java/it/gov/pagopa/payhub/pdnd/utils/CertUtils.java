@@ -11,6 +11,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
 
 public class CertUtils {
+    private CertUtils(){}
 
     public static RSAPrivateKey pemKey2PrivateKey(String privateKey) throws InvalidKeySpecException, NoSuchAlgorithmException, IOException {
         String keyStringFormat =  extractInlinePemBody(privateKey);
