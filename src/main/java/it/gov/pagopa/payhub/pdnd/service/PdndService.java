@@ -19,7 +19,7 @@ public class PdndService {
 
   private final PdndClientImpl pdndClientImpl;
   private final PdndClientAssertionBuilderService pdndClientAssertionBuilderService;
-  private final ConcurrentHashMap<PdndGenericConfig, String> jwtCache = new ConcurrentHashMap<>();
+  protected final ConcurrentHashMap<PdndGenericConfig, String> jwtCache = new ConcurrentHashMap<>();
 
   public PdndService(PdndClientImpl pdndClientImpl,
       PdndClientAssertionBuilderService pdndClientAssertionBuilderService) {

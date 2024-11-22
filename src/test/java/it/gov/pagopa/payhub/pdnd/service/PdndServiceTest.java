@@ -2,15 +2,12 @@ package it.gov.pagopa.payhub.pdnd.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.nimbusds.jose.JOSEException;
 import it.gov.pagopa.common.pdnd.generated.dto.ClientCredentialsResponseDTO;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.client.PdndClientImpl;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.service.PdndClientAssertionBuilderService;
 import it.gov.pagopa.payhub.pdnd.exception.custom.JwtClaimBuildException;
 import it.gov.pagopa.payhub.pdnd.model.PdndGenericConfig;
 import it.gov.pagopa.payhub.pdnd.utils.JWTUtils;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,6 +55,22 @@ class PdndServiceTest {
     Mockito.verify(pdndClientImpl, Mockito.times(1)).getAccessToken(clientId, clientAssertion);
   }
 
+  @Test
+  void givenTokenInCacheWhenGenerateTokenThenReturnCachedToken() {
+    // Given
+    PdndGenericConfig config = Mockito.mock(PdndGenericConfig.class);
+    String cachedToken = "CACHED_TOKEN";
+    pdndService.jwtCache.put(config, cachedToken);
+
+    try (MockedStatic<JWTUtils> mockedStatic = Mockito.mockStatic(JWTUtils.class)) {
+      // When
+      mockedStatic.when(() -> JWTUtils.isJWTExpired(cachedToken)).thenReturn(false);
+      String token = pdndService.generateToken(config);
+
+      // Then
+      assertEquals(cachedToken, token);
+    }
+  }
 
   @Test
   void givenInvalidAssertionWhenGenerateTokenThenException() throws Exception {
