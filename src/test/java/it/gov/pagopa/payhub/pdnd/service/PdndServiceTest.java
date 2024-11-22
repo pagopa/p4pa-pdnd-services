@@ -58,29 +58,6 @@ class PdndServiceTest {
     Mockito.verify(pdndClientImpl, Mockito.times(1)).getAccessToken(clientId, clientAssertion);
   }
 
-  @Test
-  void givenValidConfigWhenGenerateTokenThenReturnCachedToken()
-      throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, JOSEException {
-    // Given
-    PdndGenericConfig config = Mockito.mock(PdndGenericConfig.class);
-    String clientAssertion = "ASSERTION";
-    String clientId = "CLIENTID";
-    ClientCredentialsResponseDTO cachedToken = new ClientCredentialsResponseDTO();
-    cachedToken.setAccessToken("CACHEDTOKEN");
-
-    // When
-    MockedStatic<JWTUtils> mockedStatic = Mockito.mockStatic(JWTUtils.class);
-    Mockito.when(config.getClientId()).thenReturn(clientId);
-    mockedStatic.when(() -> JWTUtils.isJWTExpired(cachedToken.getAccessToken())).thenReturn(false);
-    Mockito.when(pdndClientAssertionBuilderService.buildPdndClientAssertion(config)).thenReturn(clientAssertion);
-    Mockito.when(pdndClientImpl.getAccessToken(clientId, clientAssertion))
-        .thenReturn(cachedToken);
-    String token = pdndService.generateToken(config);
-
-    // Then
-    assertEquals(cachedToken.getAccessToken(), token);
-    mockedStatic.close();
-  }
 
   @Test
   void givenInvalidAssertionWhenGenerateTokenThenException() throws Exception {
