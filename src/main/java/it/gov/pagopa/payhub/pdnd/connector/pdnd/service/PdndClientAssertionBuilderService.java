@@ -1,4 +1,4 @@
-package it.gov.pagopa.payhub.pdnd.utils;
+package it.gov.pagopa.payhub.pdnd.connector.pdnd.service;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JOSEObjectType;
@@ -9,6 +9,8 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import it.gov.pagopa.payhub.pdnd.config.PdndConfig;
+import it.gov.pagopa.payhub.pdnd.model.PdndGenericConfig;
+import it.gov.pagopa.payhub.pdnd.utils.CertUtils;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -17,40 +19,40 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PdndUtils {
+public class PdndClientAssertionBuilderService {
 
   private final PdndConfig pdndConfig;
 
-  public PdndUtils(PdndConfig pdndConfig) {
+  public PdndClientAssertionBuilderService(PdndConfig pdndConfig) {
     this.pdndConfig = pdndConfig;
   }
 
-  public String buildPdndClientAssertion()
+  public String buildPdndClientAssertion(PdndGenericConfig pdndGenericConfig)
       throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, JOSEException {
-    JWTClaimsSet claims = buildPdndClientAssertionClaims();
-    return signPdndJWT(claims);
+    JWTClaimsSet claims = buildPdndClientAssertionClaims(pdndGenericConfig.getClientId(), pdndGenericConfig.getPurposeId());
+    return signPdndJWT(pdndGenericConfig.getKid(), claims);
   }
 
-  public JWTClaimsSet buildPdndClientAssertionClaims() {
+  private JWTClaimsSet buildPdndClientAssertionClaims(String clientId, String purposeId) {
     long now = System.currentTimeMillis() / 1000;
     return new JWTClaimsSet.Builder()
-        .issuer(pdndConfig.getClientId())
-        .subject(pdndConfig.getClientId())
+        .issuer(clientId)
+        .subject(clientId)
         .audience(pdndConfig.getAudience())
-        .claim("purposeId",pdndConfig.getPurposeId())
+        .claim("purposeId",purposeId)
         .issueTime(new Date(now * 1000))
         .expirationTime(new Date((now + 300) * 1000))
         .jwtID(UUID.randomUUID().toString())
         .build();
   }
 
-  public String signPdndJWT(JWTClaimsSet claims)
+  private String signPdndJWT(String kid, JWTClaimsSet claims)
       throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, JOSEException {
     JWSSigner signer = new RSASSASigner(CertUtils.pemKey2PrivateKey(pdndConfig.getKey()));
     SignedJWT signedJWT = new SignedJWT(
         new JWSHeader.Builder(JWSAlgorithm.RS256)
             .type(JOSEObjectType.JWT)
-            .keyID(pdndConfig.getKid())
+            .keyID(kid)
             .build(),
         claims
     );

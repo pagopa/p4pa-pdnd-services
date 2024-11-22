@@ -94,13 +94,13 @@ configurations {
 }
 
 tasks.compileJava {
-	dependsOn("openApiGenerate")
+	dependsOn("openApiGeneratePayhub","openApiGeneratePdndClient")
 }
-
 
 configure<SourceSetContainer> {
 	named("main") {
 		java.srcDir("$projectDir/build/generated/src/main/java")
+		java.srcDir("$projectDir/build/generated/pdnd-client/src/main/java")
 	}
 }
 
@@ -108,7 +108,10 @@ springBoot {
 	mainClass.value("it.gov.pagopa.payhub.pdnd.PayhubPdndApplication")
 }
 
-openApiGenerate {
+tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("openApiGeneratePayhub") {
+	group = "openapi"
+	description = "description"
+
 	generatorName.set("spring")
 	inputSpec.set("$rootDir/openapi/p4pa-pdnd.openapi.yaml")
 	outputDir.set("$projectDir/build/generated")
@@ -122,6 +125,29 @@ openApiGenerate {
 		"useTags" to "true",
 		"generateConstructorWithAllArgs" to "false",
 		"generatedConstructorWithRequiredArgs" to "false",
-		"additionalModelTypeAnnotations" to "@lombok.Data @lombok.Builder @lombok.AllArgsConstructor @lombok.RequiredArgsConstructor"
+		"additionalModelTypeAnnotations" to "@lombok.Data @lombok.Builder @lombok.AllArgsConstructor @lombok.RequiredArgsConstructor",
+		"serializationLibrary" to "jackson"
 	))
+}
+
+tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("openApiGeneratePdndClient") {
+	group = "openapi"
+	description = "description"
+
+	generatorName.set("java")
+	inputSpec.set("$rootDir/src/main/resources/pdnd/pdnd-v1.yaml")
+	outputDir.set("$projectDir/build/generated/pdnd-client")
+	apiPackage.set("it.gov.pagopa.common.pdnd.generated.api")
+	modelPackage.set("it.gov.pagopa.common.pdnd.generated.dto")
+	modelNameSuffix.set("DTO")
+	configOptions.set(mapOf(
+		"swaggerAnnotations" to "false",
+		"openApiNullable" to "false",
+		"dateLibrary" to "java17",
+		"useSpringBoot3" to "true",
+		"useJakartaEe" to "true",
+		"serializationLibrary" to "jackson",
+		"generateSupportingFiles" to "true"
+	))
+	library.set("resttemplate")
 }
