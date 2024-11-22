@@ -36,6 +36,7 @@ val jwksRsaVersion = "0.22.1"
 val nimbusJoseJwtVersion = "9.47"
 val jjwtVersion = "0.12.6"
 val wiremockVersion = "3.9.2"
+val wiremockSpringBootVersion = "2.1.3"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
@@ -59,11 +60,10 @@ dependencies {
 	//	Testing
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
-	testImplementation("org.junit.jupiter:junit-jupiter-api")
-	testImplementation("org.junit.jupiter:junit-jupiter-engine")
 	testImplementation("org.mockito:mockito-core")
 	testImplementation ("org.projectlombok:lombok")
 	testImplementation ("org.wiremock:wiremock-standalone:$wiremockVersion")
+	testImplementation ("com.maciejwalkowiak.spring:wiremock-spring-boot:$wiremockSpringBootVersion")
 }
 
 tasks.withType<Test> {

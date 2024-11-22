@@ -1,43 +1,50 @@
 package it.gov.pagopa.payhub.pdnd.service;
 
-import it.gov.pagopa.payhub.pdnd.config.PdndConfig;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.maciejwalkowiak.wiremock.spring.ConfigureWireMock;
+import com.maciejwalkowiak.wiremock.spring.EnableWireMock;
+import com.maciejwalkowiak.wiremock.spring.InjectWireMock;
+import it.gov.pagopa.common.pdnd.generated.dto.ClientCredentialsResponseDTO;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.client.PdndClientImpl;
-import it.gov.pagopa.payhub.pdnd.connector.pdnd.service.PdndClientAssertionBuilderService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Value;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.web.client.RestTemplate;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@EnableWireMock({
+    @ConfigureWireMock(name = "pdnd")
+})
+@EnableConfigurationProperties
 class PdndClientImplTest {
 
-  @InjectMocks
-  private PdndClientImpl pdndClient;
-
-  @Mock
-  private RestTemplate restTemplate;
-
-  @Mock
-  private PdndConfig pdndConfig;
-
-  @Mock
+  @Autowired
   private RestTemplateBuilder restTemplateBuilder;
 
-  @Mock
-  private PdndClientAssertionBuilderService pdndClientAssertionBuilderService;
+  @InjectWireMock(value = "pdnd")
+  private WireMockServer wireMockServer;
 
-  @Value("${app.pdnd.base-url}")
-  private String pdndBaseUrl = "https://pdnd.it";
+  private PdndClientImpl pdndClient;
 
   @BeforeEach
-  void setUp() {
-    Mockito.when(restTemplateBuilder.build()).thenReturn(restTemplate);
-    pdndClient = new PdndClientImpl(restTemplateBuilder, pdndBaseUrl);
+  void setup() {
+      pdndClient = new PdndClientImpl(restTemplateBuilder, wireMockServer.baseUrl());
+  }
+
+  @Test
+  void givenValidInputsWhenGetAccessTokenThenReturnResponse() {
+    // Given
+    String clientId = "CLIENTID";
+    String assertions = "ASSERTION";
+
+    // When
+    ClientCredentialsResponseDTO response = pdndClient.getAccessToken(clientId, assertions);
+
+    // Then
+    Assertions.assertEquals("PDND_ACCESS_TOKEN", response.getAccessToken());
   }
 
 }
