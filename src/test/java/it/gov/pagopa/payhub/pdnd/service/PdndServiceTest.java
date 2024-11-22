@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -68,8 +69,9 @@ class PdndServiceTest {
     cachedToken.setAccessToken("CACHEDTOKEN");
 
     // When
+    MockedStatic<JWTUtils> mockedStatic = Mockito.mockStatic(JWTUtils.class);
     Mockito.when(config.getClientId()).thenReturn(clientId);
-    Mockito.mockStatic(JWTUtils.class).when(() -> JWTUtils.isJWTExpired(cachedToken.getAccessToken())).thenReturn(false);
+    mockedStatic.when(() -> JWTUtils.isJWTExpired(cachedToken.getAccessToken())).thenReturn(false);
     Mockito.when(pdndClientAssertionBuilderService.buildPdndClientAssertion(config)).thenReturn(clientAssertion);
     Mockito.when(pdndClientImpl.getAccessToken(clientId, clientAssertion))
         .thenReturn(cachedToken);
@@ -77,6 +79,7 @@ class PdndServiceTest {
 
     // Then
     assertEquals(cachedToken.getAccessToken(), token);
+    mockedStatic.close();
   }
 
   @Test
