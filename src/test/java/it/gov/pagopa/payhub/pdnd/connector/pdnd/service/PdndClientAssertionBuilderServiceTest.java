@@ -66,7 +66,7 @@ class PdndClientAssertionBuilderServiceTest {
     Mockito.when(pdndGenericConfig.getKid()).thenReturn("KID");
     // When
     String token = pdndClientAssertionBuilderService.buildPdndClientAssertion(pdndGenericConfig);
-    
+
     // Then
     assertNotNull(token);
   }

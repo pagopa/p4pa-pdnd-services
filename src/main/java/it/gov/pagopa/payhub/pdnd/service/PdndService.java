@@ -3,6 +3,7 @@ package it.gov.pagopa.payhub.pdnd.service;
 import com.nimbusds.jose.JOSEException;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.client.PdndClientImpl;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.service.PdndClientAssertionBuilderService;
+import it.gov.pagopa.payhub.pdnd.exception.custom.JwtClaimBuildException;
 import it.gov.pagopa.payhub.pdnd.model.PdndGenericConfig;
 import it.gov.pagopa.payhub.pdnd.utils.JWTUtils;
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class PdndService {
           String clientAssertion = pdndClientAssertionBuilderService.buildPdndClientAssertion(key);
           return pdndClientImpl.getAccessToken(key.getClientId(), clientAssertion).getAccessToken();
         } catch (InvalidKeySpecException | NoSuchAlgorithmException | IOException | JOSEException e) {
-          throw new RuntimeException(e);
+          throw new JwtClaimBuildException("Error building JWT claims", e);
         }
       }
       log.debug("Token is present in cache");
