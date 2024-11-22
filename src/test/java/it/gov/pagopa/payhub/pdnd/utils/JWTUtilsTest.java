@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class JWTUtilsTest {
 
   @Test
-  public void givenValidTokenWhenIsJWTExpiredThenTokenNotExpired() {
+  void givenValidTokenWhenIsJWTExpiredThenTokenNotExpired() {
     // Given
     Date futureDate = new Date(System.currentTimeMillis() + 3600 * 1000); // 1 hour from now
     String token = JWT.create()
@@ -22,7 +22,7 @@ class JWTUtilsTest {
   }
 
   @Test
-  public void givenExpiredTokenWhenIsJWTExpiredThenTokenExpired() {
+  void givenExpiredTokenWhenIsJWTExpiredThenTokenExpired() {
     // Given
     Date pastDate = new Date(System.currentTimeMillis() - 3600 * 1000); // 1 hour ago
     String token = JWT.create()
@@ -33,7 +33,7 @@ class JWTUtilsTest {
   }
 
   @Test
-  public void givenInvalidTokenWhenIsJWTExpiredThenException() {
+  void givenInvalidTokenWhenIsJWTExpiredThenException() {
     // Given
     String invalidtoken = "INVALIDTOKEN";
     // Then

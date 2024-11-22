@@ -18,7 +18,6 @@ public class PdndClientImpl implements PdndClient {
   public PdndClientImpl(RestTemplateBuilder restTemplateBuilder,
       @Value("${app.pdnd.base-url}") String pdndBaseUrl) {
     RestTemplate restTemplate = restTemplateBuilder.build();
-
     ApiClient apiClient = new ApiClient(restTemplate);
     apiClient.setBasePath(pdndBaseUrl);
     authApi = new AuthApi(apiClient);

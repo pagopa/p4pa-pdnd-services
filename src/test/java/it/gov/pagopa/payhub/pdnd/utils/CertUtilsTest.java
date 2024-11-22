@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 class CertUtilsTest {
 
   @Test
-  void whenPemKey2PrivateKeyThenValidKey() throws InvalidKeySpecException, NoSuchAlgorithmException, IOException {
+  void givenValidPrivateKeyWhenPemKey2PrivateKeyThenValidKey() throws InvalidKeySpecException, NoSuchAlgorithmException, IOException {
     // Given
     String pemKey = """
                 -----BEGIN PRIVATE KEY-----
@@ -53,7 +53,7 @@ class CertUtilsTest {
   }
 
   @Test
-  void whenPemKey2PrivateKeyThenInvalidKey() {
+  void givenInvalidPrivateKeyWhenPemKey2PrivateKeyThenInvalidKey() {
     // Given
     String invalidPemKey = """
                 -----BEGIN PRIVATE KEY-----
@@ -66,7 +66,7 @@ class CertUtilsTest {
   }
 
   @Test
-  void whenPemKey2PrivateKeyThenNullKey() {
+  void givenNullPrivateKeyWhenPemKey2PrivateKeyThenNullKey() {
     // Given
     String nullKey = null;
 
@@ -75,7 +75,7 @@ class CertUtilsTest {
   }
 
   @Test
-  void whenExtractInlinePemBodyThenValidPem() {
+  void givenValidPemWhenExtractInlinePemBodyThenValidPem() {
     // Given
     String pemKey = """
                 -----BEGIN PRIVATE KEY-----
