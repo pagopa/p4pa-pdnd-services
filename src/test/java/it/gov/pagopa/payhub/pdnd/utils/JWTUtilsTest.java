@@ -5,9 +5,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import java.util.Date;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class JWTUtilsTest {
+
+  @BeforeEach
+  void init(){
+    System.clearProperty("jwt");
+  }
 
   @Test
   void givenValidTokenWhenIsJWTExpiredThenTokenNotExpired() {
