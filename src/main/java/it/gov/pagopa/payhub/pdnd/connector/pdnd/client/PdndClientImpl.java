@@ -1,8 +1,8 @@
 package it.gov.pagopa.payhub.pdnd.connector.pdnd.client;
 
-import it.gov.pagopa.common.pdnd.generated.ApiClient;
-import it.gov.pagopa.common.pdnd.generated.api.AuthApi;
-import it.gov.pagopa.common.pdnd.generated.dto.ClientCredentialsResponseDTO;
+import it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.ApiClient;
+import it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.api.AuthApi;
+import it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.dto.ClientCredentialsResponseDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;

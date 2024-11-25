@@ -2,7 +2,7 @@ package it.gov.pagopa.payhub.pdnd.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import it.gov.pagopa.common.pdnd.generated.dto.ClientCredentialsResponseDTO;
+import it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.dto.ClientCredentialsResponseDTO;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.client.PdndClientImpl;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.service.PdndClientAssertionBuilderService;
 import it.gov.pagopa.payhub.pdnd.exception.custom.JwtClaimBuildException;
