@@ -24,7 +24,7 @@ public class PdndClientImpl implements PdndClient {
   }
 
   @Override
-  public ClientCredentialsResponseDTO getAccessToken(String clientId, String assertions) {
-    return authApi.createToken(assertions, CLIENT_ASSERTION_TYPE, GRANT_TYPE, clientId);
+  public ClientCredentialsResponseDTO getAccessToken(String clientId, String clientAssertions) {
+    return authApi.createToken(clientAssertions, CLIENT_ASSERTION_TYPE, GRANT_TYPE, clientId);
   }
 }

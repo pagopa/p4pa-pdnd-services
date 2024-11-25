@@ -6,7 +6,7 @@ import it.gov.pagopa.common.pdnd.generated.dto.ClientCredentialsResponseDTO;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.client.PdndClientImpl;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.service.PdndClientAssertionBuilderService;
 import it.gov.pagopa.payhub.pdnd.exception.custom.JwtClaimBuildException;
-import it.gov.pagopa.payhub.pdnd.model.PdndGenericConfig;
+import it.gov.pagopa.payhub.pdnd.config.PdndBaseServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.utils.JWTUtils;
 import java.security.spec.InvalidKeySpecException;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +36,7 @@ class PdndServiceTest {
   @Test
   void givenValidConfigWhenGenerateTokenThenGeneratesNewToken() throws Exception {
     // Given
-    PdndGenericConfig config = Mockito.mock(PdndGenericConfig.class);
+    PdndBaseServiceIntegratedConfig config = Mockito.mock(PdndBaseServiceIntegratedConfig.class);
     String clientId = "CLIENTID";
     String clientAssertion = "ASSERTION";
     ClientCredentialsResponseDTO newAccessToken = new ClientCredentialsResponseDTO();
@@ -58,7 +58,7 @@ class PdndServiceTest {
   @Test
   void givenTokenInCacheWhenGenerateTokenThenReturnCachedToken() {
     // Given
-    PdndGenericConfig config = Mockito.mock(PdndGenericConfig.class);
+    PdndBaseServiceIntegratedConfig config = Mockito.mock(PdndBaseServiceIntegratedConfig.class);
     String cachedToken = "CACHED_TOKEN";
     pdndService.jwtCache.put(config, cachedToken);
 
@@ -75,7 +75,7 @@ class PdndServiceTest {
   @Test
   void givenInvalidAssertionWhenGenerateTokenThenException() throws Exception {
     // Given
-    PdndGenericConfig config = Mockito.mock(PdndGenericConfig.class);
+    PdndBaseServiceIntegratedConfig config = Mockito.mock(PdndBaseServiceIntegratedConfig.class);
     // When
     Mockito.when(pdndClientAssertionBuilderService.buildPdndClientAssertion(config))
         .thenThrow(new InvalidKeySpecException("Key spec error"));

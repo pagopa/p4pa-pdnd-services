@@ -9,6 +9,6 @@ import org.springframework.context.annotation.Configuration;
 @Data
 public class PdndConfig {
     private String audience;
-    private String key;
+    private String privateKey;
     private String publicKey;
 }

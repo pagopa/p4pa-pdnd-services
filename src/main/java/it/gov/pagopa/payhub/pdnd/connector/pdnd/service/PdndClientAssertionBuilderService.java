@@ -9,7 +9,7 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import it.gov.pagopa.payhub.pdnd.config.PdndConfig;
-import it.gov.pagopa.payhub.pdnd.model.PdndGenericConfig;
+import it.gov.pagopa.payhub.pdnd.config.PdndBaseServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.utils.CertUtils;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -27,10 +27,11 @@ public class PdndClientAssertionBuilderService {
     this.pdndConfig = pdndConfig;
   }
 
-  public String buildPdndClientAssertion(PdndGenericConfig pdndGenericConfig)
+  public String buildPdndClientAssertion(
+      PdndBaseServiceIntegratedConfig pdndBaseServiceIntegratedConfig)
       throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, JOSEException {
-    JWTClaimsSet claims = buildPdndClientAssertionClaims(pdndGenericConfig.getClientId(), pdndGenericConfig.getPurposeId());
-    return signPdndJWT(pdndGenericConfig.getKid(), claims);
+    JWTClaimsSet claims = buildPdndClientAssertionClaims(pdndBaseServiceIntegratedConfig.getClientId(), pdndBaseServiceIntegratedConfig.getPurposeId());
+    return signPdndJWT(pdndBaseServiceIntegratedConfig.getKid(), claims);
   }
 
   private JWTClaimsSet buildPdndClientAssertionClaims(String clientId, String purposeId) {
@@ -48,7 +49,7 @@ public class PdndClientAssertionBuilderService {
 
   private String signPdndJWT(String kid, JWTClaimsSet claims)
       throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, JOSEException {
-    JWSSigner signer = new RSASSASigner(CertUtils.pemKey2PrivateKey(pdndConfig.getKey()));
+    JWSSigner signer = new RSASSASigner(CertUtils.pemKey2PrivateKey(pdndConfig.getPrivateKey()));
     SignedJWT signedJWT = new SignedJWT(
         new JWSHeader.Builder(JWSAlgorithm.RS256)
             .type(JOSEObjectType.JWT)

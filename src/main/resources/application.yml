@@ -20,7 +20,7 @@ app:
       base-url: "\${PDND_BASE_URL:https://auth.uat.interop.pagopa.it}"
       config:
         audience: "\${PDND_ACCESS_TOKEN_AUDIENCE:auth.uat.interop.pagopa.it/client-assertion}"
-        key: "\${PDND_PRIVATE_KEY:}"
+        privateKey: "\${PDND_PRIVATE_KEY:}"
         publicKey: "\${PDND_PUBLIC_KEY:}"
       anpr:
         config:

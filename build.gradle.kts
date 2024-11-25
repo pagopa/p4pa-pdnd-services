@@ -141,8 +141,8 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
 	generatorName.set("java")
 	inputSpec.set("$rootDir/src/main/resources/pdnd/pdnd-v1.yaml")
 	outputDir.set("$projectDir/build/generated/pdnd-client")
-	apiPackage.set("it.gov.pagopa.common.pdnd.generated.api")
-	modelPackage.set("it.gov.pagopa.common.pdnd.generated.dto")
+	apiPackage.set("it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.api")
+	modelPackage.set("it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.dto")
 	modelNameSuffix.set("DTO")
 	configOptions.set(mapOf(
 		"swaggerAnnotations" to "false",
