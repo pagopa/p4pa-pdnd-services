@@ -28,7 +28,7 @@ app:
           publicKey: "\${PDND_PUBLIC_KEY:}"
         service-c003:
           config:
-            purpose-id: "\${PAGOPA_PDND_CONFIGURATION_C003_PURPOSE_ID:87520bd5-207a-4616-85d9-10d7bb3e88b8}"
+            purpose-id: "\${ANPR_PDND_CONFIGURATION_C003_PURPOSE_ID:87520bd5-207a-4616-85d9-10d7bb3e88b8}"
         service-c030:
           config:
-            purpose-id: "\${PAGOPA_PDND_CONFIGURATION_C030_PURPOSE_ID:87520bd5-207a-4616-85d9-10d7bb3e88b8}"
+            purpose-id: "\${ANPR_PDND_CONFIGURATION_C030_PURPOSE_ID:87520bd5-207a-4616-85d9-10d7bb3e88b8}"
