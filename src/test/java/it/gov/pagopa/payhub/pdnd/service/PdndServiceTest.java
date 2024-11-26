@@ -7,7 +7,6 @@ import it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.dto.ClientCredentialsR
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.client.PdndClientImpl;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.service.PdndClientAssertionBuilderService;
 import it.gov.pagopa.payhub.pdnd.utils.JWTUtils;
-import java.security.spec.InvalidKeySpecException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +32,7 @@ class PdndServiceTest {
   }
 
   @Test
-  void givenValidConfigWhenGenerateTokenThenGeneratesNewToken() throws Exception {
+  void givenValidConfigWhenGenerateTokenThenGeneratesNewToken() {
     // Given
     PdndServiceIntegrationConfig serviceConfig = Mockito.mock(PdndServiceIntegrationConfig.class);
     String clientId = "CLIENTID";
