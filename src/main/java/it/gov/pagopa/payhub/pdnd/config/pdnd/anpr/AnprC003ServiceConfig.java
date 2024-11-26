@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "app.pdnd.anpr.service-c003.config")
+@ConfigurationProperties(prefix = "app.pdnd.anpr.services.c003")
 public class AnprC003ServiceConfig extends PdndServiceIntegrationConfig {
 
 }

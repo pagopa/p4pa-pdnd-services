@@ -65,8 +65,8 @@ microservice-chart:
   envSecret:
     APPLICATIONINSIGHTS_CONNECTION_STRING: appinsights-connection-string
 
-    PDND_PRIVATE_KEY: piattaforma-unitaria-interop-priv
-    PDND_PUBLIC_KEY: piattaforma-unitaria-interop-pub
+    PDND_SERVICE_PRIVATEKEY: piattaforma-unitaria-interop-priv
+    PDND_SERVICE_PUBLICKEY: piattaforma-unitaria-interop-pub
 
   # nodeSelector: {}
 

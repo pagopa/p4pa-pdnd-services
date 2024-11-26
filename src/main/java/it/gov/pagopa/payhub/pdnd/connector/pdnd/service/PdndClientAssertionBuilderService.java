@@ -9,7 +9,6 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndConfig;
-import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndBaseServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegrationConfig;
 import it.gov.pagopa.payhub.pdnd.utils.CertUtils;
 import java.io.IOException;
@@ -23,20 +22,17 @@ import org.springframework.stereotype.Service;
 public class PdndClientAssertionBuilderService {
 
   private final PdndConfig pdndConfig;
-  private final PdndBaseServiceIntegratedConfig pdndBaseServiceIntegratedConfig;
 
-  public PdndClientAssertionBuilderService(PdndConfig pdndConfig,
-      PdndBaseServiceIntegratedConfig pdndBaseServiceIntegratedConfig) {
+  public PdndClientAssertionBuilderService(PdndConfig pdndConfig) {
     this.pdndConfig = pdndConfig;
-    this.pdndBaseServiceIntegratedConfig = pdndBaseServiceIntegratedConfig;
   }
 
-  public String buildPdndClientAssertion(PdndBaseServiceIntegratedConfig pdndBaseServiceIntegratedConfig,
-      PdndServiceIntegrationConfig pdndServiceIntegrationConfig)
-      throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, JOSEException {
-    JWTClaimsSet claims = buildPdndClientAssertionClaims(pdndBaseServiceIntegratedConfig.getClientId(),
-        pdndServiceIntegrationConfig.getPurposeId());
-    return signPdndJWT(pdndBaseServiceIntegratedConfig.getKid(), claims);
+  public String buildPdndClientAssertion(PdndServiceIntegrationConfig pdndServiceIntegrationConfig) {
+    try {
+      return buildAndSignPdndJWT(pdndServiceIntegrationConfig);
+    } catch (InvalidKeySpecException | NoSuchAlgorithmException | IOException | JOSEException e) {
+      throw new IllegalStateException("Error building PDND client assertion", e);
+    }
   }
 
   private JWTClaimsSet buildPdndClientAssertionClaims(String clientId, String purposeId) {
@@ -52,13 +48,15 @@ public class PdndClientAssertionBuilderService {
         .build();
   }
 
-  private String signPdndJWT(String kid, JWTClaimsSet claims)
+  private String buildAndSignPdndJWT(PdndServiceIntegrationConfig pdndServiceIntegrationConfig)
       throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, JOSEException {
-    JWSSigner signer = new RSASSASigner(CertUtils.pemKey2PrivateKey(pdndBaseServiceIntegratedConfig.getPrivateKey()));
+    JWTClaimsSet claims = buildPdndClientAssertionClaims(pdndServiceIntegrationConfig.getClientId(),
+        pdndServiceIntegrationConfig.getPurposeId());
+    JWSSigner signer = new RSASSASigner(CertUtils.pemKey2PrivateKey(pdndServiceIntegrationConfig.getPrivateKey()));
     SignedJWT signedJWT = new SignedJWT(
         new JWSHeader.Builder(JWSAlgorithm.RS256)
             .type(JOSEObjectType.JWT)
-            .keyID(kid)
+            .keyID(pdndServiceIntegrationConfig.getKid())
             .build(),
         claims
     );

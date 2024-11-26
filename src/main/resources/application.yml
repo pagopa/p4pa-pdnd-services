@@ -21,14 +21,19 @@ app:
       config:
         audience: "\${PDND_ACCESS_TOKEN_AUDIENCE:auth.uat.interop.pagopa.it/client-assertion}"
       anpr:
-        config:
-          client-id: "\${PAGOPA_PDND_CONFIGURATION_CLIENT_ID:890b7ca9-b402-4dce-9e8d-9a333d22d76d}"
-          kid: "\${PAGOPA_PDND_CONFIGURATION_KID:jxOpPRxM6oFcnnKtICqeW5l7fbxLr45IAsJ8Q9s-fK8}"
-          privateKey: "\${PDND_PRIVATE_KEY:}"
-          publicKey: "\${PDND_PUBLIC_KEY:}"
-        service-c003:
-          config:
-            purpose-id: "\${ANPR_PDND_CONFIGURATION_C003_PURPOSE_ID:87520bd5-207a-4616-85d9-10d7bb3e88b8}"
-        service-c030:
-          config:
-            purpose-id: "\${ANPR_PDND_CONFIGURATION_C030_PURPOSE_ID:87520bd5-207a-4616-85d9-10d7bb3e88b8}"
+        services:
+          c003:
+            client-id: "\${PDND_SERVICE_ANPR_C003_CLIENTID:\${PDND_SERVICE_ANPR_CLIENTID:\${PDND_SERVICE_CLIENTID:clientid}}}"
+            kid: "\${PDND_SERVICE_ANPR_C003_KID:\${PDND_SERVICE_ANPR_KID:\${PDND_SERVICE_KID:kid}}}"
+            purpose-id: "\${ANPR_PDND_CONFIGURATION_C003_PURPOSE_ID:c003purposeid}"
+            privateKey: "\${PDND_SERVICE_ANPR_C003_PRIVATEKEY:\${PDND_SERVICE_ANPR_PRIVATEKEY:\${PDND_SERVICE_PRIVATEKEY:}}}"
+            publicKey: "\${PDND_SERVICE_ANPR_C003_PUBLICKEY:\${PDND_SERVICE_ANPR_PUBLICKEY:\${PDND_SERVICE_PUBLICKEY:}}}"
+          c030:
+            client-id: "\${PDND_SERVICE_ANPR_C030_CLIENTID:\${PDND_SERVICE_ANPR_CLIENTID:\${PDND_SERVICE_CLIENTID:clientid}}}"
+            kid: "\${PDND_SERVICE_ANPR_C030_KID:\${PDND_SERVICE_ANPR_KID:\${PDND_SERVICE_KID:kid}}}"
+            purpose-id: "\${ANPR_PDND_CONFIGURATION_C030_PURPOSE_ID:c030purposeid}"
+            privateKey: "\${PDND_SERVICE_ANPR_C030_PRIVATEKEY:\${PDND_SERVICE_ANPR_PRIVATEKEY:\${PDND_SERVICE_PRIVATEKEY:}}}"
+            publicKey: "\${PDND_SERVICE_ANPR_C030_PUBLICKEY:\${PDND_SERVICE_ANPR_PUBLICKEY:\${PDND_SERVICE_PUBLICKEY:}}}"
+    web-client:
+      connect.timeout.millis: "\${CONNECT_TIMEOUT_MILLIS:120000}"
+      read.timeout.millis: "\${READ_TIMEOUT_MILLIS:120000}"
