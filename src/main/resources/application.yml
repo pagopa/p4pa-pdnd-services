@@ -20,10 +20,15 @@ app:
       base-url: "\${PDND_BASE_URL:https://auth.uat.interop.pagopa.it}"
       config:
         audience: "\${PDND_ACCESS_TOKEN_AUDIENCE:auth.uat.interop.pagopa.it/client-assertion}"
-        privateKey: "\${PDND_PRIVATE_KEY:}"
-        publicKey: "\${PDND_PUBLIC_KEY:}"
       anpr:
         config:
           client-id: "\${PAGOPA_PDND_CONFIGURATION_CLIENT_ID:890b7ca9-b402-4dce-9e8d-9a333d22d76d}"
           kid: "\${PAGOPA_PDND_CONFIGURATION_KID:jxOpPRxM6oFcnnKtICqeW5l7fbxLr45IAsJ8Q9s-fK8}"
-          purpose-id: "\${PAGOPA_PDND_CONFIGURATION_PURPOSE_ID:87520bd5-207a-4616-85d9-10d7bb3e88b8}"
+          privateKey: "\${PDND_PRIVATE_KEY:}"
+          publicKey: "\${PDND_PUBLIC_KEY:}"
+        service-c003:
+          config:
+            purpose-id: "\${PAGOPA_PDND_CONFIGURATION_C003_PURPOSE_ID:87520bd5-207a-4616-85d9-10d7bb3e88b8}"
+        service-c030:
+          config:
+            purpose-id: "\${PAGOPA_PDND_CONFIGURATION_C030_PURPOSE_ID:87520bd5-207a-4616-85d9-10d7bb3e88b8}"

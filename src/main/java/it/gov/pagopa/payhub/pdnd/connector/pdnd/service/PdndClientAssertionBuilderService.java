@@ -8,8 +8,9 @@ import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import it.gov.pagopa.payhub.pdnd.config.PdndConfig;
-import it.gov.pagopa.payhub.pdnd.config.PdndBaseServiceIntegratedConfig;
+import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndConfig;
+import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndBaseServiceIntegratedConfig;
+import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegrationConfig;
 import it.gov.pagopa.payhub.pdnd.utils.CertUtils;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -22,15 +23,19 @@ import org.springframework.stereotype.Service;
 public class PdndClientAssertionBuilderService {
 
   private final PdndConfig pdndConfig;
+  private final PdndBaseServiceIntegratedConfig pdndBaseServiceIntegratedConfig;
 
-  public PdndClientAssertionBuilderService(PdndConfig pdndConfig) {
+  public PdndClientAssertionBuilderService(PdndConfig pdndConfig,
+      PdndBaseServiceIntegratedConfig pdndBaseServiceIntegratedConfig) {
     this.pdndConfig = pdndConfig;
+    this.pdndBaseServiceIntegratedConfig = pdndBaseServiceIntegratedConfig;
   }
 
-  public String buildPdndClientAssertion(
-      PdndBaseServiceIntegratedConfig pdndBaseServiceIntegratedConfig)
+  public String buildPdndClientAssertion(PdndBaseServiceIntegratedConfig pdndBaseServiceIntegratedConfig,
+      PdndServiceIntegrationConfig pdndServiceIntegrationConfig)
       throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, JOSEException {
-    JWTClaimsSet claims = buildPdndClientAssertionClaims(pdndBaseServiceIntegratedConfig.getClientId(), pdndBaseServiceIntegratedConfig.getPurposeId());
+    JWTClaimsSet claims = buildPdndClientAssertionClaims(pdndBaseServiceIntegratedConfig.getClientId(),
+        pdndServiceIntegrationConfig.getPurposeId());
     return signPdndJWT(pdndBaseServiceIntegratedConfig.getKid(), claims);
   }
 
@@ -49,7 +54,7 @@ public class PdndClientAssertionBuilderService {
 
   private String signPdndJWT(String kid, JWTClaimsSet claims)
       throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, JOSEException {
-    JWSSigner signer = new RSASSASigner(CertUtils.pemKey2PrivateKey(pdndConfig.getPrivateKey()));
+    JWSSigner signer = new RSASSASigner(CertUtils.pemKey2PrivateKey(pdndBaseServiceIntegratedConfig.getPrivateKey()));
     SignedJWT signedJWT = new SignedJWT(
         new JWSHeader.Builder(JWSAlgorithm.RS256)
             .type(JOSEObjectType.JWT)

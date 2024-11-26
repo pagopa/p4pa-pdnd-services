@@ -2,8 +2,10 @@ package it.gov.pagopa.payhub.pdnd.connector.pdnd.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import it.gov.pagopa.payhub.pdnd.config.PdndConfig;
-import it.gov.pagopa.payhub.pdnd.config.PdndBaseServiceIntegratedConfig;
+import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndConfig;
+import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndBaseServiceIntegratedConfig;
+import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegrationConfig;
+import it.gov.pagopa.payhub.pdnd.config.pdnd.anpr.AnprConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,7 +21,13 @@ class PdndClientAssertionBuilderServiceTest {
   private PdndConfig pdndConfig;
 
   @Mock
+  private AnprConfig anprConfig;
+
+  @Mock
   private PdndBaseServiceIntegratedConfig pdndBaseServiceIntegratedConfig;
+
+  @Mock
+  private PdndServiceIntegrationConfig pdndServiceIntegrationConfig;
 
   @InjectMocks
   private PdndClientAssertionBuilderService pdndClientAssertionBuilderService;
@@ -59,14 +67,16 @@ class PdndClientAssertionBuilderServiceTest {
   void givenValidPDNDConfigWhenBuildPdndClientAssertionThenVerifyToken() throws Exception {
     // Given
     Mockito.when(pdndConfig.getAudience()).thenReturn("AUDIENCE");
-    Mockito.when(pdndConfig.getPrivateKey()).thenReturn(pemKey);
+    Mockito.when(anprConfig.getPrivateKey()).thenReturn(pemKey);
 
     Mockito.when(pdndBaseServiceIntegratedConfig.getClientId()).thenReturn("CLIENTID");
-    Mockito.when(pdndBaseServiceIntegratedConfig.getPurposeId()).thenReturn("PURPOSEID");
     Mockito.when(pdndBaseServiceIntegratedConfig.getKid()).thenReturn("KID");
+    Mockito.when(pdndServiceIntegrationConfig.getPurposeId()).thenReturn("PURPOSEID");
+
     // When
     String token = pdndClientAssertionBuilderService.buildPdndClientAssertion(
-        pdndBaseServiceIntegratedConfig);
+        pdndBaseServiceIntegratedConfig,
+        pdndServiceIntegrationConfig);
 
     // Then
     assertNotNull(token);

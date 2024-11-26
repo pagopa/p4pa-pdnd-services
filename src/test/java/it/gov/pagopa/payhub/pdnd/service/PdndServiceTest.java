@@ -2,11 +2,12 @@ package it.gov.pagopa.payhub.pdnd.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegrationConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.dto.ClientCredentialsResponseDTO;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.client.PdndClientImpl;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.service.PdndClientAssertionBuilderService;
 import it.gov.pagopa.payhub.pdnd.exception.custom.JwtClaimBuildException;
-import it.gov.pagopa.payhub.pdnd.config.PdndBaseServiceIntegratedConfig;
+import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndBaseServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.utils.JWTUtils;
 import java.security.spec.InvalidKeySpecException;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,21 +38,22 @@ class PdndServiceTest {
   void givenValidConfigWhenGenerateTokenThenGeneratesNewToken() throws Exception {
     // Given
     PdndBaseServiceIntegratedConfig config = Mockito.mock(PdndBaseServiceIntegratedConfig.class);
+    PdndServiceIntegrationConfig serviceConfig = Mockito.mock(PdndServiceIntegrationConfig.class);
     String clientId = "CLIENTID";
     String clientAssertion = "ASSERTION";
     ClientCredentialsResponseDTO newAccessToken = new ClientCredentialsResponseDTO();
 
     // When
     Mockito.when(config.getClientId()).thenReturn(clientId);
-    Mockito.when(pdndClientAssertionBuilderService.buildPdndClientAssertion(config)).thenReturn(clientAssertion);
+    Mockito.when(pdndClientAssertionBuilderService.buildPdndClientAssertion(config, serviceConfig)).thenReturn(clientAssertion);
     Mockito.when(pdndClientImpl.getAccessToken(clientId, clientAssertion))
         .thenReturn(newAccessToken);
 
-    String token = pdndService.generateToken(config);
+    String token = pdndService.generateToken(config, serviceConfig);
 
     // Then
     assertEquals(newAccessToken.getAccessToken(), token);
-    Mockito.verify(pdndClientAssertionBuilderService, Mockito.times(1)).buildPdndClientAssertion(config);
+    Mockito.verify(pdndClientAssertionBuilderService, Mockito.times(1)).buildPdndClientAssertion(config,serviceConfig);
     Mockito.verify(pdndClientImpl, Mockito.times(1)).getAccessToken(clientId, clientAssertion);
   }
 
@@ -59,13 +61,14 @@ class PdndServiceTest {
   void givenTokenInCacheWhenGenerateTokenThenReturnCachedToken() {
     // Given
     PdndBaseServiceIntegratedConfig config = Mockito.mock(PdndBaseServiceIntegratedConfig.class);
+    PdndServiceIntegrationConfig serviceConfig = Mockito.mock(PdndServiceIntegrationConfig.class);
     String cachedToken = "CACHED_TOKEN";
-    pdndService.jwtCache.put(config, cachedToken);
+    pdndService.jwtCache.put(serviceConfig, cachedToken);
 
     try (MockedStatic<JWTUtils> mockedStatic = Mockito.mockStatic(JWTUtils.class)) {
       // When
       mockedStatic.when(() -> JWTUtils.isJWTExpired(cachedToken)).thenReturn(false);
-      String token = pdndService.generateToken(config);
+      String token = pdndService.generateToken(config, serviceConfig);
 
       // Then
       assertEquals(cachedToken, token);
@@ -76,13 +79,14 @@ class PdndServiceTest {
   void givenInvalidAssertionWhenGenerateTokenThenException() throws Exception {
     // Given
     PdndBaseServiceIntegratedConfig config = Mockito.mock(PdndBaseServiceIntegratedConfig.class);
+    PdndServiceIntegrationConfig serviceConfig = Mockito.mock(PdndServiceIntegrationConfig.class);
     // When
-    Mockito.when(pdndClientAssertionBuilderService.buildPdndClientAssertion(config))
+    Mockito.when(pdndClientAssertionBuilderService.buildPdndClientAssertion(config, serviceConfig))
         .thenThrow(new InvalidKeySpecException("Key spec error"));
 
     // Then
     JwtClaimBuildException exception = assertThrows(JwtClaimBuildException.class, () -> {
-      pdndService.generateToken(config);
+      pdndService.generateToken(config, serviceConfig);
     });
 
     assertEquals("Error building JWT claims", exception.getMessage());
