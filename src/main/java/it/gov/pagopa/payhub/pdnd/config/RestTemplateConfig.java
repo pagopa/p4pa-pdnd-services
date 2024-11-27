@@ -13,8 +13,8 @@ public class RestTemplateConfig {
   private final int readTimeoutHandlerMillis;
 
   public RestTemplateConfig(
-      @Value("${app.web-client.connect.timeout.millis}") int connectTimeoutMillis,
-      @Value("${app.web-client.read.timeout.millis}") int readTimeoutHandlerMillis) {
+      @Value("${app.rest-client.connect.timeout.millis}") int connectTimeoutMillis,
+      @Value("${app.rest-client.read.timeout.millis}") int readTimeoutHandlerMillis) {
     this.connectTimeoutMillis = connectTimeoutMillis;
     this.readTimeoutHandlerMillis = readTimeoutHandlerMillis;
   }
