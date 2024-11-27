@@ -2,7 +2,7 @@ package it.gov.pagopa.payhub.pdnd.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegrationConfig;
+import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.dto.ClientCredentialsResponseDTO;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.client.PdndClientImpl;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.service.PdndClientAssertionBuilderService;
@@ -34,7 +34,7 @@ class PdndServiceTest {
   @Test
   void givenValidConfigWhenGenerateTokenThenGeneratesNewToken() {
     // Given
-    PdndServiceIntegrationConfig serviceConfig = Mockito.mock(PdndServiceIntegrationConfig.class);
+    PdndServiceIntegratedConfig serviceConfig = Mockito.mock(PdndServiceIntegratedConfig.class);
     String clientId = "CLIENTID";
     String clientAssertion = "ASSERTION";
     ClientCredentialsResponseDTO newAccessToken = new ClientCredentialsResponseDTO();
@@ -56,7 +56,7 @@ class PdndServiceTest {
   @Test
   void givenTokenInCacheWhenGenerateTokenThenReturnCachedToken() {
     // Given
-    PdndServiceIntegrationConfig serviceConfig = Mockito.mock(PdndServiceIntegrationConfig.class);
+    PdndServiceIntegratedConfig serviceConfig = Mockito.mock(PdndServiceIntegratedConfig.class);
     String cachedToken = "CACHED_TOKEN";
     pdndService.jwtCache.put(serviceConfig, cachedToken);
 

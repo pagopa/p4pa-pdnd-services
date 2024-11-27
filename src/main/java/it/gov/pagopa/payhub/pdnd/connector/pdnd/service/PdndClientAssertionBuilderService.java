@@ -9,7 +9,7 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndConfig;
-import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegrationConfig;
+import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.utils.CertUtils;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -27,9 +27,9 @@ public class PdndClientAssertionBuilderService {
     this.pdndConfig = pdndConfig;
   }
 
-  public String buildPdndClientAssertion(PdndServiceIntegrationConfig pdndServiceIntegrationConfig) {
+  public String buildPdndClientAssertion(PdndServiceIntegratedConfig pdndServiceIntegratedConfig) {
     try {
-      return buildAndSignPdndJWT(pdndServiceIntegrationConfig);
+      return buildAndSignPdndJWT(pdndServiceIntegratedConfig);
     } catch (InvalidKeySpecException | NoSuchAlgorithmException | IOException | JOSEException e) {
       throw new IllegalStateException("Error building PDND client assertion", e);
     }
@@ -48,15 +48,15 @@ public class PdndClientAssertionBuilderService {
         .build();
   }
 
-  private String buildAndSignPdndJWT(PdndServiceIntegrationConfig pdndServiceIntegrationConfig)
+  private String buildAndSignPdndJWT(PdndServiceIntegratedConfig pdndServiceIntegratedConfig)
       throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, JOSEException {
-    JWTClaimsSet claims = buildPdndClientAssertionClaims(pdndServiceIntegrationConfig.getClientId(),
-        pdndServiceIntegrationConfig.getPurposeId());
-    JWSSigner signer = new RSASSASigner(CertUtils.pemKey2PrivateKey(pdndServiceIntegrationConfig.getPrivateKey()));
+    JWTClaimsSet claims = buildPdndClientAssertionClaims(pdndServiceIntegratedConfig.getClientId(),
+        pdndServiceIntegratedConfig.getPurposeId());
+    JWSSigner signer = new RSASSASigner(CertUtils.pemKey2PrivateKey(pdndServiceIntegratedConfig.getPrivateKey()));
     SignedJWT signedJWT = new SignedJWT(
         new JWSHeader.Builder(JWSAlgorithm.RS256)
             .type(JOSEObjectType.JWT)
-            .keyID(pdndServiceIntegrationConfig.getKid())
+            .keyID(pdndServiceIntegratedConfig.getKid())
             .build(),
         claims
     );

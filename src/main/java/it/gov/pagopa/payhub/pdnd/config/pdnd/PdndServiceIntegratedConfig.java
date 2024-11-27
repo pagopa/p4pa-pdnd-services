@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class PdndServiceIntegrationConfig {
+public abstract class PdndServiceIntegratedConfig {
   private String clientId;
   private String kid;
   private String purposeId;

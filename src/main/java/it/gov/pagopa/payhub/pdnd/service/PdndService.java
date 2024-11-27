@@ -1,6 +1,6 @@
 package it.gov.pagopa.payhub.pdnd.service;
 
-import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegrationConfig;
+import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.client.PdndClientImpl;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.service.PdndClientAssertionBuilderService;
 import it.gov.pagopa.payhub.pdnd.utils.JWTUtils;
@@ -14,7 +14,7 @@ public class PdndService {
 
   private final PdndClientImpl pdndClientImpl;
   private final PdndClientAssertionBuilderService pdndClientAssertionBuilderService;
-  protected final ConcurrentHashMap<PdndServiceIntegrationConfig, String> jwtCache = new ConcurrentHashMap<>();
+  protected final ConcurrentHashMap<PdndServiceIntegratedConfig, String> jwtCache = new ConcurrentHashMap<>();
 
   public PdndService(PdndClientImpl pdndClientImpl,
       PdndClientAssertionBuilderService pdndClientAssertionBuilderService) {
@@ -22,15 +22,15 @@ public class PdndService {
     this.pdndClientAssertionBuilderService = pdndClientAssertionBuilderService;
   }
 
-  public String generateToken(PdndServiceIntegrationConfig pdndServiceIntegrationConfig) {
-    return jwtCache.compute(pdndServiceIntegrationConfig, (key, existingJwt) -> {
-      log.debug("Check cache for token exists and not expired for {}", pdndServiceIntegrationConfig.getClass().getName());
+  public String generateToken(PdndServiceIntegratedConfig pdndServiceIntegratedConfig) {
+    return jwtCache.compute(pdndServiceIntegratedConfig, (key, existingJwt) -> {
+      log.debug("Check cache for token exists and not expired for {}", pdndServiceIntegratedConfig.getClass().getName());
       if(existingJwt == null || JWTUtils.isJWTExpired(existingJwt)) {
-          log.debug("Token for {} not present or expired, generate new one", pdndServiceIntegrationConfig.getClass().getName());
+          log.debug("Token for {} not present or expired, generate new one", pdndServiceIntegratedConfig.getClass().getName());
           String clientAssertion = pdndClientAssertionBuilderService.buildPdndClientAssertion(key);
-          return pdndClientImpl.getAccessToken(pdndServiceIntegrationConfig.getClientId(), clientAssertion).getAccessToken();
+          return pdndClientImpl.getAccessToken(pdndServiceIntegratedConfig.getClientId(), clientAssertion).getAccessToken();
       }
-      log.debug("Token for {} is present in cache", pdndServiceIntegrationConfig.getClass().getName());
+      log.debug("Token for {} is present in cache", pdndServiceIntegratedConfig.getClass().getName());
       return existingJwt;
     });
   }
