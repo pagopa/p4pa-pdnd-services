@@ -3,8 +3,8 @@
 #
 # 🎯 Version Management
 #
-ARG CORRETTO_VERSION="17-alpine3.19"
-ARG CORRETTO_SHA="2122cb140fa94053abce343fb854d24f4c62ba3c1ac701882dce12980396b477"
+ARG CORRETTO_VERSION="21-alpine3.20"
+ARG CORRETTO_SHA="8b16834e7fabfc62d4c8faa22de5df97f99627f148058d52718054aaa4ea3674"
 ARG GRADLE_VERSION="8.10.2"
 ARG GRADLE_DOWNLOAD_SHA256="31c55713e40233a8303827ceb42ca48a47267a0ad4bab9177123121e71524c26"
 ARG APPINSIGHTS_VERSION="3.5.2"
@@ -93,6 +93,7 @@ WORKDIR /build
 COPY --chown=${APP_USER}:${APP_GROUP} build.gradle.kts settings.gradle.kts ./
 COPY --chown=${APP_USER}:${APP_GROUP} gradle.lockfile ./
 COPY --chown=${APP_USER}:${APP_GROUP} openapi openapi/
+COPY --chown=${APP_USER}:${APP_GROUP} src/main/resources src/main/resources
 
 # Generate OpenAPI stubs and download dependencies
 RUN mkdir -p src/main/java && \
@@ -101,7 +102,9 @@ RUN mkdir -p src/main/java && \
 
 USER ${APP_USER}
 
-RUN gradle openApiGenerate dependencies --no-daemon
+RUN gradle openApiGeneratePayhub dependencies --no-daemon
+
+RUN gradle openApiGeneratePdndClient dependencies --no-daemon
 
 #
 # 🏗️ Build Stage

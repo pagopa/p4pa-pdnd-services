@@ -14,7 +14,7 @@ description = "p4pa-pdnd-services"
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
+		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
 
@@ -31,6 +31,12 @@ repositories {
 val springDocOpenApiVersion = "2.6.0"
 val openApiToolsVersion = "0.2.6"
 val findbugsVersion = "3.0.2"
+val javaJwtVersion = "4.4.0"
+val jwksRsaVersion = "0.22.1"
+val nimbusJoseJwtVersion = "9.47"
+val jjwtVersion = "0.12.6"
+val wiremockVersion = "3.9.2"
+val wiremockSpringBootVersion = "2.1.3"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
@@ -45,11 +51,19 @@ dependencies {
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 
+	// validation token jwt
+	implementation("com.auth0:java-jwt:$javaJwtVersion")
+	implementation("com.auth0:jwks-rsa:$jwksRsaVersion")
+	implementation("com.nimbusds:nimbus-jose-jwt:$nimbusJoseJwtVersion")
+	implementation("io.jsonwebtoken:jjwt-api:$jjwtVersion")
+
 	//	Testing
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
 	testImplementation("org.mockito:mockito-core")
 	testImplementation ("org.projectlombok:lombok")
+	testImplementation ("org.wiremock:wiremock-standalone:$wiremockVersion")
+	testImplementation ("com.maciejwalkowiak.spring:wiremock-spring-boot:$wiremockSpringBootVersion")
 }
 
 tasks.withType<Test> {
@@ -84,13 +98,13 @@ configurations {
 }
 
 tasks.compileJava {
-	dependsOn("openApiGenerate")
+	dependsOn("openApiGeneratePayhub","openApiGeneratePdndClient")
 }
-
 
 configure<SourceSetContainer> {
 	named("main") {
 		java.srcDir("$projectDir/build/generated/src/main/java")
+		java.srcDir("$projectDir/build/generated/pdnd-client/src/main/java")
 	}
 }
 
@@ -98,7 +112,10 @@ springBoot {
 	mainClass.value("it.gov.pagopa.payhub.pdnd.PayhubPdndApplication")
 }
 
-openApiGenerate {
+tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("openApiGeneratePayhub") {
+	group = "openapi"
+	description = "description"
+
 	generatorName.set("spring")
 	inputSpec.set("$rootDir/openapi/p4pa-pdnd.openapi.yaml")
 	outputDir.set("$projectDir/build/generated")
@@ -112,6 +129,29 @@ openApiGenerate {
 		"useTags" to "true",
 		"generateConstructorWithAllArgs" to "false",
 		"generatedConstructorWithRequiredArgs" to "false",
-		"additionalModelTypeAnnotations" to "@lombok.Data @lombok.Builder @lombok.AllArgsConstructor @lombok.RequiredArgsConstructor"
+		"additionalModelTypeAnnotations" to "@lombok.Data @lombok.Builder @lombok.AllArgsConstructor @lombok.RequiredArgsConstructor",
+		"serializationLibrary" to "jackson"
 	))
+}
+
+tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("openApiGeneratePdndClient") {
+	group = "openapi"
+	description = "description"
+
+	generatorName.set("java")
+	inputSpec.set("$rootDir/src/main/resources/pdnd/pdnd-v1.yaml")
+	outputDir.set("$projectDir/build/generated/pdnd-client")
+	apiPackage.set("it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.api")
+	modelPackage.set("it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.dto")
+	modelNameSuffix.set("DTO")
+	configOptions.set(mapOf(
+		"swaggerAnnotations" to "false",
+		"openApiNullable" to "false",
+		"dateLibrary" to "java17",
+		"useSpringBoot3" to "true",
+		"useJakartaEe" to "true",
+		"serializationLibrary" to "jackson",
+		"generateSupportingFiles" to "true"
+	))
+	library.set("resttemplate")
 }
