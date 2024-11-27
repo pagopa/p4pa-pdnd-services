@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndConfig;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegrationConfig;
-import java.security.spec.InvalidKeySpecException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
