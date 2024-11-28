@@ -2,6 +2,7 @@ package it.gov.pagopa.payhub.pdnd.security;
 
 import it.gov.pagopa.payhub.pdnd.dto.auth.UserInfoDTO;
 import it.gov.pagopa.payhub.pdnd.dto.auth.UserOrganizationRolesDTO;
+import it.gov.pagopa.payhub.pdnd.exception.custom.InvalidAccessTokenException;
 import it.gov.pagopa.payhub.pdnd.service.auth.AuthorizationService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -82,5 +83,23 @@ class JwtAuthenticationFilterTest {
         authToken,
         SecurityContextHolder.getContext().getAuthentication()
     );
+  }
+
+  @Test
+  void givenInvalidTokenWhenDoFilterInternalThenInvalidAccessTokenException() throws ServletException, IOException {
+    // Given
+    String accessToken = "ACCESSTOKEN";
+    MockHttpServletRequest request = new MockHttpServletRequest(HttpMethod.GET.name(), "/path");
+    request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+
+    MockHttpServletResponse response = new MockHttpServletResponse();
+
+    Mockito.doThrow(new InvalidAccessTokenException("An invalid accessToken has been provided")).when(authorizationService).validateToken(accessToken);
+
+    // When
+    jwtAuthenticationFilter.doFilterInternal(request, response, filterChainMock);
+
+    // Then
+    Mockito.verify(filterChainMock).doFilter(request, response);
   }
 }

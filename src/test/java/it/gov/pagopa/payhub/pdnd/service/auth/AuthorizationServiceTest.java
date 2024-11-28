@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Bean;
     classes = {AuthorizationService.class, AuthorizationServiceTest.AuthorizationServiceTestConfiguration.class},
     webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @EnableWireMock({
-    @ConfigureWireMock(name = "auth-server", property = "app.auth.base-url")
+    @ConfigureWireMock(name = "auth-server", properties = "app.auth.base-url")
 })
 @EnableConfigurationProperties
 class AuthorizationServiceTest {
