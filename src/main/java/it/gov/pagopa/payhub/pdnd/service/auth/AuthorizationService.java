@@ -44,7 +44,7 @@ public class AuthorizationService {
         errorMessage="Something gone wrong while validate token";
         log.error(errorMessage, ex);
       }
-      throw new InvalidAccessTokenException(ex.getMessage());
+      throw new InvalidAccessTokenException(errorMessage);
     }
   }
 }
