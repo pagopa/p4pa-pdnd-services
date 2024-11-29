@@ -31,6 +31,13 @@ microservice-chart:
     ENV: "UAT"
     JAVA_TOOL_OPTIONS: "-Xms128m -Xmx4g -Djava.util.concurrent.ForkJoinPool.common.parallelism=7 -javaagent:/app/applicationinsights-agent.jar -Dapplicationinsights.configuration.file=/mnt/file-config-external/appinsights-config/applicationinsights.json -agentlib:jdwp=transport=dt_socket,server=y,address=8001,suspend=n -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.port=3002 -Dcom.sun.management.jmxremote.rmi.port=3003 -Djava.rmi.server.hostname=127.0.0.1 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
 
+    PDND_BASE_URL: https://auth.uat.interop.pagopa.it
+    PDND_ACCESS_TOKEN_AUDIENCE: auth.uat.interop.pagopa.it/client-assertion
+    PDND_SERVICE_CLIENTID: 685e6542-8d1b-4837-a555-130e92c9dc6c
+    PDND_SERVICE_KID: y80rvmuzGPyfMw0n6v5K-yWsyUVYXiICG2zzNPAJg64
+    PDND_SERVICE_ANPR_C003_PURPOSE_ID: 5ba1f38f-6a91-4da4-8a42-4da1aa55bfee
+    PDND_SERVICE_ANPR_C030_PURPOSE_ID: 87520bd5-207a-4616-85d9-10d7bb3e88b8
+
   keyvault:
     name: "p4pa-u-payhub-kv"
     tenantId: "7788edaf-0346-4068-9d79-c868aed15b3d"
