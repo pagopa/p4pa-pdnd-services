@@ -88,13 +88,31 @@ class JwtAuthenticationFilterTest {
   @Test
   void givenInvalidTokenWhenDoFilterInternalThenInvalidAccessTokenException() throws ServletException, IOException {
     // Given
-    String accessToken = "ACCESSTOKEN";
+    String accessToken = "INVALIDACCESSTOKEN";
     MockHttpServletRequest request = new MockHttpServletRequest(HttpMethod.GET.name(), "/path");
     request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 
     MockHttpServletResponse response = new MockHttpServletResponse();
 
     Mockito.doThrow(new InvalidAccessTokenException("An invalid accessToken has been provided")).when(authorizationService).validateToken(accessToken);
+
+    // When
+    jwtAuthenticationFilter.doFilterInternal(request, response, filterChainMock);
+
+    // Then
+    Mockito.verify(filterChainMock).doFilter(request, response);
+  }
+
+  @Test
+  void givenInvalidTokenWhenDoFilterInternalThenRuntimeException() throws ServletException, IOException {
+    // Given
+    String accessToken = "EXCEPTION";
+    MockHttpServletRequest request = new MockHttpServletRequest(HttpMethod.GET.name(), "/path");
+    request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+
+    MockHttpServletResponse response = new MockHttpServletResponse();
+
+    Mockito.doThrow(new RuntimeException("Something gone wrong while validate accessToken")).when(authorizationService).validateToken(accessToken);
 
     // When
     jwtAuthenticationFilter.doFilterInternal(request, response, filterChainMock);
