@@ -37,6 +37,7 @@ val nimbusJoseJwtVersion = "9.47"
 val jjwtVersion = "0.12.6"
 val wiremockVersion = "3.9.2"
 val wiremockSpringBootVersion = "2.1.3"
+val micrometerVersion = "1.4.0"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
@@ -47,6 +48,7 @@ dependencies {
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 	implementation("org.openapitools:jackson-databind-nullable:$openApiToolsVersion")
 	implementation("com.google.code.findbugs:jsr305:$findbugsVersion")
+	implementation("io.micrometer:micrometer-tracing-bridge-otel:$micrometerVersion")
 
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
