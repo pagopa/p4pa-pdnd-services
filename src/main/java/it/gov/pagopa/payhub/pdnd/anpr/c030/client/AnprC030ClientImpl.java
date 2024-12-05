@@ -1,7 +1,7 @@
 package it.gov.pagopa.payhub.pdnd.anpr.c030.client;
 
-import it.gov.pagopa.payhub.pdnd.anpr.c030.dto.RichiestaDTO;
-import it.gov.pagopa.payhub.pdnd.anpr.c030.dto.RispostaOKDTO;
+import it.gov.pagopa.payhub.anpr.C030.model.generated.RichiestaE002;
+import it.gov.pagopa.payhub.anpr.C030.model.generated.RispostaE002OK;
 import it.gov.pagopa.payhub.pdnd.anpr.c030.service.AnprC030ServiceConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -25,18 +25,18 @@ public class AnprC030ClientImpl implements AnprC030Client {
         this.anprC030ServiceConfig = anprC030ServiceConfig;
     }
 
-    public RispostaOKDTO getIdAnprFromCf(RichiestaDTO request) {
+    public RispostaE002OK getIdAnprFromFc(RichiestaE002 request) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
         headers.set("Accept", "application/json");
 
-        HttpEntity<RichiestaDTO> entity = new HttpEntity<>(request, headers);
+        HttpEntity<RichiestaE002> entity = new HttpEntity<>(request, headers);
 
-        ResponseEntity<RispostaOKDTO> response = restTemplate.exchange(
+        ResponseEntity<RispostaE002OK> response = restTemplate.exchange(
                 anprBasePath + anprC030ServiceConfig.getUrl(),
                 HttpMethod.POST,
                 entity,
-                RispostaOKDTO.class
+                RispostaE002OK.class
         );
 
         return response.getBody();

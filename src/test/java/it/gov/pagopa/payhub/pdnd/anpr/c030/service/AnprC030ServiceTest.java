@@ -1,7 +1,7 @@
 package it.gov.pagopa.payhub.pdnd.anpr.c030.service;
 
+import it.gov.pagopa.payhub.anpr.C030.model.generated.*;
 import it.gov.pagopa.payhub.pdnd.anpr.c030.client.AnprC030ClientImpl;
-import it.gov.pagopa.payhub.pdnd.anpr.c030.dto.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,27 +24,27 @@ class AnprC030ServiceTest {
     private AnprC030Service anprC030Service;
 
     @Test
-    void testGetIdAnprFromCf() {
+    void testGetIdAnprFromFc() {
         String fiscalCode = "DNTCRL65S67M126K";
 
-        TipoIdentificativiDTO tipoIdentificativiDTO = TipoIdentificativiDTO.builder()
+        TipoIdentificativi idTypes = TipoIdentificativi.builder()
                 .idANPR("d20fcd8e-f228-323c-8924-6405b44879bf").build();
 
-        TipoDatiSoggettiEnteDTO tipoDatiSoggettiEnteDTO = TipoDatiSoggettiEnteDTO.builder()
-                .identificativi(tipoIdentificativiDTO).build();
+        TipoDatiSoggettiEnte subDataTypes = TipoDatiSoggettiEnte.builder()
+                .identificativi(idTypes).build();
 
-        TipoListaSoggettiDTO tipoListaSoggettiDTO = TipoListaSoggettiDTO.builder()
-                .datiSoggetto(List.of(tipoDatiSoggettiEnteDTO)).build();
+        TipoListaSoggetti subListTypes = TipoListaSoggetti.builder()
+                .datiSoggetto(List.of(subDataTypes)).build();
 
-        RispostaOKDTO mockResponse = RispostaOKDTO.builder()
+        RispostaE002OK mockResponse = RispostaE002OK.builder()
                 .idOperazioneANPR("12345")
-                .listaSoggetti(tipoListaSoggettiDTO)
+                .listaSoggetti(subListTypes)
                 .listaAnomalie(null)
                 .build();
 
-        when(anprC030ClientImpl.getIdAnprFromCf(Mockito.any(RichiestaDTO.class))).thenReturn(mockResponse);
+        when(anprC030ClientImpl.getIdAnprFromFc(Mockito.any(RichiestaE002.class))).thenReturn(mockResponse);
 
-        RispostaOKDTO response = anprC030Service.getIdAnprFromCf(fiscalCode);
+        RispostaE002OK response = anprC030Service.getIdAnprFromFc(fiscalCode);
 
         assertNotNull(response);
         assertEquals("d20fcd8e-f228-323c-8924-6405b44879bf", response.getListaSoggetti().getDatiSoggetto().getFirst().getIdentificativi().getIdANPR());

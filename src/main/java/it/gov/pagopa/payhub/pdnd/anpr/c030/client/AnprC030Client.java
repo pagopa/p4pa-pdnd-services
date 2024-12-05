@@ -1,8 +1,8 @@
 package it.gov.pagopa.payhub.pdnd.anpr.c030.client;
 
-import it.gov.pagopa.payhub.pdnd.anpr.c030.dto.RichiestaDTO;
-import it.gov.pagopa.payhub.pdnd.anpr.c030.dto.RispostaOKDTO;
+import it.gov.pagopa.payhub.anpr.C030.model.generated.RichiestaE002;
+import it.gov.pagopa.payhub.anpr.C030.model.generated.RispostaE002OK;
 
 public interface AnprC030Client {
-  RispostaOKDTO getIdAnprFromCf(RichiestaDTO clientAssertions);
+  RispostaE002OK getIdAnprFromFc(RichiestaE002 request);
 }
