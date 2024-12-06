@@ -48,14 +48,14 @@ dependencies {
 	implementation("org.openapitools:jackson-databind-nullable:$openApiToolsVersion")
 	implementation("com.google.code.findbugs:jsr305:$findbugsVersion")
 
-	compileOnly("org.projectlombok:lombok")
-	annotationProcessor("org.projectlombok:lombok")
-
 	// validation token jwt
 	implementation("com.auth0:java-jwt:$javaJwtVersion")
 	implementation("com.auth0:jwks-rsa:$jwksRsaVersion")
 	implementation("com.nimbusds:nimbus-jose-jwt:$nimbusJoseJwtVersion")
 	implementation("io.jsonwebtoken:jjwt-api:$jjwtVersion")
+
+	compileOnly("org.projectlombok:lombok")
+	annotationProcessor("org.projectlombok:lombok")
 
 	//	Testing
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -173,7 +173,7 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
 		"useTags" to "true",
 		"generateConstructorWithAllArgs" to "false",
 		"generatedConstructorWithRequiredArgs" to "false",
-		"additionalModelTypeAnnotations" to "@lombok.Data @lombok.Builder @lombok.AllArgsConstructor"
+		"additionalModelTypeAnnotations" to "@lombok.Data;@lombok.Builder;@lombok.NoArgsConstructor;@lombok.AllArgsConstructor"
 	))
 }
 
@@ -194,6 +194,6 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
 		"useTags" to "true",
 		"generateConstructorWithAllArgs" to "false",
 		"generatedConstructorWithRequiredArgs" to "false",
-		"additionalModelTypeAnnotations" to "@lombok.Data @lombok.Builder @lombok.AllArgsConstructor"
+		"additionalModelTypeAnnotations" to "@lombok.Data;@lombok.Builder;@lombok.NoArgsConstructor;@lombok.AllArgsConstructor"
 	))
 }

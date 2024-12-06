@@ -8,6 +8,9 @@ import it.gov.pagopa.payhub.pdnd.anpr.c030.client.AnprC030Client;
 import it.gov.pagopa.payhub.pdnd.anpr.c030.client.AnprC030ClientImpl;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.UUID;
+
 @Service
 public class AnprC030Service {
 
@@ -27,12 +30,18 @@ public class AnprC030Service {
                 .build();
 
         RichiestaE002 request = RichiestaE002.builder()
-                .idOperazioneClient("ID-ENTE-myHost-1701102800550")
+                .idOperazioneClient(generateIdClientOperation(fiscalCode))
                 .criteriRicerca(searchTypes)
                 .datiRichiesta(reqDataTypes)
                 .build();
 
         return anprC030Client.getIdAnprFromFc(request);
+    }
+
+    private String generateIdClientOperation(String fiscalCode) {
+        String timestamp = String.valueOf(Instant.now().toEpochMilli());
+        String uuid = UUID.nameUUIDFromBytes(fiscalCode.getBytes()).toString();
+        return uuid + "-" + timestamp;
     }
 }
 
