@@ -1,4 +1,4 @@
-package it.gov.pagopa.payhub.pdnd.config.pdnd.anpr;
+package it.gov.pagopa.payhub.pdnd.anpr.c030.service;
 
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;

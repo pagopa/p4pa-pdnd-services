@@ -50,14 +50,14 @@ dependencies {
 	implementation("com.google.code.findbugs:jsr305:$findbugsVersion")
 	implementation("io.micrometer:micrometer-tracing-bridge-otel:$micrometerVersion")
 
-	compileOnly("org.projectlombok:lombok")
-	annotationProcessor("org.projectlombok:lombok")
-
 	// validation token jwt
 	implementation("com.auth0:java-jwt:$javaJwtVersion")
 	implementation("com.auth0:jwks-rsa:$jwksRsaVersion")
 	implementation("com.nimbusds:nimbus-jose-jwt:$nimbusJoseJwtVersion")
 	implementation("io.jsonwebtoken:jjwt-api:$jjwtVersion")
+
+	compileOnly("org.projectlombok:lombok")
+	annotationProcessor("org.projectlombok:lombok")
 
 	//	Testing
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -100,7 +100,7 @@ configurations {
 }
 
 tasks.compileJava {
-	dependsOn("openApiGeneratePayhub","openApiGeneratePdndClient")
+	dependsOn("openApiGeneratePayhub","openApiGeneratePdndClient","openApiGenerateAnprApiC030", "openApiGenerateAnprApiC003")
 }
 
 configure<SourceSetContainer> {
@@ -156,4 +156,46 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
 		"generateSupportingFiles" to "true"
 	))
 	library.set("resttemplate")
+}
+
+tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("openApiGenerateAnprApiC030") {
+	group = "openapi"
+	description = "description"
+
+	generatorName.set("spring")
+	inputSpec.set("$rootDir/openapi/anprApiC030.openapi.yaml")
+	outputDir.set("$projectDir/build/generated")
+	apiPackage.set("it.gov.pagopa.payhub.anpr.C030.controller.generated")
+	modelPackage.set("it.gov.pagopa.payhub.anpr.C030.model.generated")
+	configOptions.set(mapOf(
+		"dateLibrary" to "java8",
+		"requestMappingMode" to "api_interface",
+		"useSpringBoot3" to "true",
+		"interfaceOnly" to "true",
+		"useTags" to "true",
+		"generateConstructorWithAllArgs" to "false",
+		"generatedConstructorWithRequiredArgs" to "false",
+		"additionalModelTypeAnnotations" to "@lombok.Data;@lombok.Builder;@lombok.NoArgsConstructor;@lombok.AllArgsConstructor"
+	))
+}
+
+tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("openApiGenerateAnprApiC003") {
+	group = "openapi"
+	description = "description"
+
+	generatorName.set("spring")
+	inputSpec.set("$rootDir/openapi/anprApiC003.openapi.yaml")
+	outputDir.set("$projectDir/build/generated")
+	apiPackage.set("it.gov.pagopa.payhub.anpr.C003.controller.generated")
+	modelPackage.set("it.gov.pagopa.payhub.anpr.C003.model.generated")
+	configOptions.set(mapOf(
+		"dateLibrary" to "java8",
+		"requestMappingMode" to "api_interface",
+		"useSpringBoot3" to "true",
+		"interfaceOnly" to "true",
+		"useTags" to "true",
+		"generateConstructorWithAllArgs" to "false",
+		"generatedConstructorWithRequiredArgs" to "false",
+		"additionalModelTypeAnnotations" to "@lombok.Data;@lombok.Builder;@lombok.NoArgsConstructor;@lombok.AllArgsConstructor"
+	))
 }
