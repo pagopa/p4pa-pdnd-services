@@ -24,20 +24,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  firstName:
-                    type: string
-                    example: Mario
-                  lastName:
-                    type: string
-                    example: Rossi
-                  dateOfBirth:
-                    type: string
-                    format: YYYY-MM-DD
-                    example: '2021-11-15'
-                  address:
-                    $ref: '#/components/schemas/Address'
+                $ref: '#/components/schemas/Citizen'
         '400':
           description: Invalid request
         '403':
@@ -69,3 +56,18 @@ components:
         country:
           type: string
           example: Italy
+    Citizen:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: Mario
+        lastName:
+          type: string
+          example: Rossi
+        dateOfBirth:
+          type: string
+          format: YYYY-MM-DD
+          example: '2021-11-15'
+        address:
+          $ref: '#/components/schemas/Address'

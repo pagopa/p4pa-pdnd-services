@@ -1,7 +1,7 @@
 package it.gov.pagopa.payhub.pdnd.anpr.service;
 
 import it.gov.pagopa.payhub.anpr.C030.model.generated.RispostaE002OK;
-import it.gov.pagopa.payhub.model.generated.AnprServiceE002CitizenGet200Response;
+import it.gov.pagopa.payhub.model.generated.Citizen;
 import it.gov.pagopa.payhub.pdnd.anpr.c003.service.AnprC003Service;
 import it.gov.pagopa.payhub.pdnd.anpr.c030.service.AnprC030Service;
 import it.gov.pagopa.payhub.pdnd.anpr.mapper.AnprResponseMapper;
@@ -19,7 +19,7 @@ public class PdndServiceImpl implements PdndService {
     }
 
     @Override
-    public AnprServiceE002CitizenGet200Response getCitizenData(String fiscalCode) {
+    public Citizen getCitizenData(String fiscalCode) {
         RispostaE002OK anprC030Response = anprC030Service.getIdAnprFromFc(fiscalCode);
         String idAnpr = anprC030Response.getListaSoggetti()
                 .getDatiSoggetto()

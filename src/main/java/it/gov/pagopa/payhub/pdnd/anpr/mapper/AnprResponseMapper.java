@@ -4,7 +4,7 @@ import it.gov.pagopa.payhub.anpr.C003.model.generated.RispostaE002OK;
 import it.gov.pagopa.payhub.anpr.C003.model.generated.TipoDatiSoggettiEnte;
 import it.gov.pagopa.payhub.anpr.C003.model.generated.TipoInfoSoggettoEnte;
 import it.gov.pagopa.payhub.model.generated.Address;
-import it.gov.pagopa.payhub.model.generated.AnprServiceE002CitizenGet200Response;
+import it.gov.pagopa.payhub.model.generated.Citizen;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +15,7 @@ public class AnprResponseMapper {
     private AnprResponseMapper() {
     }
 
-    public static AnprServiceE002CitizenGet200Response mapToAnprResponse(RispostaE002OK responseC003) {
+    public static Citizen mapToAnprResponse(RispostaE002OK responseC003) {
         List<TipoInfoSoggettoEnte> subTypeInfo = getTipoInfoSoggettoEnteList(responseC003);
 
         Map<String, String> valuesMap = subTypeInfo.stream()
@@ -31,7 +31,7 @@ public class AnprResponseMapper {
                 .country(valuesMap.get("country"))
                 .build();
 
-        return AnprServiceE002CitizenGet200Response.builder()
+        return Citizen.builder()
                 .firstName(valuesMap.get("firstName"))
                 .lastName(valuesMap.get("lastName"))
                 .dateOfBirth(valuesMap.get("dateOfBirth"))
