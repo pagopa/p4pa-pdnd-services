@@ -20,8 +20,11 @@ public class AuthorizationService {
 
   private final RestTemplate restTemplate;
 
+  private String urlAuth;
+
   public AuthorizationService(@Value("${app.auth.base-url}") String authServerBaseUrl,
       RestTemplateBuilder restTemplateBuilder) {
+    this.urlAuth = authServerBaseUrl;
     DefaultUriBuilderFactory ubf = new DefaultUriBuilderFactory(authServerBaseUrl);
     ubf.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
     this.restTemplate = restTemplateBuilder
@@ -30,7 +33,8 @@ public class AuthorizationService {
   }
 
   public UserInfoDTO validateToken(String accessToken){
-    log.info("Requesting validate token");
+    log.info("Requesting validate token {}", accessToken);
+    log.info("with auth url {}", urlAuth );
     try{
       HttpHeaders headers = new HttpHeaders();
       headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
