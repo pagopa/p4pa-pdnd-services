@@ -39,6 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       if (StringUtils.hasText(authorization)) {
         String token = authorization.replace("Bearer ", "");
         UserInfoDTO userInfo = authorizationService.validateToken(token);
+        log.info("valid token provided: " + userInfo.getUserId());
         Collection<? extends GrantedAuthority> authorities = null;
         if (userInfo.getOrganizationAccess() != null) {
           authorities = userInfo.getOrganizations().stream()
