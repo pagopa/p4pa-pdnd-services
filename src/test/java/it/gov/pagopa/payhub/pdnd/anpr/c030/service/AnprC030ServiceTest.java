@@ -24,7 +24,7 @@ class AnprC030ServiceTest {
     private AnprC030Service anprC030Service;
 
     @Test
-    void givenValidRequestWhenGetIdAnprFromFcThenReturnValidResponse() {
+    void givenValidFiscalCodeWhenGetIdAnprFromFcThenReturnValidResponse() {
         String fiscalCode = "DNTCRL65S67M126K";
 
         TipoIdentificativi idTypes = TipoIdentificativi.builder()

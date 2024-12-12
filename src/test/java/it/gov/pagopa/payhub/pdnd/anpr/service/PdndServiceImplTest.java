@@ -34,7 +34,7 @@ class PdndServiceImplTest {
     private PdndServiceImpl pdndService;
 
     @Test
-    void givenValidFiscalCodeWhenGetCitizenDataThenReturnCitizenDetails() {
+    void givenValidFiscalCodeAndIdAnprWhenGetCitizenDataThenReturnCitizenDetails() {
         String fiscalCode = "DNTCRL65S67M126K";
         String idAnpr = "d20fcd8e-f228-323c-8924-6405b44879bf";
 
