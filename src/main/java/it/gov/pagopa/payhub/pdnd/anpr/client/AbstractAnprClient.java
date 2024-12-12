@@ -29,7 +29,7 @@ public abstract class AbstractAnprClient<R, S> {
         headers.set("Accept", "application/json");
 
         HttpEntity<R> entity = new HttpEntity<>(request, headers);
-        log.info("ANPR url {}", anprBasePath);
+        log.info("ANPR url {}", anprBasePath + getEndpointPath());
         ResponseEntity<S> response = restTemplate.exchange(
                 anprBasePath + getEndpointPath(),
                 HttpMethod.POST,
