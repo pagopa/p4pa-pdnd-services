@@ -42,7 +42,7 @@ class AnprC030ClientImplTest {
     }
 
     @Test
-    void testGetIdAnprFromFc() {
+    void givenValidRequestWhenGetIdAnprFromFcThenReturnValidResponse() {
         RichiestaE002 request = RichiestaE002.builder()
                 .idOperazioneClient("13f32508-7bcb-38d0-8510-d68bf240aa59-1733496758205")
                 .build();
