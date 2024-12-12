@@ -16,7 +16,7 @@ public class PdndServiceController implements DefaultApi {
     }
 
     @Override
-    public ResponseEntity<Citizen> anprServiceE002CitizenGet(String fiscalCode) {
+    public ResponseEntity<Citizen> getCitizenDataByFiscalCode(String fiscalCode) {
         Citizen response = pdndService.getCitizenData(fiscalCode);
         return ResponseEntity.ok(response);
     }

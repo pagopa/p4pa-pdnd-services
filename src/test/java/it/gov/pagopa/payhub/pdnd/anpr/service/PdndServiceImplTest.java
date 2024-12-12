@@ -34,7 +34,7 @@ class PdndServiceImplTest {
     private PdndServiceImpl pdndService;
 
     @Test
-    void testGetCitizenData_Success() {
+    void givenValidFiscalCodeAndIdAnprWhenGetCitizenDataThenReturnCitizenDetails() {
         String fiscalCode = "DNTCRL65S67M126K";
         String idAnpr = "d20fcd8e-f228-323c-8924-6405b44879bf";
 
@@ -73,7 +73,7 @@ class PdndServiceImplTest {
     }
 
     @Test
-    void testGetCitizenData_InvalidListaSoggetti() {
+    void givenValidFiscalCodeAndInvalidSubjectListWhenGetCitizenDataThenThrowIllegalArgumentException() {
         String fiscalCode = "DNTCRL65S67M126K";
         String idAnpr = "d20fcd8e-f228-323c-8924-6405b44879bf";
 
@@ -98,7 +98,7 @@ class PdndServiceImplTest {
     }
 
     @Test
-    void testGetCitizenData_InvalidC003Response() {
+    void givenValidFiscalCodeAndInvalidC003ResponseWhenGetCitizenDataThenThrowIllegalArgumentException() {
         String fiscalCode = "DNTCRL65S67M126K";
         String idAnpr = "d20fcd8e-f228-323c-8924-6405b44879bf";
 
@@ -120,7 +120,7 @@ class PdndServiceImplTest {
     }
 
     @Test
-    void testGetCitizenData_InvalidSubDataType() {
+    void givenValidFiscalCodeAndInvalidSubDataTypeWhenGetCitizenDataThenThrowIllegalArgumentException() {
         String fiscalCode = "DNTCRL65S67M126K";
         String idAnpr = "d20fcd8e-f228-323c-8924-6405b44879bf";
 
@@ -146,7 +146,7 @@ class PdndServiceImplTest {
     }
 
     @Test
-    void testGetCitizenData_EmptySubDataType() {
+    void givenValidFiscalCodeAndEmptySubDataTypeWhenGetCitizenDataThenThrowIllegalArgumentException() {
         String fiscalCode = "DNTCRL65S67M126K";
         String idAnpr = "d20fcd8e-f228-323c-8924-6405b44879bf";
 
@@ -172,7 +172,7 @@ class PdndServiceImplTest {
     }
 
     @Test
-    void testGetCitizenData_InvalidResponse_ThrowsException() {
+    void givenServiceUnavailableWhenGetCitizenDataThenThrowRuntimeException() {
         String fiscalCode = "DNTCRL65S67M126K";
 
         Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode)).thenThrow(new RuntimeException("Service unavailable"));
