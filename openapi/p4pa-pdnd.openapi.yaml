@@ -10,6 +10,7 @@ paths:
     get:
       summary: Retrieve citizen data
       description: Returns detailed information about a citizen based on their fiscal code.
+      operationId: getCitizenDataByFiscalCode
       parameters:
         - name: fiscalCode
           in: query

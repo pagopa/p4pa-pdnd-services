@@ -27,7 +27,7 @@ class PdndServiceControllerTest {
     private PdndService pdndService;
 
     @Test
-    void testAnprServiceE002CitizenGet_Success() throws Exception {
+    void testCitizenDataByFiscalCodeGet_Success() throws Exception {
         String fiscalCode = "DNTCRL65S67M126K";
         Citizen citizen = Citizen.builder()
                 .firstName("Julieta")
