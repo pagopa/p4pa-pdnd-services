@@ -14,4 +14,5 @@ public abstract class PdndServiceIntegratedConfig {
   private String purposeId;
   private String privateKey;
   private String publicKey;
+  private String url;
 }

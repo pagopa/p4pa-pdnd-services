@@ -21,6 +21,7 @@ app:
       config:
         audience: "\${PDND_ACCESS_TOKEN_AUDIENCE:auth.uat.interop.pagopa.it/client-assertion}"
       anpr:
+        base-url: "\${ANPR_BASE_URL:http://p4pa-mocks-microservice-chart:8080}"
         services:
           c003:
             client-id: "\${PDND_SERVICE_ANPR_C003_CLIENTID:\${PDND_SERVICE_ANPR_CLIENTID:\${PDND_SERVICE_CLIENTID:clientid}}}"
@@ -28,12 +29,14 @@ app:
             purpose-id: "\${PDND_SERVICE_ANPR_C003_PURPOSE_ID:c003purposeid}"
             privateKey: "\${PDND_SERVICE_ANPR_C003_PRIVATEKEY:\${PDND_SERVICE_ANPR_PRIVATEKEY:\${PDND_SERVICE_PRIVATEKEY:}}}"
             publicKey: "\${PDND_SERVICE_ANPR_C003_PUBLICKEY:\${PDND_SERVICE_ANPR_PUBLICKEY:\${PDND_SERVICE_PUBLICKEY:}}}"
+            url: "\${PDND_SERVICE_ANPR_C003_URL:/govway/rest/in/MinInternoPortaANPR-PDND/C003-servizioVerificaDichGeneralita/v1/anpr-service-e002}"
           c030:
             client-id: "\${PDND_SERVICE_ANPR_C030_CLIENTID:\${PDND_SERVICE_ANPR_CLIENTID:\${PDND_SERVICE_CLIENTID:clientid}}}"
             kid: "\${PDND_SERVICE_ANPR_C030_KID:\${PDND_SERVICE_ANPR_KID:\${PDND_SERVICE_KID:kid}}}"
             purpose-id: "\${PDND_SERVICE_ANPR_C030_PURPOSE_ID:c030purposeid}"
             privateKey: "\${PDND_SERVICE_ANPR_C030_PRIVATEKEY:\${PDND_SERVICE_ANPR_PRIVATEKEY:\${PDND_SERVICE_PRIVATEKEY:}}}"
             publicKey: "\${PDND_SERVICE_ANPR_C030_PUBLICKEY:\${PDND_SERVICE_ANPR_PUBLICKEY:\${PDND_SERVICE_PUBLICKEY:}}}"
+            url: "\${PDND_SERVICE_ANPR_C030_URL:/govway/rest/in/MinInternoPortaANPR-PDND/C030-servizioAccertamentoIdUnicoNazionale/v1/anpr-service-e002}"
     rest-client:
       connect.timeout.millis: "\${CONNECT_TIMEOUT_MILLIS:120000}"
       read.timeout.millis: "\${READ_TIMEOUT_MILLIS:120000}"

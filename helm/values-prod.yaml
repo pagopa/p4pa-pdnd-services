@@ -39,6 +39,8 @@ microservice-chart:
     PDND_SERVICE_ANPR_C003_PURPOSE_ID: 5ba1f38f-6a91-4da4-8a42-4da1aa55bfee
     PDND_SERVICE_ANPR_C030_PURPOSE_ID: 87520bd5-207a-4616-85d9-10d7bb3e88b8
 
+    ANPR_BASE_URL: http://p4pa-mocks-microservice-chart:8080
+
   keyvault:
     name: "p4pa-p-payhub-kv"
     tenantId: "7788edaf-0346-4068-9d79-c868aed15b3d"
