@@ -43,7 +43,7 @@ class PdndServiceControllerTest {
 
         Mockito.when(pdndService.getCitizenData(fiscalCode)).thenReturn(citizen);
 
-        mockMvc.perform(get("/p4papdnd/anpr-service-e002/citizen")
+        mockMvc.perform(get("/anpr-service-e002/citizen")
                         .param("fiscalCode", fiscalCode))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName").value("Julieta"))
