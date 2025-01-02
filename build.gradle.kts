@@ -1,11 +1,11 @@
 plugins {
 	java
-	id("org.springframework.boot") version "3.3.5"
-	id("io.spring.dependency-management") version "1.1.6"
+	id("org.springframework.boot") version "3.4.1"
+	id("io.spring.dependency-management") version "1.1.7"
 	jacoco
-	id("org.sonarqube") version "5.1.0.4882"
+	id("org.sonarqube") version "6.0.1.5171"
 	id("com.github.ben-manes.versions") version "0.51.0"
-	id("org.openapi.generator") version "7.9.0"
+	id("org.openapi.generator") version "7.10.0"
 }
 
 group = "it.gov.pagopa.payhub"
@@ -28,16 +28,15 @@ repositories {
 	mavenCentral()
 }
 
-val springDocOpenApiVersion = "2.6.0"
+val springDocOpenApiVersion = "2.7.0"
 val openApiToolsVersion = "0.2.6"
-val findbugsVersion = "3.0.2"
 val javaJwtVersion = "4.4.0"
 val jwksRsaVersion = "0.22.1"
-val nimbusJoseJwtVersion = "9.47"
+val nimbusJoseJwtVersion = "9.48"
 val jjwtVersion = "0.12.6"
-val wiremockVersion = "3.9.2"
+val wiremockVersion = "3.10.0"
 val wiremockSpringBootVersion = "2.1.3"
-val micrometerVersion = "1.4.0"
+val micrometerVersion = "1.4.1"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
@@ -47,7 +46,6 @@ dependencies {
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$springDocOpenApiVersion")
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 	implementation("org.openapitools:jackson-databind-nullable:$openApiToolsVersion")
-	implementation("com.google.code.findbugs:jsr305:$findbugsVersion")
 	implementation("io.micrometer:micrometer-tracing-bridge-otel:$micrometerVersion")
 
 	// validation token jwt
@@ -121,8 +119,8 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
 	generatorName.set("spring")
 	inputSpec.set("$rootDir/openapi/p4pa-pdnd.openapi.yaml")
 	outputDir.set("$projectDir/build/generated")
-	apiPackage.set("it.gov.pagopa.payhub.controller.generated")
-	modelPackage.set("it.gov.pagopa.payhub.model.generated")
+	apiPackage.set("it.gov.pagopa.payhub.pdnd.controller.generated")
+	modelPackage.set("it.gov.pagopa.payhub.pdnd.dto.generated")
 	configOptions.set(mapOf(
 		"dateLibrary" to "java8",
 		"requestMappingMode" to "api_interface",
@@ -130,8 +128,8 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
 		"interfaceOnly" to "true",
 		"useTags" to "true",
 		"generateConstructorWithAllArgs" to "false",
-		"generatedConstructorWithRequiredArgs" to "false",
-		"additionalModelTypeAnnotations" to "@lombok.Data @lombok.Builder @lombok.AllArgsConstructor @lombok.RequiredArgsConstructor",
+		"generatedConstructorWithRequiredArgs" to "true",
+		"additionalModelTypeAnnotations" to "@lombok.Data @lombok.Builder @lombok.AllArgsConstructor",
 		"serializationLibrary" to "jackson"
 	))
 }
@@ -166,7 +164,7 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
 	inputSpec.set("$rootDir/openapi/anprApiC030.openapi.yaml")
 	outputDir.set("$projectDir/build/generated")
 	apiPackage.set("it.gov.pagopa.payhub.anpr.C030.controller.generated")
-	modelPackage.set("it.gov.pagopa.payhub.anpr.C030.model.generated")
+	modelPackage.set("it.gov.pagopa.payhub.anpr.C030.dto.generated")
 	configOptions.set(mapOf(
 		"dateLibrary" to "java8",
 		"requestMappingMode" to "api_interface",
@@ -174,8 +172,8 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
 		"interfaceOnly" to "true",
 		"useTags" to "true",
 		"generateConstructorWithAllArgs" to "false",
-		"generatedConstructorWithRequiredArgs" to "false",
-		"additionalModelTypeAnnotations" to "@lombok.Data;@lombok.Builder;@lombok.NoArgsConstructor;@lombok.AllArgsConstructor"
+		"generatedConstructorWithRequiredArgs" to "true",
+		"additionalModelTypeAnnotations" to "@lombok.Data @lombok.Builder @lombok.AllArgsConstructor"
 	))
 }
 
@@ -187,7 +185,7 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
 	inputSpec.set("$rootDir/openapi/anprApiC003.openapi.yaml")
 	outputDir.set("$projectDir/build/generated")
 	apiPackage.set("it.gov.pagopa.payhub.anpr.C003.controller.generated")
-	modelPackage.set("it.gov.pagopa.payhub.anpr.C003.model.generated")
+	modelPackage.set("it.gov.pagopa.payhub.anpr.C003.dto.generated")
 	configOptions.set(mapOf(
 		"dateLibrary" to "java8",
 		"requestMappingMode" to "api_interface",
@@ -195,7 +193,7 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
 		"interfaceOnly" to "true",
 		"useTags" to "true",
 		"generateConstructorWithAllArgs" to "false",
-		"generatedConstructorWithRequiredArgs" to "false",
-		"additionalModelTypeAnnotations" to "@lombok.Data;@lombok.Builder;@lombok.NoArgsConstructor;@lombok.AllArgsConstructor"
+		"generatedConstructorWithRequiredArgs" to "true",
+		"additionalModelTypeAnnotations" to "@lombok.Data @lombok.Builder @lombok.AllArgsConstructor"
 	))
 }

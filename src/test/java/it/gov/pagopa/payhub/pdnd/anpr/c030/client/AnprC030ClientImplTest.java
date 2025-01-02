@@ -1,7 +1,7 @@
 package it.gov.pagopa.payhub.pdnd.anpr.c030.client;
 
-import it.gov.pagopa.payhub.anpr.C030.model.generated.RichiestaE002;
-import it.gov.pagopa.payhub.anpr.C030.model.generated.RispostaE002OK;
+import it.gov.pagopa.payhub.anpr.C030.dto.generated.RichiestaE002;
+import it.gov.pagopa.payhub.anpr.C030.dto.generated.RispostaE002OK;
 import it.gov.pagopa.payhub.pdnd.anpr.c030.service.AnprC030ServiceConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,13 +32,14 @@ class AnprC030ClientImplTest {
     private AnprC030ClientImpl anprC030Client;
 
     @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+    void setUp() throws Exception {
+        try(AutoCloseable mocks = MockitoAnnotations.openMocks(this)) {
 
-        when(restTemplateBuilder.build()).thenReturn(restTemplate);
+            when(restTemplateBuilder.build()).thenReturn(restTemplate);
 
-        anprC030Client = new AnprC030ClientImpl(restTemplateBuilder, anprC030ServiceConfig);
-        ReflectionTestUtils.setField(anprC030Client, "anprBasePath", "http://localhost:8080");
+            anprC030Client = new AnprC030ClientImpl(restTemplateBuilder, anprC030ServiceConfig);
+            ReflectionTestUtils.setField(anprC030Client, "anprBasePath", "http://localhost:8080");
+        }
     }
 
     @Test

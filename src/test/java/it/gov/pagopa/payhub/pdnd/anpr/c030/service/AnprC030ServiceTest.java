@@ -1,6 +1,6 @@
 package it.gov.pagopa.payhub.pdnd.anpr.c030.service;
 
-import it.gov.pagopa.payhub.anpr.C030.model.generated.*;
+import it.gov.pagopa.payhub.anpr.C030.dto.generated.*;
 import it.gov.pagopa.payhub.pdnd.anpr.c030.client.AnprC030ClientImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

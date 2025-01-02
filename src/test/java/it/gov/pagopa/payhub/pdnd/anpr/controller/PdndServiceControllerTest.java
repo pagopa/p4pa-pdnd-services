@@ -1,15 +1,15 @@
 package it.gov.pagopa.payhub.pdnd.anpr.controller;
 
-import it.gov.pagopa.payhub.model.generated.Address;
-import it.gov.pagopa.payhub.model.generated.Citizen;
 import it.gov.pagopa.payhub.pdnd.anpr.service.PdndService;
+import it.gov.pagopa.payhub.pdnd.dto.generated.Address;
+import it.gov.pagopa.payhub.pdnd.dto.generated.Citizen;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -23,7 +23,7 @@ class PdndServiceControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private PdndService pdndService;
 
     @Test

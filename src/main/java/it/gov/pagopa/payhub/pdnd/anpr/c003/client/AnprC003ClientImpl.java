@@ -1,7 +1,7 @@
 package it.gov.pagopa.payhub.pdnd.anpr.c003.client;
 
-import it.gov.pagopa.payhub.anpr.C003.model.generated.RichiestaE002;
-import it.gov.pagopa.payhub.anpr.C003.model.generated.RispostaE002OK;
+import it.gov.pagopa.payhub.anpr.C003.dto.generated.RichiestaE002;
+import it.gov.pagopa.payhub.anpr.C003.dto.generated.RispostaE002OK;
 import it.gov.pagopa.payhub.pdnd.anpr.c003.service.AnprC003ServiceConfig;
 import it.gov.pagopa.payhub.pdnd.anpr.client.AbstractAnprClient;
 import org.springframework.boot.web.client.RestTemplateBuilder;

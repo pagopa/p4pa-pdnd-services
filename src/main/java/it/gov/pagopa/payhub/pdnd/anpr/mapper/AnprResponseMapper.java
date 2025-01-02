@@ -1,10 +1,10 @@
 package it.gov.pagopa.payhub.pdnd.anpr.mapper;
 
-import it.gov.pagopa.payhub.anpr.C003.model.generated.RispostaE002OK;
-import it.gov.pagopa.payhub.anpr.C003.model.generated.TipoDatiSoggettiEnte;
-import it.gov.pagopa.payhub.anpr.C003.model.generated.TipoInfoSoggettoEnte;
-import it.gov.pagopa.payhub.model.generated.Address;
-import it.gov.pagopa.payhub.model.generated.Citizen;
+import it.gov.pagopa.payhub.anpr.C003.dto.generated.RispostaE002OK;
+import it.gov.pagopa.payhub.anpr.C003.dto.generated.TipoDatiSoggettiEnte;
+import it.gov.pagopa.payhub.anpr.C003.dto.generated.TipoInfoSoggettoEnte;
+import it.gov.pagopa.payhub.pdnd.dto.generated.Address;
+import it.gov.pagopa.payhub.pdnd.dto.generated.Citizen;
 
 import java.util.List;
 import java.util.Map;

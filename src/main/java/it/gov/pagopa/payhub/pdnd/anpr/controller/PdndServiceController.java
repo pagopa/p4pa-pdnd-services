@@ -1,7 +1,7 @@
 package it.gov.pagopa.payhub.pdnd.anpr.controller;
 
-import it.gov.pagopa.payhub.controller.generated.DefaultApi;
-import it.gov.pagopa.payhub.model.generated.Citizen;
+import it.gov.pagopa.payhub.pdnd.controller.generated.DefaultApi;
+import it.gov.pagopa.payhub.pdnd.dto.generated.Citizen;
 import it.gov.pagopa.payhub.pdnd.anpr.service.PdndService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

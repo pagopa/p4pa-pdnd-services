@@ -1,12 +1,12 @@
 package it.gov.pagopa.payhub.pdnd.anpr.service;
 
-import it.gov.pagopa.payhub.anpr.C003.model.generated.TipoInfoSoggettoEnte;
-import it.gov.pagopa.payhub.anpr.C003.model.generated.TipoInfoValore;
-import it.gov.pagopa.payhub.anpr.C030.model.generated.RispostaE002OK;
-import it.gov.pagopa.payhub.anpr.C030.model.generated.TipoDatiSoggettiEnte;
-import it.gov.pagopa.payhub.anpr.C030.model.generated.TipoIdentificativi;
-import it.gov.pagopa.payhub.anpr.C030.model.generated.TipoListaSoggetti;
-import it.gov.pagopa.payhub.model.generated.Citizen;
+import it.gov.pagopa.payhub.anpr.C003.dto.generated.TipoInfoSoggettoEnte;
+import it.gov.pagopa.payhub.anpr.C003.dto.generated.TipoInfoValore;
+import it.gov.pagopa.payhub.anpr.C030.dto.generated.RispostaE002OK;
+import it.gov.pagopa.payhub.anpr.C030.dto.generated.TipoDatiSoggettiEnte;
+import it.gov.pagopa.payhub.anpr.C030.dto.generated.TipoIdentificativi;
+import it.gov.pagopa.payhub.anpr.C030.dto.generated.TipoListaSoggetti;
+import it.gov.pagopa.payhub.pdnd.dto.generated.Citizen;
 import it.gov.pagopa.payhub.pdnd.anpr.c003.service.AnprC003Service;
 import it.gov.pagopa.payhub.pdnd.anpr.c030.service.AnprC030Service;
 import org.junit.jupiter.api.Test;
@@ -46,10 +46,10 @@ class PdndServiceImplTest {
                 .identificativi(idTypes)
                 .build();
 
-        RispostaE002OK anprC030Response = new RispostaE002OK();
+        RispostaE002OK anprC030Response = newC030RispostaE002Ok();
         anprC030Response.setListaSoggetti(new TipoListaSoggetti(List.of(subDataTypes)));
 
-        it.gov.pagopa.payhub.anpr.C003.model.generated.RispostaE002OK anprC003Response = new it.gov.pagopa.payhub.anpr.C003.model.generated.RispostaE002OK();
+        it.gov.pagopa.payhub.anpr.C003.dto.generated.RispostaE002OK anprC003Response = newC003RispostaE002Ok();
         TipoInfoSoggettoEnte subTypeInfo = TipoInfoSoggettoEnte.builder()
                 .id("firstName")
                 .chiave("Julieta")
@@ -59,8 +59,8 @@ class PdndServiceImplTest {
                 .dettaglio("")
                 .build();
 
-        anprC003Response.setListaSoggetti(new it.gov.pagopa.payhub.anpr.C003.model.generated.TipoListaSoggetti(List.of(
-                new it.gov.pagopa.payhub.anpr.C003.model.generated.TipoDatiSoggettiEnte(List.of(subTypeInfo))
+        anprC003Response.setListaSoggetti(new it.gov.pagopa.payhub.anpr.C003.dto.generated.TipoListaSoggetti(List.of(
+                new it.gov.pagopa.payhub.anpr.C003.dto.generated.TipoDatiSoggettiEnte(List.of(subTypeInfo))
         )));
 
         Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode)).thenReturn(anprC030Response);
@@ -70,6 +70,10 @@ class PdndServiceImplTest {
 
         assertNotNull(result);
         assertEquals("Julieta", result.getFirstName());
+    }
+
+    private static it.gov.pagopa.payhub.anpr.C003.dto.generated.RispostaE002OK newC003RispostaE002Ok() {
+        return new it.gov.pagopa.payhub.anpr.C003.dto.generated.RispostaE002OK("IDOP", new it.gov.pagopa.payhub.anpr.C003.dto.generated.TipoListaSoggetti(List.of()), List.of());
     }
 
     @Test
@@ -85,16 +89,20 @@ class PdndServiceImplTest {
                 .identificativi(idTypes)
                 .build();
 
-        RispostaE002OK anprC030Response = new RispostaE002OK();
+        RispostaE002OK anprC030Response = newC030RispostaE002Ok();
         anprC030Response.setListaSoggetti(new TipoListaSoggetti(List.of(subDataTypes)));
 
-        it.gov.pagopa.payhub.anpr.C003.model.generated.RispostaE002OK anprC003Response = new it.gov.pagopa.payhub.anpr.C003.model.generated.RispostaE002OK();
+        it.gov.pagopa.payhub.anpr.C003.dto.generated.RispostaE002OK anprC003Response = newC003RispostaE002Ok();
         anprC003Response.setListaSoggetti(null);
 
         Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode)).thenReturn(anprC030Response);
         Mockito.when(anprC003Service.getUserData(idAnpr, fiscalCode)).thenReturn(anprC003Response);
 
         assertThrows(IllegalArgumentException.class, () -> pdndService.getCitizenData(fiscalCode));
+    }
+
+    private static RispostaE002OK newC030RispostaE002Ok() {
+        return new RispostaE002OK("IDOP", new TipoListaSoggetti(List.of()), List.of());
     }
 
     @Test
@@ -110,7 +118,7 @@ class PdndServiceImplTest {
                 .identificativi(idTypes)
                 .build();
 
-        RispostaE002OK anprC030Response = new RispostaE002OK();
+        RispostaE002OK anprC030Response = newC030RispostaE002Ok();
         anprC030Response.setListaSoggetti(new TipoListaSoggetti(List.of(subDataTypes)));
 
         Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode)).thenReturn(anprC030Response);
@@ -132,12 +140,12 @@ class PdndServiceImplTest {
                 .identificativi(idTypes)
                 .build();
 
-        RispostaE002OK anprC030Response = new RispostaE002OK();
+        RispostaE002OK anprC030Response = newC030RispostaE002Ok();
         anprC030Response.setListaSoggetti(new TipoListaSoggetti(List.of(subDataTypes)));
 
-        it.gov.pagopa.payhub.anpr.C003.model.generated.RispostaE002OK anprC003Response = new it.gov.pagopa.payhub.anpr.C003.model.generated.RispostaE002OK();
+        it.gov.pagopa.payhub.anpr.C003.dto.generated.RispostaE002OK anprC003Response = newC003RispostaE002Ok();
 
-        anprC003Response.setListaSoggetti(new it.gov.pagopa.payhub.anpr.C003.model.generated.TipoListaSoggetti(null));
+        anprC003Response.setListaSoggetti(new it.gov.pagopa.payhub.anpr.C003.dto.generated.TipoListaSoggetti(null));
 
         Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode)).thenReturn(anprC030Response);
         Mockito.when(anprC003Service.getUserData(idAnpr, fiscalCode)).thenReturn(anprC003Response);
@@ -158,12 +166,12 @@ class PdndServiceImplTest {
                 .identificativi(idTypes)
                 .build();
 
-        RispostaE002OK anprC030Response = new RispostaE002OK();
+        RispostaE002OK anprC030Response = newC030RispostaE002Ok();
         anprC030Response.setListaSoggetti(new TipoListaSoggetti(List.of(subDataTypes)));
 
-        it.gov.pagopa.payhub.anpr.C003.model.generated.RispostaE002OK anprC003Response = new it.gov.pagopa.payhub.anpr.C003.model.generated.RispostaE002OK();
+        it.gov.pagopa.payhub.anpr.C003.dto.generated.RispostaE002OK anprC003Response = newC003RispostaE002Ok();
 
-        anprC003Response.setListaSoggetti(new it.gov.pagopa.payhub.anpr.C003.model.generated.TipoListaSoggetti(new ArrayList<>()));
+        anprC003Response.setListaSoggetti(new it.gov.pagopa.payhub.anpr.C003.dto.generated.TipoListaSoggetti(new ArrayList<>()));
 
         Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode)).thenReturn(anprC030Response);
         Mockito.when(anprC003Service.getUserData(idAnpr, fiscalCode)).thenReturn(anprC003Response);

@@ -1,9 +1,9 @@
 package it.gov.pagopa.payhub.pdnd.anpr.c003.service;
 
-import it.gov.pagopa.payhub.anpr.C003.model.generated.RichiestaE002;
-import it.gov.pagopa.payhub.anpr.C003.model.generated.RispostaE002OK;
-import it.gov.pagopa.payhub.anpr.C003.model.generated.TipoCriteriRicercaE002;
-import it.gov.pagopa.payhub.anpr.C003.model.generated.TipoDatiRichiestaE002;
+import it.gov.pagopa.payhub.anpr.C003.dto.generated.RichiestaE002;
+import it.gov.pagopa.payhub.anpr.C003.dto.generated.RispostaE002OK;
+import it.gov.pagopa.payhub.anpr.C003.dto.generated.TipoCriteriRicercaE002;
+import it.gov.pagopa.payhub.anpr.C003.dto.generated.TipoDatiRichiestaE002;
 import it.gov.pagopa.payhub.pdnd.anpr.c003.client.AnprC003Client;
 import it.gov.pagopa.payhub.pdnd.anpr.c003.client.AnprC003ClientImpl;
 import org.springframework.stereotype.Service;
