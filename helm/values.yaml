@@ -65,6 +65,7 @@ microservice-chart:
 
   envSecret:
     APPLICATIONINSIGHTS_CONNECTION_STRING: appinsights-connection-string
+    JWT_TOKEN_PUBLIC_KEY: jwt-public-key
 
     PDND_SERVICE_PRIVATEKEY: piattaforma-unitaria-interop-priv
     PDND_SERVICE_PUBLICKEY: piattaforma-unitaria-interop-pub
