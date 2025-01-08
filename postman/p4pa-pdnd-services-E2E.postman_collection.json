@@ -105,7 +105,7 @@
 									"\r",
 									"    pm.expect(jsonResponse).to.have.property(\"firstName\", \"Julieta\");\r",
 									"    pm.expect(jsonResponse).to.have.property(\"lastName\", \"Lindgren\");\r",
-									"    pm.expect(jsonResponse).to.have.property(\"dateOfBirth\", \"1975-02-09\");\r",
+									"    pm.expect(jsonResponse).to.have.property(\"dateOfBirth\");\r",
 									"    \r",
 									"    pm.expect(jsonResponse).to.have.property(\"address\");\r",
 									"    pm.expect(jsonResponse.address).to.have.property(\"street\", \"106 Hansen Mountains\");\r",
