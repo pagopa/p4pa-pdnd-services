@@ -3,6 +3,10 @@ spring:
       name: ${artifactId}
       version: ${version}
     jmx.enabled: true
+    threads:
+      virtual:
+        enabled: "\${VIRTUAL_THREADS_ENABLED:true}"
+
 management:
     endpoint:
       health:
@@ -15,6 +19,7 @@ management:
         exposure.include: "*"
       web:
         exposure.include: info, health
+
 app:
     pdnd:
       base-url: "\${PDND_BASE_URL:https://auth.uat.interop.pagopa.it}"
@@ -40,8 +45,6 @@ app:
     rest-client:
       connect.timeout.millis: "\${CONNECT_TIMEOUT_MILLIS:120000}"
       read.timeout.millis: "\${READ_TIMEOUT_MILLIS:120000}"
-    auth:
-      base-url: "\${AUTH_SERVER_BASE_URL:https://auth-server/api}"
 
 springdoc:
   writer-with-default-pretty-printer: true
