@@ -32,17 +32,16 @@ val springDocOpenApiVersion = "2.7.0"
 val openApiToolsVersion = "0.2.6"
 val javaJwtVersion = "4.4.0"
 val jwksRsaVersion = "0.22.1"
-val nimbusJoseJwtVersion = "9.48"
-val jjwtVersion = "0.12.6"
 val wiremockVersion = "3.10.0"
 val wiremockSpringBootVersion = "2.1.3"
 val micrometerVersion = "1.4.1"
+val bouncycastleVersion = "1.79"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
-	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$springDocOpenApiVersion")
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 	implementation("org.openapitools:jackson-databind-nullable:$openApiToolsVersion")
@@ -51,11 +50,12 @@ dependencies {
 	// validation token jwt
 	implementation("com.auth0:java-jwt:$javaJwtVersion")
 	implementation("com.auth0:jwks-rsa:$jwksRsaVersion")
-	implementation("com.nimbusds:nimbus-jose-jwt:$nimbusJoseJwtVersion")
-	implementation("io.jsonwebtoken:jjwt-api:$jjwtVersion")
 
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
+
+	//security
+	implementation("org.bouncycastle:bcprov-jdk18on:$bouncycastleVersion")
 
 	//	Testing
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
