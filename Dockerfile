@@ -102,13 +102,7 @@ RUN mkdir -p src/main/java && \
 
 USER ${APP_USER}
 
-RUN gradle openApiGeneratePayhub dependencies --no-daemon
-
-RUN gradle openApiGeneratePdndClient dependencies --no-daemon
-
-RUN gradle openApiGenerateAnprApiC030 dependencies --no-daemon
-
-RUN gradle openApiGenerateAnprApiC003 dependencies --no-daemon
+RUN gradle dependenciesBuild dependencies --no-daemon
 
 #
 # 🏗️ Build Stage

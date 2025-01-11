@@ -1,11 +1,11 @@
 {
 	"info": {
-		"_postman_id": "2474956e-ea82-4ca1-a3f4-19579b4b7f67",
+		"_postman_id": "21c09e17-4ba6-4b2f-ab0c-71d1e4fd1c97",
 		"name": "P4PA-PDND-Service API",
 		"description": "API and Models.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "15747968",
-		"_collection_link": "https://warped-astronaut-141685.postman.co/workspace/P4PA~9a8b7dd5-97b6-4dd0-b3f5-95f25fd0b455/collection/15747968-2474956e-ea82-4ca1-a3f4-19579b4b7f67?action=share&source=collection_link&creator=15747968"
+		"_collection_link": "https://warped-astronaut-141685.postman.co/workspace/P4PA~9a8b7dd5-97b6-4dd0-b3f5-95f25fd0b455/collection/15747968-21c09e17-4ba6-4b2f-ab0c-71d1e4fd1c97?action=share&source=collection_link&creator=15747968"
 	},
 	"item": [
 		{
@@ -27,13 +27,13 @@
 									"pm.test(\"p4paAuth - 01_authtoken jwt - Verify response body\", function () {\r",
 									"    let jsonResponse = pm.response.json();\r",
 									"\r",
-									"    pm.expect(jsonResponse).have.property(\"accessToken\")\r",
-									"    pm.expect(jsonResponse).have.property(\"tokenType\")\r",
-									"    pm.expect(jsonResponse).have.property(\"expiresIn\")\r",
+									"    pm.expect(jsonResponse).have.property(\"access_token\")\r",
+									"    pm.expect(jsonResponse).have.property(\"token_type\")\r",
+									"    pm.expect(jsonResponse).have.property(\"expires_in\")\r",
 									"});\r",
 									"\r",
 									"let jsonResponse = pm.response.json();\r",
-									"pm.collectionVariables.set(\"accessToken\", jsonResponse.accessToken);\r",
+									"pm.collectionVariables.set(\"accessToken\", jsonResponse.access_token);\r",
 									""
 								],
 								"type": "text/javascript",
@@ -45,12 +45,11 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{p4paAuthBaseUrl}}/payhub/auth/token?client_id=piattaforma-unitaria&grant_type=urn:ietf:params:oauth:grant-type:token-exchange&subject_token={{tokenExchange_subjectToken}}&subject_issuer={{tokenExchange_issuer}}&scope=openid&subject_token_type=urn:ietf:params:oauth:token-type:jwt",
+							"raw": "{{p4paAuthBaseUrl}}/auth/token?client_id=piattaforma-unitaria&grant_type=urn:ietf:params:oauth:grant-type:token-exchange&subject_token={{tokenExchange_subjectToken}}&subject_issuer={{tokenExchange_issuer}}&scope=openid&subject_token_type=urn:ietf:params:oauth:token-type:jwt",
 							"host": [
 								"{{p4paAuthBaseUrl}}"
 							],
 							"path": [
-								"payhub",
 								"auth",
 								"token"
 							],
@@ -103,12 +102,12 @@
 									"pm.test(\"MyPay - 02_getCitizenData - check response and reading citizen data\", function () {\r",
 									"    let jsonResponse = pm.response.json();\r",
 									"\r",
-									"    pm.expect(jsonResponse).to.have.property(\"firstName\", \"Julieta\");\r",
-									"    pm.expect(jsonResponse).to.have.property(\"lastName\", \"Lindgren\");\r",
-									"    pm.expect(jsonResponse).to.have.property(\"dateOfBirth\", \"1975-03-09\");\r",
+									"    pm.expect(jsonResponse).to.have.property(\"firstName\", \"Norris\");\r",
+									"    pm.expect(jsonResponse).to.have.property(\"lastName\", \"Jones\");\r",
+									"    pm.expect(jsonResponse).to.have.property(\"dateOfBirth\", \"2005-07-28\");\r",
 									"    \r",
 									"    pm.expect(jsonResponse).to.have.property(\"address\");\r",
-									"    pm.expect(jsonResponse.address).to.have.property(\"street\", \"Turner Run\");\r",
+									"    pm.expect(jsonResponse.address).to.have.property(\"street\", \"Barabara Passage\");\r",
 									"    pm.expect(jsonResponse.address).to.have.property(\"city\", \"Roma\");\r",
 									"    pm.expect(jsonResponse.address).to.have.property(\"postalCode\", \"00100\");\r",
 									"    pm.expect(jsonResponse.address).to.have.property(\"country\", \"Italia\");\r",
@@ -468,10 +467,6 @@
 		}
 	],
 	"variable": [
-		{
-			"key": "baseUrlPdnd",
-			"value": "https://hub.internal.dev.p4pa.pagopa.it/p4papdnd"
-		},
 		{
 			"key": "fiscalCode",
 			"value": "DNTCRL65S67M126K",
