@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "21c09e17-4ba6-4b2f-ab0c-71d1e4fd1c97",
-		"name": "P4PA-PDND-Service API",
+		"name": "p4pa-pdnd-services-E2E",
 		"description": "API and Models.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "15747968",
@@ -128,9 +128,9 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrlPdnd}}/anpr-service-e002/citizen?fiscalCode={{fiscalCode}}",
+							"raw": "{{pdndServicesBaseUrl}}/anpr-service-e002/citizen?fiscalCode={{fiscalCode}}",
 							"host": [
-								"{{baseUrlPdnd}}"
+								"{{pdndServicesBaseUrl}}"
 							],
 							"path": [
 								"anpr-service-e002",
