@@ -46,6 +46,7 @@ dependencies {
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 	implementation("org.openapitools:jackson-databind-nullable:$openApiToolsVersion")
 	implementation("io.micrometer:micrometer-tracing-bridge-otel:$micrometerVersion")
+	implementation("io.micrometer:micrometer-registry-prometheus")
 
 	// validation token jwt
 	implementation("com.auth0:java-jwt:$javaJwtVersion")
@@ -98,7 +99,19 @@ configurations {
 }
 
 tasks.compileJava {
-	dependsOn("openApiGeneratePayhub","openApiGeneratePdndClient","openApiGenerateAnprApiC030", "openApiGenerateAnprApiC003")
+	dependsOn("dependenciesBuild")
+}
+
+tasks.register("dependenciesBuild") {
+	group = "AutomaticallyGeneratedCode"
+	description = "grouping all together automatically generate code tasks"
+
+	dependsOn(
+		"openApiGeneratePDNDSERVICES",
+		"openApiGeneratePdndClient",
+		"openApiGenerateAnprApiC030",
+		"openApiGenerateAnprApiC003"
+	)
 }
 
 configure<SourceSetContainer> {
@@ -112,7 +125,7 @@ springBoot {
 	mainClass.value("it.gov.pagopa.payhub.pdnd.PayhubPdndApplication")
 }
 
-tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("openApiGeneratePayhub") {
+tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("openApiGeneratePDNDSERVICES") {
 	group = "openapi"
 	description = "description"
 
@@ -127,10 +140,10 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
 		"useSpringBoot3" to "true",
 		"interfaceOnly" to "true",
 		"useTags" to "true",
-		"generateConstructorWithAllArgs" to "false",
+		"useBeanValidation" to "true",
+		"generateConstructorWithAllArgs" to "true",
 		"generatedConstructorWithRequiredArgs" to "true",
-		"additionalModelTypeAnnotations" to "@lombok.Data @lombok.Builder @lombok.AllArgsConstructor",
-		"serializationLibrary" to "jackson"
+		"additionalModelTypeAnnotations" to "@lombok.Builder"
 	))
 }
 
