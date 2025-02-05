@@ -72,3 +72,16 @@ components:
           example: '2021-11-15'
         address:
           $ref: '#/components/schemas/Address'
+    PdndServicesErrorDTO:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          enum:
+            - PDND_SERVICES_BAD_REQUEST
+            - PDND_SERVICES_GENERIC_ERROR
+        message:
+          type: string
