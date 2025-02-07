@@ -81,6 +81,7 @@ components:
         code:
           type: string
           enum:
+            - PDND_SERVICES_NOT_FOUND
             - PDND_SERVICES_BAD_REQUEST
             - PDND_SERVICES_GENERIC_ERROR
         message:
