@@ -71,9 +71,6 @@ app:
             privateKey: "\${PDND_SERVICE_ANPR_C030_PRIVATEKEY:\${PDND_SERVICE_ANPR_PRIVATEKEY:\${PDND_SERVICE_PRIVATEKEY:}}}"
             publicKey: "\${PDND_SERVICE_ANPR_C030_PUBLICKEY:\${PDND_SERVICE_ANPR_PUBLICKEY:\${PDND_SERVICE_PUBLICKEY:}}}"
             url: "\${PDND_SERVICE_ANPR_C030_URL:/govway/rest/in/MinInternoPortaANPR-PDND/C030-servizioAccertamentoIdUnicoNazionale/v1/anpr-service-e002}"
-    rest-client:
-      connect.timeout.millis: "\${CONNECT_TIMEOUT_MILLIS:120000}"
-      read.timeout.millis: "\${READ_TIMEOUT_MILLIS:120000}"
 
 springdoc:
   writer-with-default-pretty-printer: true
@@ -89,3 +86,8 @@ jwt:
                 odND6HPvvvmgbK1/2qTHn/HJjWUm11LUC73BszR32BKbdEEhxPQnnwswVekWzPi1
                 IwIDAQAB
                 -----END PUBLIC KEY-----}"
+
+rest:
+  default-timeout:
+    connect-millis: "\${DEFAULT_REST_CONNECT_TIMEOUT_MILLIS:120000}"
+    read-millis: "\${DEFAULT_REST_READ_TIMEOUT_MILLIS:120000}"
