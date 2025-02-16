@@ -2,7 +2,7 @@ package it.gov.pagopa.payhub.pdnd.connector.pdnd.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndConfig;
+import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndConfig;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +27,7 @@ class PdndClientAssertionBuilderServiceTest {
   @InjectMocks
   private PdndClientAssertionBuilderService pdndClientAssertionBuilderService;
 
-  private String pemKey = """
+  private final String pemKey = """
   -----BEGIN PRIVATE KEY-----
     MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCT5fdA/ZKoyLas
     R5/kxfFm8KBz4v3i8k76Xd8j2vh8kBaapzn9hAHWJXOJ+GOUFOxkw1bnI2PUtZjj
