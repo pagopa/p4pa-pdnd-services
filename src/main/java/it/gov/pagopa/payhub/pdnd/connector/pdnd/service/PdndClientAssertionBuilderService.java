@@ -8,7 +8,7 @@ import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndConfig;
+import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndConfig;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.utils.CertUtils;
 import java.io.IOException;
