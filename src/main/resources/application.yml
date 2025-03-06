@@ -97,3 +97,12 @@ rest:
         privateKey: "\${PDND_SERVICE_ANPR_C030_PRIVATEKEY:\${PDND_SERVICE_ANPR_PRIVATEKEY:\${PDND_SERVICE_PRIVATEKEY:}}}"
         publicKey: "\${PDND_SERVICE_ANPR_C030_PUBLICKEY:\${PDND_SERVICE_ANPR_PUBLICKEY:\${PDND_SERVICE_PUBLICKEY:}}}"
         url: "\${PDND_SERVICE_ANPR_C030_URL:/govway/rest/in/MinInternoPortaANPR-PDND/C030-servizioAccertamentoIdUnicoNazionale/v1/anpr-service-e002}"
+  send:
+    base-url: "\${SEND_BASE_URL:https://api.uat.notifichedigitali.it}"
+    send:
+      client-id: "\${PDND_SERVICE_SEND_CLIENTID:\${PDND_SERVICE_CLIENTID:clientid}}"
+      kid: "\${PDND_SERVICE_SEND_KID:\${PDND_SERVICE_KID:kid}}"
+      purpose-id: "\${PDND_SERVICE_SEND_PURPOSE_ID:purposeid}"
+      privateKey: "\${PDND_SERVICE_SEND_PRIVATEKEY:\${PDND_SERVICE_PRIVATEKEY:}}"
+      publicKey: "\${PDND_SERVICE_SEND_PUBLICKEY:\${PDND_SERVICE_PUBLICKEY:}}"
+      url: "\${PDND_SERVICE_SEND_URL:}"
