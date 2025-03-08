@@ -1,0 +1,65 @@
+package it.gov.pagopa.payhub.pdnd.anpr.connector.c003.config;
+
+import it.gov.pagopa.payhub.anpr.C003.controller.ApiClient;
+import it.gov.pagopa.payhub.anpr.C003.controller.BaseApi;
+import it.gov.pagopa.payhub.anpr.C003.controller.generated.E002ServiceApi;
+import it.gov.pagopa.payhub.pdnd.anpr.connector.AnprApiClientConfig;
+import it.gov.pagopa.payhub.pdnd.anpr.connector.BaseAnprServiceApisHolder;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.function.Supplier;
+
+@Slf4j
+@Service
+public class AnprC003ApisHolder extends BaseAnprServiceApisHolder<ApiClient> {
+
+    private final E002ServiceApi e002ServiceApi;
+
+    public AnprC003ApisHolder(
+            AnprApiClientConfig clientConfig,
+            RestTemplateBuilder restTemplateBuilder
+    ) {
+        super(clientConfig, clientConfig.getServices().getC003(), restTemplateBuilder);
+
+        this.e002ServiceApi = new E002ServiceApi(apiClient);
+    }
+
+//region Configure openApiGenerator ApiClient
+    @Override
+    protected ApiClient buildApiClient(RestTemplate restTemplate) {
+        return new ApiClient(restTemplate);
+    }
+
+    @Override
+    protected void setApiClientBasePath(ApiClient apiClient, String basePath) {
+        apiClient.setBasePath(basePath);
+    }
+
+    @Override
+    protected void setApiClientBearerToken(ApiClient apiClient, Supplier<String> accessTokenSupplier) {
+        apiClient.setBearerToken(accessTokenSupplier);
+    }
+
+    @Override
+    protected void setApiClientMaxAttemptsForRetry(ApiClient apiClient, int maxAttemptsForRetry) {
+        apiClient.setMaxAttemptsForRetry(maxAttemptsForRetry);
+    }
+
+    @Override
+    protected void setApiClientWaitTimeMillis(ApiClient apiClient, long waitTimeMillis) {
+        apiClient.setWaitTimeMillis(waitTimeMillis);
+    }
+//endregion
+
+    public E002ServiceApi getE002ServiceApi(String accessToken) {
+        return getApi(accessToken, e002ServiceApi);
+    }
+
+    private <T extends BaseApi> T getApi(String accessToken, T api) {
+        bearerTokenHolder.set(accessToken);
+        return api;
+    }
+}

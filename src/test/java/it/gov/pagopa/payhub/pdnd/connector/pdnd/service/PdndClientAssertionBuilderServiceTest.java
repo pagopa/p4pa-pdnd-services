@@ -2,10 +2,11 @@ package it.gov.pagopa.payhub.pdnd.connector.pdnd.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndConfig;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
+import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Answers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -15,14 +16,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class PdndClientAssertionBuilderServiceTest {
 
 
-  @Mock
-  private PdndConfig pdndConfig;
+  @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+  private PdndApiClientConfig pdndApiClientConfigMock;
 
   @Mock
-  private PdndServiceIntegratedConfig pdndServiceIntegratedConfig;
-
-  @Mock
-  private PdndClientAssertionBuilderService pdndClientAssertionBuilderServiceMock;
+  private PdndServiceIntegratedConfig pdndServiceIntegratedConfigMock;
 
   @InjectMocks
   private PdndClientAssertionBuilderService pdndClientAssertionBuilderService;
@@ -61,15 +59,15 @@ class PdndClientAssertionBuilderServiceTest {
   @Test
   void givenValidPDNDConfigWhenBuildPdndClientAssertionThenVerifyToken() {
     // Given
-    Mockito.when(pdndConfig.getAudience()).thenReturn("AUDIENCE");
-    Mockito.when(pdndServiceIntegratedConfig.getClientId()).thenReturn("CLIENTID");
-    Mockito.when(pdndServiceIntegratedConfig.getKid()).thenReturn("KID");
-    Mockito.when(pdndServiceIntegratedConfig.getPrivateKey()).thenReturn(pemKey);
-    Mockito.when(pdndServiceIntegratedConfig.getPurposeId()).thenReturn("PURPOSEID");
+    Mockito.when(pdndApiClientConfigMock.getConfig().getAudience()).thenReturn("AUDIENCE");
+    Mockito.when(pdndServiceIntegratedConfigMock.getClientId()).thenReturn("CLIENTID");
+    Mockito.when(pdndServiceIntegratedConfigMock.getKid()).thenReturn("KID");
+    Mockito.when(pdndServiceIntegratedConfigMock.getPrivateKey()).thenReturn(pemKey);
+    Mockito.when(pdndServiceIntegratedConfigMock.getPurposeId()).thenReturn("PURPOSEID");
 
     // When
     String token = pdndClientAssertionBuilderService.buildPdndClientAssertion(
-        pdndServiceIntegratedConfig);
+            pdndServiceIntegratedConfigMock);
 
     // Then
     assertNotNull(token);

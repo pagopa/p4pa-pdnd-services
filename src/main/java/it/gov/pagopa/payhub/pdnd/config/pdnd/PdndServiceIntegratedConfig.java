@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class PdndServiceIntegratedConfig {
+public class PdndServiceIntegratedConfig {
+  private String basePath;
+  private String purposeId;
   private String clientId;
   private String kid;
-  private String purposeId;
   private String privateKey;
   private String publicKey;
-  private String url;
 }

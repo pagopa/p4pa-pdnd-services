@@ -1,30 +1,27 @@
 package it.gov.pagopa.payhub.pdnd.connector.pdnd.service;
 
-import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.JOSEObjectType;
-import com.nimbusds.jose.JWSAlgorithm;
-import com.nimbusds.jose.JWSHeader;
-import com.nimbusds.jose.JWSSigner;
+import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndConfig;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
+import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.utils.CertUtils;
+import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 import java.util.UUID;
-import org.springframework.stereotype.Service;
 
 @Service
 public class PdndClientAssertionBuilderService {
 
-  private final PdndConfig pdndConfig;
+  private final PdndApiClientConfig.PdndConfig pdndConfig;
 
-  public PdndClientAssertionBuilderService(PdndConfig pdndConfig) {
-    this.pdndConfig = pdndConfig;
+  public PdndClientAssertionBuilderService(PdndApiClientConfig pdndApiClientConfig) {
+    this.pdndConfig = pdndApiClientConfig.getConfig();
   }
 
   public String buildPdndClientAssertion(PdndServiceIntegratedConfig pdndServiceIntegratedConfig) {

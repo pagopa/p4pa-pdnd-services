@@ -125,7 +125,6 @@ tasks.register("dependenciesBuild") {
 configure<SourceSetContainer> {
 	named("main") {
 		java.srcDir("$projectDir/build/generated/src/main/java")
-		java.srcDir("$projectDir/build/generated/pdnd-client/src/main/java")
 	}
 }
 
@@ -161,7 +160,7 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
 
 	generatorName.set("java")
 	inputSpec.set("$rootDir/src/main/resources/pdnd/pdnd-v1.yaml")
-	outputDir.set("$projectDir/build/generated/pdnd-client")
+	outputDir.set("$projectDir/build/generated")
 	apiPackage.set("it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.api")
 	modelPackage.set("it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.dto")
 	modelNameSuffix.set("DTO")
@@ -184,40 +183,46 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
 	group = "openapi"
 	description = "description"
 
-	generatorName.set("spring")
+	generatorName.set("java")
 	inputSpec.set("$rootDir/openapi/anprApiC030.openapi.yaml")
 	outputDir.set("$projectDir/build/generated")
 	apiPackage.set("it.gov.pagopa.payhub.anpr.C030.controller.generated")
 	modelPackage.set("it.gov.pagopa.payhub.anpr.C030.dto.generated")
 	configOptions.set(mapOf(
-		"dateLibrary" to "java8",
-		"requestMappingMode" to "api_interface",
+		"swaggerAnnotations" to "false",
+		"openApiNullable" to "false",
+		"dateLibrary" to "java17",
 		"useSpringBoot3" to "true",
-		"interfaceOnly" to "true",
-		"useTags" to "true",
+		"useJakartaEe" to "true",
+		"serializationLibrary" to "jackson",
+		"generateSupportingFiles" to "true",
 		"generateConstructorWithAllArgs" to "true",
 		"generatedConstructorWithRequiredArgs" to "true",
 		"additionalModelTypeAnnotations" to "@lombok.experimental.SuperBuilder(toBuilder = true)"
 	))
+	library.set("resttemplate")
 }
 
 tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("openApiGenerateAnprApiC003") {
 	group = "openapi"
 	description = "description"
 
-	generatorName.set("spring")
+	generatorName.set("java")
 	inputSpec.set("$rootDir/openapi/anprApiC003.openapi.yaml")
 	outputDir.set("$projectDir/build/generated")
 	apiPackage.set("it.gov.pagopa.payhub.anpr.C003.controller.generated")
 	modelPackage.set("it.gov.pagopa.payhub.anpr.C003.dto.generated")
 	configOptions.set(mapOf(
-		"dateLibrary" to "java8",
-		"requestMappingMode" to "api_interface",
+		"swaggerAnnotations" to "false",
+		"openApiNullable" to "false",
+		"dateLibrary" to "java17",
 		"useSpringBoot3" to "true",
-		"interfaceOnly" to "true",
-		"useTags" to "true",
+		"useJakartaEe" to "true",
+		"serializationLibrary" to "jackson",
+		"generateSupportingFiles" to "true",
 		"generateConstructorWithAllArgs" to "true",
 		"generatedConstructorWithRequiredArgs" to "true",
 		"additionalModelTypeAnnotations" to "@lombok.experimental.SuperBuilder(toBuilder = true)"
 	))
+	library.set("resttemplate")
 }
