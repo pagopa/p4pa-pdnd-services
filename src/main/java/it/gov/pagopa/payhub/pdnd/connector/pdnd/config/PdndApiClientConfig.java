@@ -23,8 +23,12 @@ public class PdndApiClientConfig extends ApiClientConfig {
 
     @NoArgsConstructor
     @AllArgsConstructor
+    @SuperBuilder
     @Data
     public static class PdndConfig {
+        private String env;
+        private String userId;
         private String audience;
+        private long authExpirationMinutes;
     }
 }

@@ -159,7 +159,7 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
 	description = "description"
 
 	generatorName.set("java")
-	inputSpec.set("$rootDir/src/main/resources/pdnd/pdnd-v1.yaml")
+	inputSpec.set("$rootDir/openapi/pdnd-v1.openapi.yaml")
 	outputDir.set("$projectDir/build/generated")
 	apiPackage.set("it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.api")
 	modelPackage.set("it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.dto")

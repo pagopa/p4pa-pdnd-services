@@ -9,6 +9,7 @@ import it.gov.pagopa.payhub.pdnd.anpr.connector.c030.client.AnprC030Client;
 import it.gov.pagopa.payhub.pdnd.anpr.service.AnprIdOperationGeneratorService;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.PdndService;
+import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -80,8 +81,10 @@ class AnprC030ServiceTest {
                 .datiRichiesta(reqDataTypes)
                 .build();
 
+        PdndAuthData pdndAuthData = new PdndAuthData(null, null, accessToken, null, null);
+
         when(pdndServiceMock.generateToken(Mockito.same(pdndServiceIntegratedConfig)))
-                .thenReturn(accessToken);
+                .thenReturn(pdndAuthData);
         when(anprC030ClientMock.getIdAnprFromFc(request, accessToken))
                 .thenReturn(expectedResult);
         when(idOperationGeneratorServiceMock.generateId())

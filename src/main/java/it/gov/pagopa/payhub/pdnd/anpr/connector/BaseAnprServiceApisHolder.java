@@ -27,6 +27,7 @@ public abstract class BaseAnprServiceApisHolder <T> {
         if (clientConfig.isPrintBodyWhenError()) {
             restTemplate.setErrorHandler(RestTemplateConfig.bodyPrinterWhenError("ANPR"));
         }
+        // TODO pdnd headers https://github.com/pagopa/idpay-admissibility-assessor/blob/main/src/main/java/it/gov/pagopa/common/reactive/pdnd/service/BaseRestPdndServiceClient.java#L73
 
         this.apiClient = buildApiClient(restTemplate);
         setApiClientBasePath(apiClient, clientConfig.getBaseUrl() + anprServiceConfig.getBasePath());

@@ -46,7 +46,7 @@ public class AnprC030ServiceImpl implements AnprC030Service {
                 .datiRichiesta(reqDataTypes)
                 .build();
 
-        return anprC030Client.getIdAnprFromFc(request, pdndService.generateToken(anprC030ServiceConfig));
+        return anprC030Client.getIdAnprFromFc(request, pdndService.generateToken(anprC030ServiceConfig).getAccessToken());
     }
 
 }
