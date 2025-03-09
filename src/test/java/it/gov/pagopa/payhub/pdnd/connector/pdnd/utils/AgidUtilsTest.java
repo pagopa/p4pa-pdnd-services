@@ -1,73 +1,139 @@
 package it.gov.pagopa.payhub.pdnd.connector.pdnd.utils;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.RegisteredClaims;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.nimbusds.jose.crypto.RSASSASigner;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.utils.CertUtils;
+import it.gov.pagopa.payhub.pdnd.utils.CertUtilsTest;
+import it.gov.pagopa.payhub.pdnd.utils.CryptoUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.json.JsonAssert;
+import org.springframework.test.json.JsonCompareMode;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
+import java.util.List;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+public class AgidUtilsTest {
 
-class AgidUtilsTest {
+    public static RSASSASigner signer;
 
-    private final String pemKey = """
-            -----BEGIN PRIVATE KEY-----
-              MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCT5fdA/ZKoyLas
-              R5/kxfFm8KBz4v3i8k76Xd8j2vh8kBaapzn9hAHWJXOJ+GOUFOxkw1bnI2PUtZjj
-              tw49XrjcxQ37sOV407+B3ko49zZjNB97OPFQyZx9V3uNcBjKnM3UqNbcBwdIIlVW
-              Egt0Cao7gEGE1CKsaXpuZkofVgGo5f8K8IdETLJPFuspDTR4UPofDraL2HCxbsVx
-              dE0UBFXgB9vQmBMkPk27cz+Ze6j5wgSGME/A+YCCp1uvJqWK/uRfGxMRyVYInR5H
-              bDiI06iZwiLLW1Pf6gE3CCYSUw42VnPHODaitjJ6XLkolB5xsUprkttIg+UrRGSa
-              9J3xg3gNAgMBAAECggEASKjRCS/KjntVK1xg1F7e0yjiWyyoeId8f4oApzfbni6X
-              vFDtr3vb/x4VHjJWkZiZ7oL9Pb7oO8cfnrf/Ge1gOq3gycdFZU/6JM5VfpkNMj2Y
-              Pcxi2cLCy91fyMPKmjfg81ojfKNDU4/yhr+EuvRImsTO63fgtP149aXxQmXZmOTu
-              TFjSNTRfvtMgHN0Em1PUgQxO8oUh3Djf5spjAJ/w+gVBSYsYSv5sOOi2H/qZSALZ
-              hc1t4GfzNKZuyG8FxNwH1SIVkKTYQnDhyiE9426tq6Kiuqvh2MspVJcRGpbaxgr2
-              q++ZZrAl60ma5U2hUEgG5oLGjyrgQjEyroZhEokgLQKBgQDKIeAJ/FYdEX4cvHhS
-              kuUpHQjpZtwOwC+vr4ojudpjLDOTTdkFXzd7jeCmjp4r1/arRxx1KZWP0fxlUEov
-              0LDiaU0zBeol/q0ayq5XnhJNVngCyKjQQ+Np1eIGTIIGOkAm8LlnEsvlQLbuOYZ4
-              eeeplBW3h321MFKgch7IyqBb5wKBgQC7UBG/ypw6RWPUOHYdtY1nLCQQJjvKCOMT
-              DolkFB2UUuNfNGK6PDUL9KbPIsrHJLw0oGoqQyBkInVMG5jJb/bHdH0spiKGn51u
-              orMk/xsA990Kqt+DT1Z5fEpoPchGMc529JR5h43n1n5s8/6jyDa5JNLFnS9xKZTm
-              IvV/Nayt6wKBgGxpSs5QRqeEkE09UJOJMduhNPxqLLDEp07lKYQL1HPIa0kgQbu9
-              2/YqnEj4ySDezfADTeIREaR3jZWRQJjwp05oB/3LuE/0jkeGWYeowkw0il2D3fcF
-              0l0bWATk2AAbEflQtz/vNuiYkwSmWdcYGwY65ILw6p1Zc5eWXah39RYVAoGAI93Y
-              GDZupcXFsMxC6btq4ReVrDX1+uCqwmplKnGjnFQmz4MTaH/A1JI7IqyR0YIaO6V/
-              zqnd2O60MSeToPa8dUK7+UGymL6VgarLzMjAXfYYMEO52sXlVAvVn5I8+BvvYd3B
-              VGf9ZyguOySZXLkoqVkAtvA7Nlr09QA6q+oWL5MCgYAsLS2PEMY/HMR1Z5P/uMxw
-              q7eQ7K3YYKcJpbM2da7r38UaZc/HhtiaU/XOdTnT/M/eF4hoW0yxO5YKfgurgosz
-              OjAnn7+Ed5S5Sh8E4EHUGCcawErZEZCtlsns0fNPGfNjadZAjq0X+5VP1EVXca0B
-              VrSp9ZTif3cvyxNTOogbgA==
-                  -----END PRIVATE KEY-----
-            """;
+    static {
+        try {
+            signer = new RSASSASigner(CertUtils.pemKey2PrivateKey(CertUtilsTest.PRIVATE_KEY));
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    private final PdndApiClientConfig.PdndConfig pdndConfig = PdndApiClientConfig.PdndConfig.builder()
+            .audience("AUDIENCE")
+            .authExpirationMinutes(1)
+            .userId("USERID")
+            .env("DEV")
+            .build();
+
+    private final PdndServiceIntegratedConfig pdndServiceIntegratedConfig = PdndServiceIntegratedConfig.builder()
+            .clientId("CLIENTID")
+            .kid("KID")
+            .purposeId("PURPOSEID")
+            .build();
 
     @Test
-    void givenValidPDNDConfigWhenBuildPdndClientAssertionThenVerifyToken() throws InvalidKeySpecException, NoSuchAlgorithmException, IOException {
+    void whenBuildPdndClientAssertionThenOk() {
         // Given
-        PdndApiClientConfig.PdndConfig pdndConfig = PdndApiClientConfig.PdndConfig.builder()
-                .audience("AUDIENCE")
-                .authExpirationMinutes(1)
-                .build();
-
-        PdndServiceIntegratedConfig pdndServiceIntegratedConfig = PdndServiceIntegratedConfig.builder()
-                .clientId("CLIENTID")
-                .kid("KID")
-                .purposeId("PURPOSEID")
-                .build();
+        String agidJwtTrackingEvidence = "TRACKINGJWT";
 
         // When
         String token = AgidUtils.buildPdndClientAssertion(
                 pdndConfig,
                 pdndServiceIntegratedConfig,
-                "TRACKINGJWT",
-                new RSASSASigner(CertUtils.pemKey2PrivateKey(pemKey))
-                );
+                agidJwtTrackingEvidence,
+                signer);
 
         // Then
-        assertNotNull(token);
+        DecodedJWT decoded = JWT.decode(token);
+        JsonAssert.comparator(JsonCompareMode.STRICT).assertIsMatch(
+                Map.of(
+                        RegisteredClaims.JWT_ID, decoded.getClaim(RegisteredClaims.JWT_ID),
+                        RegisteredClaims.SUBJECT, pdndServiceIntegratedConfig.getClientId(),
+                        RegisteredClaims.ISSUER, pdndServiceIntegratedConfig.getClientId(),
+                        RegisteredClaims.AUDIENCE, pdndConfig.getAudience(),
+                        RegisteredClaims.ISSUED_AT, decoded.getClaim(RegisteredClaims.ISSUED_AT),
+                        RegisteredClaims.EXPIRES_AT, decoded.getClaim(RegisteredClaims.ISSUED_AT).asLong() + 60,
+                        "purposeId", pdndServiceIntegratedConfig.getPurposeId(),
+                        "digest", Map.of(
+                                "alg", "SHA256",
+                                "value", CryptoUtils.sha256HEX(agidJwtTrackingEvidence)
+                        )).toString(),
+                decoded.getClaims().toString());
+    }
+
+    @Test
+    void whenBuildAgidJwtTrackingEvidenceThenOk() {
+        // When
+        String token = AgidUtils.buildAgidJwtTrackingEvidence(
+                pdndConfig,
+                pdndServiceIntegratedConfig,
+                signer);
+
+        // Then
+        DecodedJWT decoded = JWT.decode(token);
+        JsonAssert.comparator(JsonCompareMode.STRICT).assertIsMatch(
+                Map.of(
+                        RegisteredClaims.JWT_ID, decoded.getClaim(RegisteredClaims.JWT_ID),
+                        RegisteredClaims.ISSUER, pdndServiceIntegratedConfig.getClientId(),
+                        RegisteredClaims.AUDIENCE, pdndConfig.getAudience(),
+                        RegisteredClaims.ISSUED_AT, decoded.getClaim(RegisteredClaims.ISSUED_AT),
+                        RegisteredClaims.EXPIRES_AT, decoded.getClaim(RegisteredClaims.ISSUED_AT).asLong() + 60,
+                        "purposeId", pdndServiceIntegratedConfig.getPurposeId(),
+                        "dnonce", decoded.getClaim("dnonce"),
+                        "userLocation", pdndConfig.getEnv(),
+                        "userID", pdndConfig.getUserId(),
+                        "LoA", "LOA3"
+                ).toString(),
+                decoded.getClaims().toString());
+    }
+
+    @Test
+    void whenBuildAgidJwtSignatureThenOk() {
+        // Given
+        String digest = "DIGEST";
+
+        // When
+        String token = AgidUtils.buildAgidJwtSignature(
+                digest,
+                pdndConfig,
+                pdndServiceIntegratedConfig,
+                signer);
+
+        // Then
+        DecodedJWT decoded = JWT.decode(token);
+        JsonAssert.comparator(JsonCompareMode.STRICT).assertIsMatch(
+                Map.of(
+                        RegisteredClaims.JWT_ID, decoded.getClaim(RegisteredClaims.JWT_ID),
+                        RegisteredClaims.SUBJECT, pdndServiceIntegratedConfig.getClientId(),
+                        RegisteredClaims.ISSUER, pdndServiceIntegratedConfig.getClientId(),
+                        RegisteredClaims.AUDIENCE, pdndConfig.getAudience(),
+                        RegisteredClaims.ISSUED_AT, decoded.getClaim(RegisteredClaims.ISSUED_AT),
+                        RegisteredClaims.EXPIRES_AT, decoded.getClaim(RegisteredClaims.ISSUED_AT).asLong() + 60,
+                        "signed_headers", List.of(
+                                Map.of("digest", digest),
+                                Map.of("\"content-encoding\"", "\"UTF-8\""),
+                                Map.of("\"content-type\"", "\"application/json\"")
+                        )
+                ).toString(),
+                decoded.getClaims().toString());
+    }
+
+    @Test
+    void whenBuildDigestThenOk(){
+        Assertions.assertEquals(
+                "SHA-256=f9SGUoWD/kZFYdz81VpXWA9SCqyEw0hZXvnSdwuRRG8=",
+                AgidUtils.buildDigest("PROVA")
+        );
     }
 }

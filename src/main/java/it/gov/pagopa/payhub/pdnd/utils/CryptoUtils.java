@@ -1,5 +1,7 @@
 package it.gov.pagopa.payhub.pdnd.utils;
 
+import jakarta.xml.bind.DatatypeConverter;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -11,6 +13,10 @@ public class CryptoUtils {
 
     public static String sha256Base64(String value) {
         return Base64.getEncoder().encodeToString(sha256(value));
+    }
+
+    public static String sha256HEX(String value) {
+        return DatatypeConverter.printHexBinary(sha256(value));
     }
 
     public static byte[] sha256(String value) {

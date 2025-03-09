@@ -16,5 +16,5 @@ public class PdndAuthData {
     private LocalDateTime expiration;
 
     @JsonIgnore
-    private RSASSASigner jwtSignAlgorithm;
+    private RSASSASigner rsaJwsSigner;
 }

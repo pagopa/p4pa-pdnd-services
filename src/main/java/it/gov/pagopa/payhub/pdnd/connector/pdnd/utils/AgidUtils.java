@@ -6,7 +6,6 @@ import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.utils.CryptoUtils;
 import it.gov.pagopa.payhub.pdnd.utils.JWTUtils;
-import jakarta.xml.bind.DatatypeConverter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
@@ -46,7 +45,7 @@ public class AgidUtils {
                 .claim("purposeId", purposeId)
                 .claim("digest", Map.of(
                         "alg", "SHA256",
-                        "value", DatatypeConverter.printHexBinary(CryptoUtils.sha256(agidJwtTrackingEvidence))
+                        "value", CryptoUtils.sha256HEX(agidJwtTrackingEvidence)
                 ))
                 .build();
     }
