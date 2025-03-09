@@ -30,7 +30,7 @@ public class AgidUtilsTest {
     }
 
     private final PdndApiClientConfig.PdndConfig pdndConfig = PdndApiClientConfig.PdndConfig.builder()
-            .audience("AUDIENCE")
+            .audience("PDNDAUDIENCE")
             .authExpirationMinutes(1)
             .userId("USERID")
             .env("DEV")

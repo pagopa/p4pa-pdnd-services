@@ -5,12 +5,12 @@ import it.gov.pagopa.payhub.anpr.C003.controller.BaseApi;
 import it.gov.pagopa.payhub.anpr.C003.controller.generated.E002ServiceApi;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.AnprApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.BaseAnprServiceApisHolder;
+import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
+import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.function.Supplier;
 
 @Slf4j
 @Service
@@ -19,10 +19,11 @@ public class AnprC003ApisHolder extends BaseAnprServiceApisHolder<ApiClient> {
     private final E002ServiceApi e002ServiceApi;
 
     public AnprC003ApisHolder(
+            PdndApiClientConfig pdndApiClientConfig,
             AnprApiClientConfig clientConfig,
             RestTemplateBuilder restTemplateBuilder
     ) {
-        super(clientConfig, clientConfig.getServices().getC003(), restTemplateBuilder);
+        super(pdndApiClientConfig.getConfig(), clientConfig, clientConfig.getServices().getC003(), restTemplateBuilder);
 
         this.e002ServiceApi = new E002ServiceApi(apiClient);
     }
@@ -39,11 +40,6 @@ public class AnprC003ApisHolder extends BaseAnprServiceApisHolder<ApiClient> {
     }
 
     @Override
-    protected void setApiClientBearerToken(ApiClient apiClient, Supplier<String> accessTokenSupplier) {
-        apiClient.setBearerToken(accessTokenSupplier);
-    }
-
-    @Override
     protected void setApiClientMaxAttemptsForRetry(ApiClient apiClient, int maxAttemptsForRetry) {
         apiClient.setMaxAttemptsForRetry(maxAttemptsForRetry);
     }
@@ -54,12 +50,12 @@ public class AnprC003ApisHolder extends BaseAnprServiceApisHolder<ApiClient> {
     }
 //endregion
 
-    public E002ServiceApi getE002ServiceApi(String accessToken) {
-        return getApi(accessToken, e002ServiceApi);
+    public E002ServiceApi getE002ServiceApi(PdndAuthData pdndAuthData) {
+        return getApi(pdndAuthData, e002ServiceApi);
     }
 
-    private <T extends BaseApi> T getApi(String accessToken, T api) {
-        bearerTokenHolder.set(accessToken);
+    private <T extends BaseApi> T getApi(PdndAuthData pdndAuthData, T api) {
+        pdndAuthDataHolder.set(pdndAuthData);
         return api;
     }
 }

@@ -35,7 +35,7 @@ class PdndAuthDataBuilderServiceTest {
             .env("DEV")
             .userId("USERID")
             .authExpirationMinutes(1)
-            .audience("AUDIENCE")
+            .audience("PDNDAUDIENCE")
             .build();
 
     private PdndAuthDataBuilderService service;

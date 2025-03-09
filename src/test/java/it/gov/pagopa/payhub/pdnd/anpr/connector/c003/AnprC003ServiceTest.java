@@ -87,7 +87,7 @@ class AnprC003ServiceTest {
                 .thenReturn(pdndAuthData);
         when(idOperationGeneratorServiceMock.generateId())
                 .thenReturn(idOp);
-        when(anprC003ClientMock.getUserData(request, accessToken))
+        when(anprC003ClientMock.getUserData(request, pdndAuthData))
                 .thenReturn(expectedResult);
 
         RispostaE002OK result = anprC003Service.getUserData(idAnpr);

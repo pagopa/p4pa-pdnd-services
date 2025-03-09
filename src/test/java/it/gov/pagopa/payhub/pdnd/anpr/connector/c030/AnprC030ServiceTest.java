@@ -85,12 +85,10 @@ class AnprC030ServiceTest {
 
         when(pdndServiceMock.generateToken(Mockito.same(pdndServiceIntegratedConfig)))
                 .thenReturn(pdndAuthData);
-        when(anprC030ClientMock.getIdAnprFromFc(request, accessToken))
+        when(anprC030ClientMock.getIdAnprFromFc(request, pdndAuthData))
                 .thenReturn(expectedResult);
         when(idOperationGeneratorServiceMock.generateId())
                 .thenReturn(idOp);
-        when(anprC030ClientMock.getIdAnprFromFc(request, accessToken))
-                .thenReturn(expectedResult);
 
         RispostaE002OK result = anprC030Service.getIdAnprFromFc(fiscalCode);
 

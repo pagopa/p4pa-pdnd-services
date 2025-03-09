@@ -4,6 +4,7 @@ import it.gov.pagopa.payhub.anpr.C003.controller.generated.E002ServiceApi;
 import it.gov.pagopa.payhub.anpr.C003.dto.generated.RichiestaE002;
 import it.gov.pagopa.payhub.anpr.C003.dto.generated.RispostaE002OK;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.c003.config.AnprC003ApisHolder;
+import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,17 +39,17 @@ class AnprC003ClientTest {
     @Test
     void whenGetUserDataThenInvokeWithAccessToken() {
         // Given
-        String accessToken = "ACCESSTOKEN";
+        PdndAuthData pdndAuthData = Mockito.mock(PdndAuthData.class);
         RichiestaE002 request = new RichiestaE002();
         RispostaE002OK expectedResult = new RispostaE002OK();
 
-        Mockito.when(apisHolder.getE002ServiceApi(accessToken))
+        Mockito.when(apisHolder.getE002ServiceApi(Mockito.same(pdndAuthData)))
                 .thenReturn(e002ServiceApiMock);
         Mockito.when(e002ServiceApiMock.e002(request))
                 .thenReturn(expectedResult);
 
         // When
-        RispostaE002OK result = client.getUserData(request, accessToken);
+        RispostaE002OK result = client.getUserData(request, pdndAuthData);
 
         // Then
         Assertions.assertSame(expectedResult, result);
