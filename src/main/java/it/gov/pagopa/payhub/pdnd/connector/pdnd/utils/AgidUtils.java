@@ -1,7 +1,9 @@
 package it.gov.pagopa.payhub.pdnd.connector.pdnd.utils;
 
+import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.utils.CryptoUtils;
@@ -21,8 +23,12 @@ public class AgidUtils {
     private static final String CONTENT_TYPE_LOWERCASE = HttpHeaders.CONTENT_TYPE.toLowerCase();
     private static final Random random = new SecureRandom();
 
+    public static SignedJWT signJwtRSA(JWTClaimsSet claims, String kid, RSASSASigner jwsRsaSigner){
+        return JWTUtils.signJwt(claims, kid, JWSAlgorithm.RS256, jwsRsaSigner);
+    }
+
     public static String buildPdndClientAssertion(PdndApiClientConfig.PdndConfig pdndConfig, PdndServiceIntegratedConfig pdndServiceIntegratedConfig, String agidJwtTrackingEvidence, RSASSASigner rsaJwsSigner) {
-        return JWTUtils.signJwtRSA(
+        return signJwtRSA(
                         buildPdndClientAssertionClaims(pdndConfig, pdndServiceIntegratedConfig, agidJwtTrackingEvidence),
                         pdndServiceIntegratedConfig.getKid(),
                         rsaJwsSigner)
@@ -44,14 +50,15 @@ public class AgidUtils {
                 .expirationTime(new Date(expirationMillis))
                 .claim("purposeId", purposeId)
                 .claim("digest", Map.of(
-                        "alg", "SHA256",
-                        "value", CryptoUtils.sha256HEX(agidJwtTrackingEvidence)
-                ))
+                                "alg", "SHA256",
+                                "value", CryptoUtils.sha256HEX(agidJwtTrackingEvidence)
+                        )
+                )
                 .build();
     }
 
     public static String buildAgidJwtTrackingEvidence(PdndApiClientConfig.PdndConfig pdndConfig, PdndServiceIntegratedConfig pdndServiceIntegratedConfig, RSASSASigner rsaJwsSigner) {
-        return JWTUtils.signJwtRSA(
+        return signJwtRSA(
                         buildAgidJwtTrackingEvidenceClaims(pdndConfig, pdndServiceIntegratedConfig),
                         pdndServiceIntegratedConfig.getKid(),
                         rsaJwsSigner)
@@ -83,7 +90,7 @@ public class AgidUtils {
     }
 
     public static String buildAgidJwtSignature(String digest, PdndApiClientConfig.PdndConfig pdndConfig, PdndServiceIntegratedConfig pdndServiceIntegratedConfig, RSASSASigner rsaJwsSigner) {
-        return JWTUtils.signJwtRSA(
+        return signJwtRSA(
                         buildAgidJwtSignatureClaims(digest, pdndConfig, pdndServiceIntegratedConfig),
                         pdndServiceIntegratedConfig.getKid(),
                         rsaJwsSigner)

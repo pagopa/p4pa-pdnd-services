@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.nimbusds.jose.*;
-import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
@@ -12,10 +11,6 @@ import java.util.Date;
 
 public class JWTUtils {
   private JWTUtils() {
-  }
-
-  public static SignedJWT signJwtRSA(JWTClaimsSet claims, String kid, RSASSASigner jwsRsaSigner){
-      return signJwt(claims, kid, JWSAlgorithm.RS512, jwsRsaSigner);
   }
 
   public static SignedJWT signJwt(JWTClaimsSet claims, String kid, JWSAlgorithm algorithm, JWSSigner jwsSigner){
