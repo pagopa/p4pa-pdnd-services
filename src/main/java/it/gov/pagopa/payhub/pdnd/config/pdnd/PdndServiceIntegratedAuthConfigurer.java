@@ -1,7 +1,7 @@
 package it.gov.pagopa.payhub.pdnd.config.pdnd;
 
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
-import it.gov.pagopa.payhub.pdnd.connector.pdnd.utils.AgidUtils;
+import it.gov.pagopa.payhub.pdnd.utils.AgidUtils;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
 import jakarta.annotation.Nonnull;
 import org.springframework.http.HttpHeaders;

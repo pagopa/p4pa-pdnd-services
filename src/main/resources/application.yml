@@ -16,7 +16,7 @@ management:
       exposure.include: "*"
     web:
       exposure:
-        include: health, info, prometheus, metrics
+        include: health, info, prometheus, metrics, caches
       base-path: /actuator
   endpoint:
     health:
@@ -100,12 +100,12 @@ rest:
       public-key: "\${PDND_SERVICE_ANPR_PUBLICKEY:\${rest.pdnd.default-client.public-key}}"
     services:
       c003:
-        base-path: "\${PDND_SERVICE_ANPR_C003_BASE_PATH:/C030-servizioAccertamentoIdUnicoNazionale/v1}"
+        base-path: "\${PDND_SERVICE_ANPR_C003_BASE_PATH:/C003-servizioVerificaDichGeneralita/v1}"
         purpose-id: "\${PDND_SERVICE_ANPR_C003_PURPOSE_ID:c003purposeid}"
         client-id: "\${PDND_SERVICE_ANPR_C003_CLIENTID:\${rest.anpr.default-client.client-id}}"
         kid: "\${PDND_SERVICE_ANPR_C003_KID:\${rest.anpr.default-client.kid}}"
-        private-key: "\${PDND_SERVICE_ANPR_C003_PRIVATEKEY:\${rest.anpr.default-client.privateKey}}"
-        public-key: "\${PDND_SERVICE_ANPR_C003_PUBLICKEY:\${rest.anpr.default-client.publicKey}}"
+        private-key: "\${PDND_SERVICE_ANPR_C003_PRIVATEKEY:\${rest.anpr.default-client.private-key}}"
+        public-key: "\${PDND_SERVICE_ANPR_C003_PUBLICKEY:\${rest.anpr.default-client.public-key}}"
       c030:
         base-path: "\${PDND_SERVICE_ANPR_C030_BASE_PATH:/C030-servizioAccertamentoIdUnicoNazionale/v1/}"
         purpose-id: "\${PDND_SERVICE_ANPR_C030_PURPOSE_ID:c030purposeid}"
@@ -115,10 +115,15 @@ rest:
         public-key: "\${PDND_SERVICE_ANPR_C030_PUBLICKEY:\${rest.anpr.default-client.public-key}}"
   send:
     base-url: "\${SEND_BASE_URL:https://api.uat.notifichedigitali.it}"
-    send:
+    service:
+      base-path: "\${PDND_SERVICE_SEND_BASE_PATH:}"
       client-id: "\${PDND_SERVICE_SEND_CLIENTID:\${PDND_SERVICE_CLIENTID:clientid}}"
       kid: "\${PDND_SERVICE_SEND_KID:\${PDND_SERVICE_KID:kid}}"
       purpose-id: "\${PDND_SERVICE_SEND_PURPOSE_ID:purposeid}"
-      privateKey: "\${PDND_SERVICE_SEND_PRIVATEKEY:\${PDND_SERVICE_PRIVATEKEY:}}"
-      publicKey: "\${PDND_SERVICE_SEND_PUBLICKEY:\${PDND_SERVICE_PUBLICKEY:}}"
-      url: "\${PDND_SERVICE_SEND_URL:}"
+      private-key: "\${PDND_SERVICE_SEND_PRIVATEKEY:\${PDND_SERVICE_PRIVATEKEY:}}"
+      public-key: "\${PDND_SERVICE_SEND_PUBLICKEY:\${PDND_SERVICE_PUBLICKEY:}}"
+
+cache:
+  anpr-ids:
+    size: "\${CACHE_ANPR_IDS_SIZE:1000}"
+    expire-in: "\${CACHE_ANPR_IDS_MINUTES:60}"

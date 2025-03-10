@@ -1,4 +1,4 @@
-package it.gov.pagopa.payhub.pdnd.connector.pdnd.utils;
+package it.gov.pagopa.payhub.pdnd.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.RegisteredClaims;
@@ -6,9 +6,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.nimbusds.jose.crypto.RSASSASigner;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
-import it.gov.pagopa.payhub.pdnd.utils.CertUtils;
-import it.gov.pagopa.payhub.pdnd.utils.CertUtilsTest;
-import it.gov.pagopa.payhub.pdnd.utils.CryptoUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.json.JsonAssert;

@@ -9,12 +9,15 @@ import it.gov.pagopa.payhub.pdnd.anpr.connector.c030.client.AnprC030Client;
 import it.gov.pagopa.payhub.pdnd.anpr.service.AnprIdOperationGeneratorService;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.PdndService;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Service
+@CacheConfig(cacheNames = it.gov.pagopa.payhub.pdnd.config.CacheConfig.Fields.anprIds)
 public class AnprC030ServiceImpl implements AnprC030Service {
 
     private final AnprC030Client anprC030Client;
@@ -29,6 +32,8 @@ public class AnprC030ServiceImpl implements AnprC030Service {
         this.anprIdOperationGeneratorService = anprIdOperationGeneratorService;
     }
 
+    @Override
+    @Cacheable(key = "#fiscalCode", unless="#result == null")
     public RispostaE002OK getIdAnprFromFc(String fiscalCode) {
         TipoCriteriRicercaE002 searchTypes = TipoCriteriRicercaE002.builder()
                 .codiceFiscale(fiscalCode)
