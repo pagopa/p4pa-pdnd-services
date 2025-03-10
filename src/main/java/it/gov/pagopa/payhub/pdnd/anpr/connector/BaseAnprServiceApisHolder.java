@@ -25,7 +25,7 @@ public abstract class BaseAnprServiceApisHolder <T> {
             PdndServiceIntegratedConfig anprServiceConfig,
             RestTemplateBuilder restTemplateBuilder
     ) {
-        RestTemplate restTemplate = restTemplateBuilder.build(); // TODO HTTPS?
+        RestTemplate restTemplate = restTemplateBuilder.build();
         restTemplate.getInterceptors().add(new PdndServiceIntegratedAuthConfigurer(pdndConfig, anprServiceConfig, pdndAuthDataHolder::get));
         if (clientConfig.isPrintBodyWhenError()) {
             restTemplate.setErrorHandler(RestTemplateConfig.bodyPrinterWhenError("ANPR"));
