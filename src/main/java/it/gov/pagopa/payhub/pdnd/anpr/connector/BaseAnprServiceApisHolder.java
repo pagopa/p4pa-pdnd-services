@@ -48,4 +48,8 @@ public abstract class BaseAnprServiceApisHolder <T> {
         pdndAuthDataHolder.remove();
     }
 
+    protected <A> A getApi(PdndAuthData pdndAuthData, A api) {
+        pdndAuthDataHolder.set(pdndAuthData);
+        return api;
+    }
 }

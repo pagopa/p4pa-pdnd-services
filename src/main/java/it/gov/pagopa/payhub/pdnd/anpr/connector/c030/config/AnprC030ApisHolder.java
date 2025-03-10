@@ -1,7 +1,6 @@
 package it.gov.pagopa.payhub.pdnd.anpr.connector.c030.config;
 
 import it.gov.pagopa.payhub.anpr.C030.controller.ApiClient;
-import it.gov.pagopa.payhub.anpr.C030.controller.BaseApi;
 import it.gov.pagopa.payhub.anpr.C030.controller.generated.E002ServiceApi;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.AnprApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.BaseAnprServiceApisHolder;
@@ -52,10 +51,5 @@ public class AnprC030ApisHolder extends BaseAnprServiceApisHolder<ApiClient> {
 
     public E002ServiceApi getE002ServiceApi(PdndAuthData pdndAuthData) {
         return getApi(pdndAuthData, e002ServiceApi);
-    }
-
-    private <T extends BaseApi> T getApi(PdndAuthData pdndAuthData, T api) {
-        pdndAuthDataHolder.set(pdndAuthData);
-        return api;
     }
 }
