@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
@@ -52,15 +53,15 @@ class JWTUtilsTest {
     }
 //endregion
 
-//region test signJwtRSA
+//region test signJwt
     @Test
-    void whenSignJwtRSAThenOk() throws InvalidKeySpecException, NoSuchAlgorithmException, IOException {
+    void whensignJwtThenOk() throws InvalidKeySpecException, NoSuchAlgorithmException, IOException {
         // Given
         RSASSASigner signer = new RSASSASigner(CertUtils.pemKey2PrivateKey(CertUtilsTest.PRIVATE_KEY));
         JWTVerifier verifier = JWT.require(Algorithm.RSA512(CertUtils.pemPub2PublicKey(CertUtilsTest.PUBLIC_KEY))).build();
 
         // Then
-        SignedJWT result = JWTUtils.signJwtRSA(new JWTClaimsSet.Builder().build(), "KID", signer);
+        SignedJWT result = JWTUtils.signJwt(new JWTClaimsSet.Builder().build(), "KID", JWSAlgorithm.RS512, signer);
 
         // When
         Assertions.assertDoesNotThrow(() -> verifier.verify(result.serialize()));
