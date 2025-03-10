@@ -3,16 +3,18 @@ package it.gov.pagopa.payhub.pdnd.config.pdnd;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class PdndServiceIntegratedConfig {
+@SuperBuilder
+public class PdndServiceIntegratedConfig {
+  private String basePath;
+  private String purposeId;
   private String clientId;
   private String kid;
-  private String purposeId;
   private String privateKey;
   private String publicKey;
-  private String url;
 }

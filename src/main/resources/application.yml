@@ -16,7 +16,7 @@ management:
       exposure.include: "*"
     web:
       exposure:
-        include: health, info, prometheus, metrics
+        include: health, info, prometheus, metrics, caches
       base-path: /actuator
   endpoint:
     health:
@@ -78,31 +78,52 @@ rest:
     max-attempts: "\${PDND_MAX_ATTEMPTS:3}" # It's counting also the first attempt
     wait-time-millis: "\${PDND_WAIT_TIME_MILLIS:500}"
     print-body-when-error: "\${PDND_PRINT_BODY_WHEN_ERROR:true}"
+    default-client:
+      client-id: "\${PDND_SERVICE_CLIENTID:clientid}"
+      kid: "\${PDND_SERVICE_KID:kid}"
+      private-key: "\${PDND_SERVICE_PRIVATEKEY:}"
+      public-key: "\${PDND_SERVICE_PUBLICKEY:}"
     config:
+      env: "\${ENV:dev}"
+      user-id: "\${PDND_AUTH_USERID:pdnd-user}"
       audience: "\${PDND_ACCESS_TOKEN_AUDIENCE:auth.uat.interop.pagopa.it/client-assertion}"
+      auth-expiration-minutes: "\${PDND_AUTH_EXPIRATION_MINUTES:10}"
   anpr:
-    base-url: "\${ANPR_BASE_URL:http://p4pa-mocks-microservice-chart:8080}"
+    base-url: "\${ANPR_BASE_URL:http://p4pa-mocks-microservice-chart:8080}\${ANPR_SERVICES_BASE_PATH:/govway/rest/in/MinInternoPortaANPR-PDND}"
+    max-attempts: "\${PDND_MAX_ATTEMPTS:3}" # It's counting also the first attempt
+    wait-time-millis: "\${PDND_WAIT_TIME_MILLIS:500}"
+    print-body-when-error: "\${PDND_PRINT_BODY_WHEN_ERROR:true}"
+    default-client:
+      client-id: "\${PDND_SERVICE_ANPR_CLIENTID:\${rest.pdnd.default-client.client-id}}"
+      kid: "\${PDND_SERVICE_ANPR_KID:\${rest.pdnd.default-client.kid}}"
+      private-key: "\${PDND_SERVICE_ANPR_PRIVATEKEY:\${rest.pdnd.default-client.private-key}}"
+      public-key: "\${PDND_SERVICE_ANPR_PUBLICKEY:\${rest.pdnd.default-client.public-key}}"
     services:
       c003:
-        client-id: "\${PDND_SERVICE_ANPR_C003_CLIENTID:\${PDND_SERVICE_ANPR_CLIENTID:\${PDND_SERVICE_CLIENTID:clientid}}}"
-        kid: "\${PDND_SERVICE_ANPR_C003_KID:\${PDND_SERVICE_ANPR_KID:\${PDND_SERVICE_KID:kid}}}"
+        base-path: "\${PDND_SERVICE_ANPR_C003_BASE_PATH:/C003-servizioVerificaDichGeneralita/v1}"
         purpose-id: "\${PDND_SERVICE_ANPR_C003_PURPOSE_ID:c003purposeid}"
-        privateKey: "\${PDND_SERVICE_ANPR_C003_PRIVATEKEY:\${PDND_SERVICE_ANPR_PRIVATEKEY:\${PDND_SERVICE_PRIVATEKEY:}}}"
-        publicKey: "\${PDND_SERVICE_ANPR_C003_PUBLICKEY:\${PDND_SERVICE_ANPR_PUBLICKEY:\${PDND_SERVICE_PUBLICKEY:}}}"
-        url: "\${PDND_SERVICE_ANPR_C003_URL:/govway/rest/in/MinInternoPortaANPR-PDND/C003-servizioVerificaDichGeneralita/v1/anpr-service-e002}"
+        client-id: "\${PDND_SERVICE_ANPR_C003_CLIENTID:\${rest.anpr.default-client.client-id}}"
+        kid: "\${PDND_SERVICE_ANPR_C003_KID:\${rest.anpr.default-client.kid}}"
+        private-key: "\${PDND_SERVICE_ANPR_C003_PRIVATEKEY:\${rest.anpr.default-client.private-key}}"
+        public-key: "\${PDND_SERVICE_ANPR_C003_PUBLICKEY:\${rest.anpr.default-client.public-key}}"
       c030:
-        client-id: "\${PDND_SERVICE_ANPR_C030_CLIENTID:\${PDND_SERVICE_ANPR_CLIENTID:\${PDND_SERVICE_CLIENTID:clientid}}}"
-        kid: "\${PDND_SERVICE_ANPR_C030_KID:\${PDND_SERVICE_ANPR_KID:\${PDND_SERVICE_KID:kid}}}"
+        base-path: "\${PDND_SERVICE_ANPR_C030_BASE_PATH:/C030-servizioAccertamentoIdUnicoNazionale/v1/}"
         purpose-id: "\${PDND_SERVICE_ANPR_C030_PURPOSE_ID:c030purposeid}"
-        privateKey: "\${PDND_SERVICE_ANPR_C030_PRIVATEKEY:\${PDND_SERVICE_ANPR_PRIVATEKEY:\${PDND_SERVICE_PRIVATEKEY:}}}"
-        publicKey: "\${PDND_SERVICE_ANPR_C030_PUBLICKEY:\${PDND_SERVICE_ANPR_PUBLICKEY:\${PDND_SERVICE_PUBLICKEY:}}}"
-        url: "\${PDND_SERVICE_ANPR_C030_URL:/govway/rest/in/MinInternoPortaANPR-PDND/C030-servizioAccertamentoIdUnicoNazionale/v1/anpr-service-e002}"
+        client-id: "\${PDND_SERVICE_ANPR_C030_CLIENTID:\${rest.anpr.default-client.client-id}}"
+        kid: "\${PDND_SERVICE_ANPR_C030_KID:\${rest.anpr.default-client.kid}}"
+        private-key: "\${PDND_SERVICE_ANPR_C030_PRIVATEKEY:\${rest.anpr.default-client.private-key}}"
+        public-key: "\${PDND_SERVICE_ANPR_C030_PUBLICKEY:\${rest.anpr.default-client.public-key}}"
   send:
     base-url: "\${SEND_BASE_URL:https://api.uat.notifichedigitali.it}"
-    send:
+    service:
+      base-path: "\${PDND_SERVICE_SEND_BASE_PATH:}"
       client-id: "\${PDND_SERVICE_SEND_CLIENTID:\${PDND_SERVICE_CLIENTID:clientid}}"
       kid: "\${PDND_SERVICE_SEND_KID:\${PDND_SERVICE_KID:kid}}"
       purpose-id: "\${PDND_SERVICE_SEND_PURPOSE_ID:purposeid}"
-      privateKey: "\${PDND_SERVICE_SEND_PRIVATEKEY:\${PDND_SERVICE_PRIVATEKEY:}}"
-      publicKey: "\${PDND_SERVICE_SEND_PUBLICKEY:\${PDND_SERVICE_PUBLICKEY:}}"
-      url: "\${PDND_SERVICE_SEND_URL:}"
+      private-key: "\${PDND_SERVICE_SEND_PRIVATEKEY:\${PDND_SERVICE_PRIVATEKEY:}}"
+      public-key: "\${PDND_SERVICE_SEND_PUBLICKEY:\${PDND_SERVICE_PUBLICKEY:}}"
+
+cache:
+  anpr-ids:
+    size: "\${CACHE_ANPR_IDS_SIZE:1000}"
+    expire-in: "\${CACHE_ANPR_IDS_MINUTES:60}"

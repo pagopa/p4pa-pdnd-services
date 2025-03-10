@@ -6,9 +6,9 @@ import it.gov.pagopa.payhub.anpr.C030.dto.generated.RispostaE002OK;
 import it.gov.pagopa.payhub.anpr.C030.dto.generated.TipoDatiSoggettiEnte;
 import it.gov.pagopa.payhub.anpr.C030.dto.generated.TipoIdentificativi;
 import it.gov.pagopa.payhub.anpr.C030.dto.generated.TipoListaSoggetti;
-import it.gov.pagopa.payhub.pdnd.dto.generated.Citizen;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.c003.AnprC003Service;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.c030.AnprC030Service;
+import it.gov.pagopa.payhub.pdnd.dto.generated.Citizen;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -64,7 +64,7 @@ class AnprServiceImplTest {
         )));
 
         Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode)).thenReturn(anprC030Response);
-        Mockito.when(anprC003Service.getUserData(idAnpr, fiscalCode)).thenReturn(anprC003Response);
+        Mockito.when(anprC003Service.getUserData(idAnpr)).thenReturn(anprC003Response);
 
         Citizen result = pdndService.getCitizenData(fiscalCode);
 
@@ -96,7 +96,7 @@ class AnprServiceImplTest {
         anprC003Response.setListaSoggetti(null);
 
         Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode)).thenReturn(anprC030Response);
-        Mockito.when(anprC003Service.getUserData(idAnpr, fiscalCode)).thenReturn(anprC003Response);
+        Mockito.when(anprC003Service.getUserData(idAnpr)).thenReturn(anprC003Response);
 
         assertThrows(IllegalArgumentException.class, () -> pdndService.getCitizenData(fiscalCode));
     }
@@ -122,7 +122,7 @@ class AnprServiceImplTest {
         anprC030Response.setListaSoggetti(new TipoListaSoggetti(List.of(subDataTypes)));
 
         Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode)).thenReturn(anprC030Response);
-        Mockito.when(anprC003Service.getUserData(idAnpr, fiscalCode)).thenReturn(null);
+        Mockito.when(anprC003Service.getUserData(idAnpr)).thenReturn(null);
 
         assertThrows(IllegalArgumentException.class, () -> pdndService.getCitizenData(fiscalCode));
     }
@@ -148,7 +148,7 @@ class AnprServiceImplTest {
         anprC003Response.setListaSoggetti(new it.gov.pagopa.payhub.anpr.C003.dto.generated.TipoListaSoggetti(null));
 
         Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode)).thenReturn(anprC030Response);
-        Mockito.when(anprC003Service.getUserData(idAnpr, fiscalCode)).thenReturn(anprC003Response);
+        Mockito.when(anprC003Service.getUserData(idAnpr)).thenReturn(anprC003Response);
 
         assertThrows(IllegalArgumentException.class, () -> pdndService.getCitizenData(fiscalCode));
     }
@@ -174,7 +174,7 @@ class AnprServiceImplTest {
         anprC003Response.setListaSoggetti(new it.gov.pagopa.payhub.anpr.C003.dto.generated.TipoListaSoggetti(new ArrayList<>()));
 
         Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode)).thenReturn(anprC030Response);
-        Mockito.when(anprC003Service.getUserData(idAnpr, fiscalCode)).thenReturn(anprC003Response);
+        Mockito.when(anprC003Service.getUserData(idAnpr)).thenReturn(anprC003Response);
 
         assertThrows(IllegalArgumentException.class, () -> pdndService.getCitizenData(fiscalCode));
     }

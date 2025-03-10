@@ -1,10 +1,10 @@
 package it.gov.pagopa.payhub.pdnd.anpr.service;
 
 import it.gov.pagopa.payhub.anpr.C030.dto.generated.RispostaE002OK;
-import it.gov.pagopa.payhub.pdnd.dto.generated.Citizen;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.c003.AnprC003Service;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.c030.AnprC030Service;
 import it.gov.pagopa.payhub.pdnd.anpr.mapper.AnprResponseMapper;
+import it.gov.pagopa.payhub.pdnd.dto.generated.Citizen;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,7 +27,7 @@ public class AnprServiceImpl implements AnprService {
                 .getIdentificativi()
                 .getIdANPR();
 
-        it.gov.pagopa.payhub.anpr.C003.dto.generated.RispostaE002OK anprC003Response = anprC003Service.getUserData(idAnpr, fiscalCode);
+        it.gov.pagopa.payhub.anpr.C003.dto.generated.RispostaE002OK anprC003Response = anprC003Service.getUserData(idAnpr);
 
         return AnprResponseMapper.mapToAnprResponse(anprC003Response);
     }

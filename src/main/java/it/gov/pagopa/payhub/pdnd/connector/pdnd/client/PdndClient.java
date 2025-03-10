@@ -17,7 +17,7 @@ public class PdndClient {
     authApi = pdndApisHolder.getBrokerEntityControllerApi();
   }
 
-  public ClientCredentialsResponseDTO getAccessToken(String clientId, String clientAssertions) {
-    return authApi.createToken(clientAssertions, CLIENT_ASSERTION_TYPE, GRANT_TYPE, clientId);
+  public ClientCredentialsResponseDTO getAccessToken(String clientId, String clientAssertion) {
+    return authApi.createToken(clientAssertion, CLIENT_ASSERTION_TYPE, GRANT_TYPE, clientId);
   }
 }

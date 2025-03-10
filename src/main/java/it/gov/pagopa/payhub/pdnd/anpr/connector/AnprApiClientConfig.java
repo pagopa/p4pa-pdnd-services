@@ -1,6 +1,7 @@
-package it.gov.pagopa.payhub.pdnd.connector.pdnd.config;
+package it.gov.pagopa.payhub.pdnd.anpr.connector;
 
 import it.gov.pagopa.payhub.pdnd.config.ApiClientConfig;
+import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,24 +12,24 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "rest.pdnd")
+@ConfigurationProperties(prefix = "rest.anpr")
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class PdndApiClientConfig extends ApiClientConfig {
+public class AnprApiClientConfig extends ApiClientConfig {
     @NestedConfigurationProperty
-    private PdndConfig config;
+    private AnprServicesConfig services;
 
     @NoArgsConstructor
     @AllArgsConstructor
     @SuperBuilder
     @Data
-    public static class PdndConfig {
-        private String env;
-        private String userId;
-        private String audience;
-        private long authExpirationMinutes;
+    public static class AnprServicesConfig{
+        @NestedConfigurationProperty
+        private PdndServiceIntegratedConfig c003;
+        @NestedConfigurationProperty
+        private PdndServiceIntegratedConfig c030;
     }
 }
