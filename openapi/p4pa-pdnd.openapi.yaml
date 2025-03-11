@@ -36,6 +36,36 @@ paths:
           description: Citizen not found
         '500':
           description: Internal server error
+  /token:
+    get:
+      summary: Retrieve voucher token
+      description: get voucher for specific service
+      operationId: getVoucherToken
+      tags:
+        - p4pa-pdnd
+      parameters:
+        - name: service
+          in: query
+          description: The name of pdnd services
+          required: true
+          schema:
+            type: string
+            example: send
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: 'PdndAuthData'
+        '400':
+          description: Invalid request
+        '403':
+          description: Forbidden
+        '404':
+          description: Service not found
+        '500':
+          description: Internal server error
 security:
   - BearerAuth: []
 components:
