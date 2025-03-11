@@ -25,6 +25,14 @@ public class AgidUtils {
         return JWTUtils.signJwt(claims, kid, JWSAlgorithm.RS256, jwsRsaSigner);
     }
 
+    public static String buildPdndClientAssertion(PdndApiClientConfig.PdndConfig pdndConfig, PdndServiceIntegratedConfig pdndServiceIntegratedConfig, String agidJwtTrackingEvidence, RSASSASigner rsaJwsSigner) {
+        return signJwtRSA(
+                        buildPdndClientAssertionClaims(pdndConfig, pdndServiceIntegratedConfig, agidJwtTrackingEvidence),
+                        pdndServiceIntegratedConfig.getKid(),
+                        rsaJwsSigner)
+                .serialize();
+    }
+
     public static String buildAgidJwtTrackingEvidence(PdndApiClientConfig.PdndConfig pdndConfig, PdndServiceIntegratedConfig pdndServiceIntegratedConfig, RSASSASigner rsaJwsSigner) {
         return signJwtRSA(
                 buildAgidJwtTrackingEvidenceClaims(pdndConfig, pdndServiceIntegratedConfig),
@@ -42,7 +50,7 @@ public class AgidUtils {
         return new JWTClaimsSet.Builder()
                 .jwtID(UUID.randomUUID().toString())
                 .issuer(clientId)
-                .audience(pdndConfig.getAudience())
+                .audience(pdndServiceIntegratedConfig.getAudience())
                 .issueTime(new Date(currentMillis))
                 .expirationTime(new Date(expirationMillis))
                 .claim("purposeId", purposeId)
@@ -51,14 +59,6 @@ public class AgidUtils {
                 .claim("userID", pdndConfig.getUserId())
                 .claim("LoA", "LOA3")
                 .build();
-    }
-
-    public static String buildPdndClientAssertion(PdndApiClientConfig.PdndConfig pdndConfig, PdndServiceIntegratedConfig pdndServiceIntegratedConfig, String agidJwtTrackingEvidence, RSASSASigner rsaJwsSigner) {
-        return signJwtRSA(
-                        buildPdndClientAssertionClaims(pdndConfig, pdndServiceIntegratedConfig, agidJwtTrackingEvidence),
-                        pdndServiceIntegratedConfig.getKid(),
-                        rsaJwsSigner)
-                .serialize();
     }
 
     private static JWTClaimsSet buildPdndClientAssertionClaims(PdndApiClientConfig.PdndConfig pdndConfig, PdndServiceIntegratedConfig pdndServiceIntegratedConfig, String agidJwtTrackingEvidence) {
@@ -87,24 +87,24 @@ public class AgidUtils {
         return "SHA-256=" + CryptoUtils.sha256Base64(value);
     }
 
-    public static String buildAgidJwtSignature(String digest, PdndApiClientConfig.PdndConfig pdndConfig, PdndServiceIntegratedConfig pdndServiceIntegratedConfig, RSASSASigner rsaJwsSigner) {
+    public static String buildAgidJwtSignature(String digest, Long expirationMinutes, PdndServiceIntegratedConfig pdndServiceIntegratedConfig, RSASSASigner rsaJwsSigner) {
         return signJwtRSA(
-                        buildAgidJwtSignatureClaims(digest, pdndConfig, pdndServiceIntegratedConfig),
+                        buildAgidJwtSignatureClaims(digest, expirationMinutes, pdndServiceIntegratedConfig),
                         pdndServiceIntegratedConfig.getKid(),
                         rsaJwsSigner)
                 .serialize();
     }
 
-    private static JWTClaimsSet buildAgidJwtSignatureClaims(String digest, PdndApiClientConfig.PdndConfig pdndConfig, PdndServiceIntegratedConfig pdndServiceIntegratedConfig) {
+    private static JWTClaimsSet buildAgidJwtSignatureClaims(String digest, Long expirationMinutes, PdndServiceIntegratedConfig pdndServiceIntegratedConfig) {
         String clientId = pdndServiceIntegratedConfig.getClientId();
         long currentMillis = System.currentTimeMillis();
-        long expirationMillis = currentMillis + (pdndConfig.getAuthExpirationMinutes() * 60 * 1000);
+        long expirationMillis = currentMillis + (expirationMinutes * 60 * 1000);
 
         return new JWTClaimsSet.Builder()
                 .jwtID(UUID.randomUUID().toString())
                 .issuer(clientId)
                 .subject(clientId)
-                .audience(pdndConfig.getAudience())
+                .audience(pdndServiceIntegratedConfig.getAudience())
                 .issueTime(new Date(currentMillis))
                 .expirationTime(new Date(expirationMillis))
                 .claim("signed_headers", List.of(

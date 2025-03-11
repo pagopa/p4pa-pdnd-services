@@ -1,10 +1,12 @@
 package it.gov.pagopa.payhub.pdnd.anpr.connector;
 
+import it.gov.pagopa.payhub.pdnd.config.HttpClientConfig;
 import it.gov.pagopa.payhub.pdnd.config.RestTemplateConfig;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedAuthConfigurer;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
+import it.gov.pagopa.payhub.pdnd.utils.SSLUtils;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -23,10 +25,15 @@ public abstract class BaseAnprServiceApisHolder <T> {
             PdndApiClientConfig.PdndConfig pdndConfig,
             AnprApiClientConfig clientConfig,
             PdndServiceIntegratedConfig anprServiceConfig,
-            RestTemplateBuilder restTemplateBuilder
+            RestTemplateBuilder restTemplateBuilder,
+            HttpClientConfig httpClientConfig
     ) {
         RestTemplate restTemplate = restTemplateBuilder.build();
         restTemplate.getInterceptors().add(new PdndServiceIntegratedAuthConfigurer(pdndConfig, anprServiceConfig, pdndAuthDataHolder::get));
+
+        if(clientConfig.getHttps().isTrustAll()){
+            restTemplate.setRequestFactory(SSLUtils.buildTrustAllSSL(httpClientConfig).build());
+        }
         if (clientConfig.isPrintBodyWhenError()) {
             restTemplate.setErrorHandler(RestTemplateConfig.bodyPrinterWhenError("ANPR"));
         }

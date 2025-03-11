@@ -37,6 +37,7 @@ val wiremockSpringBootVersion = "2.1.3"
 val micrometerVersion = "1.4.3"
 val bouncycastleVersion = "1.80"
 val caffeineVersion = "3.2.0"
+val httpClientVersion = "5.4.2"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
@@ -54,6 +55,7 @@ dependencies {
 	implementation("com.auth0:jwks-rsa:$jwksRsaVersion")
 	implementation("org.bouncycastle:bcprov-jdk18on:$bouncycastleVersion")
 	implementation("com.github.ben-manes.caffeine:caffeine:$caffeineVersion")
+	implementation("org.apache.httpcomponents.client5:httpclient5:$httpClientVersion")
 
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")

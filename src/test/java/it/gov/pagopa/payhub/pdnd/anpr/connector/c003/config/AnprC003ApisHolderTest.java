@@ -2,6 +2,8 @@ package it.gov.pagopa.payhub.pdnd.anpr.connector.c003.config;
 
 import it.gov.pagopa.payhub.anpr.C003.dto.generated.RichiestaE002;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.AnprApiClientConfig;
+import it.gov.pagopa.payhub.pdnd.config.HttpClientConfig;
+import it.gov.pagopa.payhub.pdnd.config.HttpsClientConfig;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.BasePdndServiceIntegratedApiHolderTest;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
@@ -25,14 +27,22 @@ class AnprC003ApisHolderTest extends BasePdndServiceIntegratedApiHolderTest {
 
     private final PdndApiClientConfig pdndApiClientConfig = PdndApiClientConfig.builder()
             .config(PdndApiClientConfig.PdndConfig.builder()
+                    .authExpirationMinutes(100L)
                     .audience("PDNDAUDIENCE")
                     .build())
             .build();
     private final AnprApiClientConfig pdndServiceIntegratedApiClientConfig = AnprApiClientConfig.builder()
             .baseUrl("http://example.com")
+            .https(HttpsClientConfig.builder()
+                    .trustAll(true)
+                    .build())
             .services(AnprApiClientConfig.AnprServicesConfig.builder()
                     .c003(new PdndServiceIntegratedConfig())
                     .build())
+            .build();
+    private final HttpClientConfig httpClientConfig = HttpClientConfig.builder()
+            .connectionPool(new HttpClientConfig.HttpClientConnectionPoolConfig())
+            .timeout(new HttpClientConfig.HttpClientTimeoutConfig())
             .build();
 
     private AnprC003ApisHolder apisHolder;
@@ -42,8 +52,11 @@ class AnprC003ApisHolderTest extends BasePdndServiceIntegratedApiHolderTest {
         Mockito.when(restTemplateBuilderMock.build()).thenReturn(restTemplateMock);
         Mockito.when(restTemplateMock.getUriTemplateHandler()).thenReturn(new DefaultUriBuilderFactory());
         Mockito.when(restTemplateMock.getInterceptors()).thenReturn(interceptors);
+        Mockito.doNothing()
+                .when(restTemplateMock)
+                .setRequestFactory(Mockito.any());
 
-        apisHolder = new AnprC003ApisHolder(pdndApiClientConfig, pdndServiceIntegratedApiClientConfig, restTemplateBuilderMock);
+        apisHolder = new AnprC003ApisHolder(pdndApiClientConfig, pdndServiceIntegratedApiClientConfig, restTemplateBuilderMock, httpClientConfig);
     }
 
     @AfterEach

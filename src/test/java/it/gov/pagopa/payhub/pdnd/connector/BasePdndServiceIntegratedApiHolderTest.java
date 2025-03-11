@@ -95,7 +95,7 @@ public abstract class BasePdndServiceIntegratedApiHolderTest {
                                             HttpHeaders headers = new HttpHeaders();
                                             String body;
                                             try (MockedStatic<AgidUtils> mockedStaticAgidUtils = Mockito.mockStatic(AgidUtils.class)) {
-                                                mockedStaticAgidUtils.when(() -> AgidUtils.buildAgidJwtSignature(Mockito.anyString(), Mockito.same(expectedPdndConfig), Mockito.same(expectedPdndServiceIntegratedConfig), Mockito.same(jwsSignerMock)))
+                                                mockedStaticAgidUtils.when(() -> AgidUtils.buildAgidJwtSignature(Mockito.anyString(), Mockito.same(expectedPdndConfig.getAuthExpirationMinutes()), Mockito.same(expectedPdndServiceIntegratedConfig), Mockito.same(jwsSignerMock)))
                                                         .thenAnswer(a -> "AGID_SIGNATURE_OF_DIGEST:" + a.getArgument(0));
                                                 mockedStaticAgidUtils.when(() -> AgidUtils.buildDigest(Mockito.anyString()))
                                                         .thenCallRealMethod();
