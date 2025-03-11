@@ -1,6 +1,7 @@
 package it.gov.pagopa.payhub.pdnd.anpr.connector;
 
 import it.gov.pagopa.payhub.pdnd.config.ApiClientConfig;
+import it.gov.pagopa.payhub.pdnd.config.HttpsClientConfig;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +20,8 @@ import org.springframework.context.annotation.Configuration;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class AnprApiClientConfig extends ApiClientConfig {
+    @NestedConfigurationProperty
+    private HttpsClientConfig https;
     @NestedConfigurationProperty
     private AnprServicesConfig services;
 

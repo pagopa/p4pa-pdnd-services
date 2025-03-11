@@ -4,6 +4,7 @@ import it.gov.pagopa.payhub.anpr.C003.controller.ApiClient;
 import it.gov.pagopa.payhub.anpr.C003.controller.generated.E002ServiceApi;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.AnprApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.BaseAnprServiceApisHolder;
+import it.gov.pagopa.payhub.pdnd.config.HttpClientConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +21,10 @@ public class AnprC003ApisHolder extends BaseAnprServiceApisHolder<ApiClient> {
     public AnprC003ApisHolder(
             PdndApiClientConfig pdndApiClientConfig,
             AnprApiClientConfig clientConfig,
-            RestTemplateBuilder restTemplateBuilder
+            RestTemplateBuilder restTemplateBuilder,
+            HttpClientConfig defaultHttpClientConfig
     ) {
-        super(pdndApiClientConfig.getConfig(), clientConfig, clientConfig.getServices().getC003(), restTemplateBuilder);
+        super(pdndApiClientConfig.getConfig(), clientConfig, clientConfig.getServices().getC003(), restTemplateBuilder, defaultHttpClientConfig);
 
         this.e002ServiceApi = new E002ServiceApi(apiClient);
     }

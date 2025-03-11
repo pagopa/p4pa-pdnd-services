@@ -13,6 +13,7 @@ import lombok.experimental.SuperBuilder;
 public class PdndServiceIntegratedConfig {
   private String basePath;
   private String purposeId;
+  private String audience;
   private String clientId;
   private String kid;
   private String privateKey;

@@ -70,9 +70,14 @@ jwt:
                 -----END PUBLIC KEY-----}"
 
 rest:
-  default-timeout:
-    connect-millis: "\${DEFAULT_REST_CONNECT_TIMEOUT_MILLIS:120000}"
-    read-millis: "\${DEFAULT_REST_READ_TIMEOUT_MILLIS:120000}"
+  defaults:
+    connection-pool:
+      size: "\${DEFAULT_REST_CONNECTION_POOL_SIZE:10}"
+      size-per-route: "\${DEFAULT_REST_CONNECTION_POOL_SIZE_PER_ROUTE:5}"
+      time-to-live-minutes: "\${DEFAULT_REST_CONNECTION_POOL_TIME_TO_LIVE_MINUTES:10}"
+    timeout:
+      connect-millis: "\${DEFAULT_REST_TIMEOUT_CONNECT_MILLIS:120000}"
+      read-millis: "\${DEFAULT_REST_TIMEOUT_READ_MILLIS:120000}"
   pdnd:
     base-url: "\${PDND_BASE_URL:https://auth.uat.interop.pagopa.it}"
     max-attempts: "\${PDND_MAX_ATTEMPTS:3}" # It's counting also the first attempt
@@ -98,10 +103,13 @@ rest:
       kid: "\${PDND_SERVICE_ANPR_KID:\${rest.pdnd.default-client.kid}}"
       private-key: "\${PDND_SERVICE_ANPR_PRIVATEKEY:\${rest.pdnd.default-client.private-key}}"
       public-key: "\${PDND_SERVICE_ANPR_PUBLICKEY:\${rest.pdnd.default-client.public-key}}"
+    https:
+      trust-all: "\${ANPR_TRUST_ALL:false}"
     services:
       c003:
         base-path: "\${PDND_SERVICE_ANPR_C003_BASE_PATH:/C003-servizioVerificaDichGeneralita/v1}"
         purpose-id: "\${PDND_SERVICE_ANPR_C003_PURPOSE_ID:c003purposeid}"
+        audience: "\${PDND_SERVICE_ANPR_C003_AUDIENCE:C003audience}"
         client-id: "\${PDND_SERVICE_ANPR_C003_CLIENTID:\${rest.anpr.default-client.client-id}}"
         kid: "\${PDND_SERVICE_ANPR_C003_KID:\${rest.anpr.default-client.kid}}"
         private-key: "\${PDND_SERVICE_ANPR_C003_PRIVATEKEY:\${rest.anpr.default-client.private-key}}"
@@ -109,6 +117,7 @@ rest:
       c030:
         base-path: "\${PDND_SERVICE_ANPR_C030_BASE_PATH:/C030-servizioAccertamentoIdUnicoNazionale/v1/}"
         purpose-id: "\${PDND_SERVICE_ANPR_C030_PURPOSE_ID:c030purposeid}"
+        audience: "\${PDND_SERVICE_ANPR_C030_AUDIENCE:C030audience}"
         client-id: "\${PDND_SERVICE_ANPR_C030_CLIENTID:\${rest.anpr.default-client.client-id}}"
         kid: "\${PDND_SERVICE_ANPR_C030_KID:\${rest.anpr.default-client.kid}}"
         private-key: "\${PDND_SERVICE_ANPR_C030_PRIVATEKEY:\${rest.anpr.default-client.private-key}}"
