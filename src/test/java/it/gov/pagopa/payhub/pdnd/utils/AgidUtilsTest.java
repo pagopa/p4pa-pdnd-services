@@ -35,6 +35,7 @@ public class AgidUtilsTest {
 
     private final PdndServiceIntegratedConfig pdndServiceIntegratedConfig = PdndServiceIntegratedConfig.builder()
             .clientId("CLIENTID")
+            .audience("SERVICEAUDIENCE")
             .kid("KID")
             .purposeId("PURPOSEID")
             .build();
@@ -83,7 +84,7 @@ public class AgidUtilsTest {
                 Map.of(
                         RegisteredClaims.JWT_ID, decoded.getClaim(RegisteredClaims.JWT_ID),
                         RegisteredClaims.ISSUER, pdndServiceIntegratedConfig.getClientId(),
-                        RegisteredClaims.AUDIENCE, pdndConfig.getAudience(),
+                        RegisteredClaims.AUDIENCE, pdndServiceIntegratedConfig.getAudience(),
                         RegisteredClaims.ISSUED_AT, decoded.getClaim(RegisteredClaims.ISSUED_AT),
                         RegisteredClaims.EXPIRES_AT, decoded.getClaim(RegisteredClaims.ISSUED_AT).asLong() + 60,
                         "purposeId", pdndServiceIntegratedConfig.getPurposeId(),
@@ -103,7 +104,7 @@ public class AgidUtilsTest {
         // When
         String token = AgidUtils.buildAgidJwtSignature(
                 digest,
-                pdndConfig,
+                pdndConfig.getAuthExpirationMinutes(),
                 pdndServiceIntegratedConfig,
                 signer);
 
@@ -114,7 +115,7 @@ public class AgidUtilsTest {
                         RegisteredClaims.JWT_ID, decoded.getClaim(RegisteredClaims.JWT_ID),
                         RegisteredClaims.SUBJECT, pdndServiceIntegratedConfig.getClientId(),
                         RegisteredClaims.ISSUER, pdndServiceIntegratedConfig.getClientId(),
-                        RegisteredClaims.AUDIENCE, pdndConfig.getAudience(),
+                        RegisteredClaims.AUDIENCE, pdndServiceIntegratedConfig.getAudience(),
                         RegisteredClaims.ISSUED_AT, decoded.getClaim(RegisteredClaims.ISSUED_AT),
                         RegisteredClaims.EXPIRES_AT, decoded.getClaim(RegisteredClaims.ISSUED_AT).asLong() + 60,
                         "signed_headers", List.of(
