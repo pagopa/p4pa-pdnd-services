@@ -136,9 +136,8 @@ rest:
       client-id: "\${PDND_SERVICE_SEND_CLIENTID:\${PDND_SERVICE_CLIENTID:clientid}}"
       kid: "\${PDND_SERVICE_SEND_KID:\${PDND_SERVICE_KID:kid}}"
       purpose-id: "\${PDND_SERVICE_SEND_PURPOSE_ID:purposeid}"
-      private-key: "\${PDND_SERVICE_SEND_PRIVATEKEY:\${PDND_SERVICE_PRIVATEKEY:}}"
-      public-key: "\${PDND_SERVICE_SEND_PUBLICKEY:\${PDND_SERVICE_PUBLICKEY:}}"
-
+      private-key: "\${PDND_SERVICE_SEND_PRIVATEKEY:\${rest.pdnd.default-client.private-key}}"
+      public-key: "\${PDND_SERVICE_SEND_PUBLICKEY:\${rest.pdnd.default-client.public-key}}"
 cache:
   anpr-ids:
     size: "\${CACHE_ANPR_IDS_SIZE:1000}"

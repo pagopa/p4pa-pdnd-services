@@ -1,11 +1,10 @@
 {
 	"info": {
-		"_postman_id": "21c09e17-4ba6-4b2f-ab0c-71d1e4fd1c97",
+		"_postman_id": "788ce8de-eb45-4b30-b5a3-b8d18ece3fcd",
 		"name": "p4pa-pdnd-services-E2E",
 		"description": "API and Models.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "15747968",
-		"_collection_link": "https://warped-astronaut-141685.postman.co/workspace/P4PA~9a8b7dd5-97b6-4dd0-b3f5-95f25fd0b455/collection/15747968-21c09e17-4ba6-4b2f-ab0c-71d1e4fd1c97?action=share&source=collection_link&creator=15747968"
+		"_exporter_id": "36568841"
 	},
 	"item": [
 		{
@@ -77,6 +76,39 @@
 								{
 									"key": "subject_token_type",
 									"value": "urn:ietf:params:oauth:token-type:jwt"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "00_getVoucherToken",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{pdndServicesBaseUrl}}/token?service=C003",
+							"host": [
+								"{{pdndServicesBaseUrl}}"
+							],
+							"path": [
+								"token"
+							],
+							"query": [
+								{
+									"key": "service",
+									"value": "C003"
 								}
 							]
 						}
