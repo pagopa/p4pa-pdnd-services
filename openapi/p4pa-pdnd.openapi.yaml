@@ -49,7 +49,7 @@ paths:
           description: The name of pdnd services
           required: true
           schema:
-            type: string
+            $ref: '#/components/schemas/PdndServicesEnum'
             example: send
       responses:
         '200':
@@ -118,3 +118,9 @@ components:
             - PDND_SERVICES_GENERIC_ERROR
         message:
           type: string
+    PdndServicesEnum:
+      type: string
+      enum:
+        - SEND
+        - C003
+        - C030

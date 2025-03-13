@@ -32,7 +32,8 @@
           "description" : "The name of pdnd services",
           "required" : true,
           "schema" : {
-            "type" : "string"
+            "type" : "string",
+            "enum" : [ "SEND", "C003", "C030" ]
           }
         } ],
         "responses" : {
