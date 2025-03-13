@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import it.gov.pagopa.payhub.pdnd.anpr.connector.AnprApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
+import it.gov.pagopa.payhub.pdnd.dto.generated.PdndServicesEnum;
 import it.gov.pagopa.payhub.pdnd.send.connector.SendApiClientConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class ApiClientConfigServiceTest {
+class ApiClientConfigResolverServiceTest {
 
   @Mock
   private SendApiClientConfig sendApiClientConfig;
@@ -30,17 +31,17 @@ class ApiClientConfigServiceTest {
   @Mock
   private PdndServiceIntegratedConfig c030ServiceConfig;
 
-  private ApiClientConfigService apiClientConfigService;
+  private ApiClientConfigResolverService apiClientConfigResolverService;
 
   @BeforeEach
   void setUp() {
-    apiClientConfigService = new ApiClientConfigService(sendApiClientConfig, anprApiClientConfig);
+    apiClientConfigResolverService = new ApiClientConfigResolverService(sendApiClientConfig, anprApiClientConfig);
   }
 
 
   @Test
   void givenSENDServiceWhenGetIntegratedConfigThenReturnIntegratedConfig(){
-    PdndServiceIntegratedConfig result = apiClientConfigService.getIntegratedConfig("SEND");
+    PdndServiceIntegratedConfig result = apiClientConfigResolverService.getIntegratedConfig(PdndServicesEnum.SEND);
     assertEquals(sendApiClientConfig.getService(), result);
   }
 
@@ -48,7 +49,7 @@ class ApiClientConfigServiceTest {
   void givenC003ServiceWhenGetIntegratedConfigThenReturnIntegratedConfig() {
     Mockito.when(anprApiClientConfig.getServices()).thenReturn(anprServices);
     Mockito.when(anprServices.getC003()).thenReturn(c003ServiceConfig);
-    PdndServiceIntegratedConfig result = apiClientConfigService.getIntegratedConfig("C003");
+    PdndServiceIntegratedConfig result = apiClientConfigResolverService.getIntegratedConfig(PdndServicesEnum.C003);
     assertEquals(c003ServiceConfig, result);
   }
 
@@ -56,14 +57,7 @@ class ApiClientConfigServiceTest {
   void givenC030ServiceWhenGetIntegratedConfigThenReturnIntegratedConfig() {
     Mockito.when(anprApiClientConfig.getServices()).thenReturn(anprServices);
     Mockito.when(anprServices.getC030()).thenReturn(c030ServiceConfig);
-    PdndServiceIntegratedConfig result = apiClientConfigService.getIntegratedConfig("C030");
+    PdndServiceIntegratedConfig result = apiClientConfigResolverService.getIntegratedConfig(PdndServicesEnum.C030);
     assertEquals(c030ServiceConfig, result);
-  }
-
-
-  @Test
-  void givenUnknownServiceWhenGetIntegratedConfigThenReturnIntegratedConfig() {
-    PdndServiceIntegratedConfig result = apiClientConfigService.getIntegratedConfig("UNKNOWN");
-    assertNull(result);
   }
 }

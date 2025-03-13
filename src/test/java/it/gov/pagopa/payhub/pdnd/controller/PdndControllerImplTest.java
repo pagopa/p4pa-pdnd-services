@@ -3,7 +3,8 @@ package it.gov.pagopa.payhub.pdnd.controller;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.PdndService;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
-import it.gov.pagopa.payhub.pdnd.service.ApiClientConfigService;
+import it.gov.pagopa.payhub.pdnd.dto.generated.PdndServicesEnum;
+import it.gov.pagopa.payhub.pdnd.service.ApiClientConfigResolverService;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ class PdndControllerImplTest {
   private PdndService pdndService;
 
   @Mock
-  private ApiClientConfigService apiClientConfigService;
+  private ApiClientConfigResolverService apiClientConfigResolverService;
 
   @InjectMocks
   private PdndControllerImpl pdndController;
@@ -31,7 +32,7 @@ class PdndControllerImplTest {
 
   @Test
   void givenValidServiceWhenGetVoucherTokenThenReturnPdndAuthData() {
-    String service = "SEND";
+    PdndServicesEnum service = PdndServicesEnum.SEND;
     PdndAuthData mockAuthData = new PdndAuthData("JWTEVIDANCE",
         "ASSERTION","TOKEN",
         LocalDateTime.now(),
@@ -39,7 +40,7 @@ class PdndControllerImplTest {
 
     PdndServiceIntegratedConfig mockConfig = new PdndServiceIntegratedConfig();
 
-    Mockito.when(apiClientConfigService.getIntegratedConfig(service)).thenReturn(mockConfig);
+    Mockito.when(apiClientConfigResolverService.getIntegratedConfig(service)).thenReturn(mockConfig);
     Mockito.when(pdndService.generateToken(mockConfig)).thenReturn(mockAuthData);
 
     ResponseEntity<PdndAuthData> response = pdndController.getVoucherToken(service);
