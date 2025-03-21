@@ -32,8 +32,7 @@
           "description" : "The name of pdnd services",
           "required" : true,
           "schema" : {
-            "type" : "string",
-            "enum" : [ "SEND", "C003", "C030" ]
+            "$ref" : "#/components/schemas/PdndServicesEnum"
           }
         } ],
         "responses" : {
@@ -185,6 +184,10 @@
             "format" : "date-time"
           }
         }
+      },
+      "PdndServicesEnum" : {
+        "type" : "string",
+        "enum" : [ "SEND", "C003", "C030" ]
       },
       "Address" : {
         "type" : "object",
