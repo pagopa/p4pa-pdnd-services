@@ -11,6 +11,8 @@ paths:
       summary: Retrieve citizen data
       description: Returns detailed information about a citizen based on their fiscal code.
       operationId: getCitizenDataByFiscalCode
+      tags:
+        - Anpr
       parameters:
         - name: fiscalCode
           in: query
@@ -32,6 +34,36 @@ paths:
           description: Forbidden
         '404':
           description: Citizen not found
+        '500':
+          description: Internal server error
+  /token:
+    get:
+      summary: Retrieve voucher token
+      description: get voucher for specific service
+      operationId: getVoucherToken
+      tags:
+        - p4pa-pdnd
+      parameters:
+        - name: service
+          in: query
+          description: The name of pdnd services
+          required: true
+          schema:
+            $ref: '#/components/schemas/PdndServicesEnum'
+            example: send
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: 'PdndAuthData'
+        '400':
+          description: Invalid request
+        '403':
+          description: Forbidden
+        '404':
+          description: Service not found
         '500':
           description: Internal server error
 security:
@@ -72,3 +104,23 @@ components:
           example: '2021-11-15'
         address:
           $ref: '#/components/schemas/Address'
+    PdndServicesErrorDTO:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          enum:
+            - PDND_SERVICES_NOT_FOUND
+            - PDND_SERVICES_BAD_REQUEST
+            - PDND_SERVICES_GENERIC_ERROR
+        message:
+          type: string
+    PdndServicesEnum:
+      type: string
+      enum:
+        - SEND
+        - C003
+        - C030

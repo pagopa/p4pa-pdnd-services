@@ -5,91 +5,104 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.InvalidKeySpecException;
+
 import org.junit.jupiter.api.Test;
 
-class CertUtilsTest {
+public class CertUtilsTest {
 
-  @Test
-  void givenValidPrivateKeyWhenPemKey2PrivateKeyThenValidKey() throws InvalidKeySpecException, NoSuchAlgorithmException, IOException {
-    // Given
-    String pemKey = """
-                -----BEGIN PRIVATE KEY-----
-                MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCT5fdA/ZKoyLas
-                R5/kxfFm8KBz4v3i8k76Xd8j2vh8kBaapzn9hAHWJXOJ+GOUFOxkw1bnI2PUtZjj
-                tw49XrjcxQ37sOV407+B3ko49zZjNB97OPFQyZx9V3uNcBjKnM3UqNbcBwdIIlVW
-                Egt0Cao7gEGE1CKsaXpuZkofVgGo5f8K8IdETLJPFuspDTR4UPofDraL2HCxbsVx
-                dE0UBFXgB9vQmBMkPk27cz+Ze6j5wgSGME/A+YCCp1uvJqWK/uRfGxMRyVYInR5H
-                bDiI06iZwiLLW1Pf6gE3CCYSUw42VnPHODaitjJ6XLkolB5xsUprkttIg+UrRGSa
-                9J3xg3gNAgMBAAECggEASKjRCS/KjntVK1xg1F7e0yjiWyyoeId8f4oApzfbni6X
-                vFDtr3vb/x4VHjJWkZiZ7oL9Pb7oO8cfnrf/Ge1gOq3gycdFZU/6JM5VfpkNMj2Y
-                Pcxi2cLCy91fyMPKmjfg81ojfKNDU4/yhr+EuvRImsTO63fgtP149aXxQmXZmOTu
-                TFjSNTRfvtMgHN0Em1PUgQxO8oUh3Djf5spjAJ/w+gVBSYsYSv5sOOi2H/qZSALZ
-                hc1t4GfzNKZuyG8FxNwH1SIVkKTYQnDhyiE9426tq6Kiuqvh2MspVJcRGpbaxgr2
-                q++ZZrAl60ma5U2hUEgG5oLGjyrgQjEyroZhEokgLQKBgQDKIeAJ/FYdEX4cvHhS
-                kuUpHQjpZtwOwC+vr4ojudpjLDOTTdkFXzd7jeCmjp4r1/arRxx1KZWP0fxlUEov
-                0LDiaU0zBeol/q0ayq5XnhJNVngCyKjQQ+Np1eIGTIIGOkAm8LlnEsvlQLbuOYZ4
-                eeeplBW3h321MFKgch7IyqBb5wKBgQC7UBG/ypw6RWPUOHYdtY1nLCQQJjvKCOMT
-                DolkFB2UUuNfNGK6PDUL9KbPIsrHJLw0oGoqQyBkInVMG5jJb/bHdH0spiKGn51u
-                orMk/xsA990Kqt+DT1Z5fEpoPchGMc529JR5h43n1n5s8/6jyDa5JNLFnS9xKZTm
-                IvV/Nayt6wKBgGxpSs5QRqeEkE09UJOJMduhNPxqLLDEp07lKYQL1HPIa0kgQbu9
-                2/YqnEj4ySDezfADTeIREaR3jZWRQJjwp05oB/3LuE/0jkeGWYeowkw0il2D3fcF
-                0l0bWATk2AAbEflQtz/vNuiYkwSmWdcYGwY65ILw6p1Zc5eWXah39RYVAoGAI93Y
-                GDZupcXFsMxC6btq4ReVrDX1+uCqwmplKnGjnFQmz4MTaH/A1JI7IqyR0YIaO6V/
-                zqnd2O60MSeToPa8dUK7+UGymL6VgarLzMjAXfYYMEO52sXlVAvVn5I8+BvvYd3B
-                VGf9ZyguOySZXLkoqVkAtvA7Nlr09QA6q+oWL5MCgYAsLS2PEMY/HMR1Z5P/uMxw
-                q7eQ7K3YYKcJpbM2da7r38UaZc/HhtiaU/XOdTnT/M/eF4hoW0yxO5YKfgurgosz
-                OjAnn7+Ed5S5Sh8E4EHUGCcawErZEZCtlsns0fNPGfNjadZAjq0X+5VP1EVXca0B
-                VrSp9ZTif3cvyxNTOogbgA==
-                -----END PRIVATE KEY-----
-                """;
+    public static final String PRIVATE_KEY = """
+            -----BEGIN PRIVATE KEY-----
+            MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCNK9IOasciiHSy
+            +pKOelylc9gnjWfIO/x74XFmjixeJr2xZQlA4nKkNv0u+CO40XgSH1OfiNxLZPJd
+            L77Ei73462FVabSUmK3Lv6DJlNe+51a6zOx8KqpyM+EirAcZ6OQPQi1Q0T/XFrho
+            jEAV4GckPuvzppbxp7RBQFfN9WYvzghYKqbuZ6I+OS2RoetOtASXamzRdZT3gK/0
+            X0VOZo1JSDp9vcSFa+dlddgc+Ns3rso5tE9UNqplmTyBK7AehUuBNU6d8rQbvmgw
+            ORY2d47UZe+XsfXQn2UfYi5movxzs0cwqEdXmqbOIESbpT3y2jBWDGUHNn7faIhi
+            WqKdLS3ZAgMBAAECgf8NAg0nkG/dQUYXolBBrS/SHkO8JvkZUG21V8XiN3HSen18
+            ZTwlNEj5J0glfJwFzUJRC2RMsJBcnvRssPhOy1I7Br7jU+MKJGUy8EFvyNFsEyHV
+            Mwo8LvvFDfiYsa5G8HmFTrsJULhat9A+nLfoJh9LsBsxRU0uvPLgXus0goBRLjBz
+            0Y4iUJgLjjKDGGIMtNrfrAdPcaQ/vYHT+XNkbR3nXLqoeI+jzBMckHD6KG+Mq1NR
+            uTOJJDzDNcq9YYgt/oTkvHubtG9s7Y9YdEK3UPsx7aG41YyW1Fq7J5pqv43c0PXs
+            CJFGIv939FpRZHKh9WCT7b/LVacYBI68JuUflCMCgYEAw0MgIaNf/XC2zXjVya9M
+            EzZHFpkUa7IKoNHkA7HQ8Ev77nYYlTnR7krAKBf332MNAO7ApFfO8T1b1mvwS0eQ
+            hTpa/+7k6EzNOe8BZwyFht4iLknVH1Y+peHzQtdNBnuPdDhuGZlBFBMoQgCKAEuY
+            ZW+34wDtsIHYC+RQPns/CXMCgYEAuRViww3MAZn6PMPMkkUXGeCoStx8cCL2XmPn
+            Y1jUNi2OR55t4woJfSFQpcrRF7gXx85eriMSxoBGNZNh0Dj9M3uUTWqqr17MRLLa
+            t1z0gpm2MHFC7WQOMVbajqS3//7B+bLTJAOI2vnp4oe8s7z1Sbno8mpFWiEZj8bE
+            bWTxSIMCgYEAs+pL1vLUZY/PwC+QvU86R5GBmv7d5AWe6WO8NvNG08MPlT9Xk1g9
+            aNWTjN3Y1QpNVwimlEccNQgWcNHwDU0ZisikRKH4ZVsu1iy1HCBbgFN5JzF8oG01
+            OF+jZ3k+TbTYD3xXZlrhrf+g3n/kqDT/bKetxgp6+GILkZmDnq6s/KUCgYBemWCu
+            Y6nnE6WEU2uHQ4sILfy2rrVnt2cHXbbR34Av5N75Gi/+QI4TB+kppF106yI0fPWF
+            ueWJ0dyQ27C99bLtEnf9jcyJ8EElx+jkmb1b12b4oZtcrKxYaZUyHVzymmrYzp7+
+            pFPZ4Ky7nTdFAwq4US6QYOLrq0leZHDXnSV6MwKBgQCLCiRgOh62DsrNQaOsxo9l
+            G20FQqfwBqflmUqCtQNuE00JReN9Rh6i3PX1eBguIkUNFD149hkr8316KTxiyof3
+            qh961xrZWqmnkV9XdAq9zA23IUlvFtyHkrBT/+AtEzjvzaj1LQisomlfIzLlBMBc
+            3cln+ZXrEwAmFOkkYHlFag==
+            -----END PRIVATE KEY-----
+            """;
 
-    // When
-    PrivateKey privateKey = CertUtils.pemKey2PrivateKey(pemKey);
+    public static final String PUBLIC_KEY = """
+            -----BEGIN PUBLIC KEY-----
+            MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjSvSDmrHIoh0svqSjnpc
+            pXPYJ41nyDv8e+FxZo4sXia9sWUJQOJypDb9LvgjuNF4Eh9Tn4jcS2TyXS++xIu9
+            +OthVWm0lJity7+gyZTXvudWuszsfCqqcjPhIqwHGejkD0ItUNE/1xa4aIxAFeBn
+            JD7r86aW8ae0QUBXzfVmL84IWCqm7meiPjktkaHrTrQEl2ps0XWU94Cv9F9FTmaN
+            SUg6fb3EhWvnZXXYHPjbN67KObRPVDaqZZk8gSuwHoVLgTVOnfK0G75oMDkWNneO
+            1GXvl7H10J9lH2IuZqL8c7NHMKhHV5qmziBEm6U98towVgxlBzZ+32iIYlqinS0t
+            2QIDAQAB
+            -----END PUBLIC KEY-----
+            """;
 
-    // Then
-    assertNotNull(privateKey);
-    assertTrue(privateKey instanceof java.security.interfaces.RSAPrivateKey);
-  }
+    @Test
+    void givenValidPrivateKeyWhenPemKey2PrivateKeyThenValidKey() throws InvalidKeySpecException, NoSuchAlgorithmException, IOException {
+        // When
+        PrivateKey privateKey = CertUtils.pemKey2PrivateKey(PRIVATE_KEY);
 
-  @Test
-  void givenInvalidPrivateKeyWhenPemKey2PrivateKeyThenInvalidKey() {
-    // Given
-    String invalidPemKey = """
+        // Then
+        assertNotNull(privateKey);
+        assertInstanceOf(RSAPrivateKey.class, privateKey);
+    }
+
+    @Test
+    void givenInvalidPrivateKeyWhenPemKey2PrivateKeyThenInvalidKey() {
+        // Given
+        String invalidPemKey = """
                 -----BEGIN PRIVATE KEY-----
                 NOT VALID KEY
                 -----END PRIVATE KEY-----
                 """;
 
-    // Then
-    assertThrows(InvalidKeySpecException.class, () -> CertUtils.pemKey2PrivateKey(invalidPemKey));
-  }
+        // Then
+        assertThrows(InvalidKeySpecException.class, () -> CertUtils.pemKey2PrivateKey(invalidPemKey));
+    }
 
-  @Test
-  void givenNullPrivateKeyWhenPemKey2PrivateKeyThenNullKey() {
-    // Given
-    String nullKey = null;
+    @Test
+    void givenNullPrivateKeyWhenPemKey2PrivateKeyThenNullKey() {
+        // Given
+        String nullKey = null;
 
-    // Then
-    assertThrows(NullPointerException.class, () -> CertUtils.pemKey2PrivateKey(nullKey));
-  }
+        // Then
+        assertThrows(NullPointerException.class, () -> CertUtils.pemKey2PrivateKey(nullKey));
+    }
 
-  @Test
-  void givenValidPemWhenExtractInlinePemBodyThenValidPem() {
-    // Given
-    String pemKey = """
+    @Test
+    void givenValidPemWhenExtractInlinePemBodyThenValidPem() {
+        // Given
+        String pemKey = """
                 -----BEGIN PRIVATE KEY-----
                 MIIEvQIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALzbdGZIkI5wsRwl
                 OjiZlQCvdS8/JXbbE29AQSkCAwEAAQ==
                 -----END PRIVATE KEY-----
                 """;
 
-    // When
-    String extractedBody = CertUtils.extractInlinePemBody(pemKey);
+        // When
+        String extractedBody = CertUtils.extractInlinePemBody(pemKey);
 
-    // Then
-    assertFalse(extractedBody.contains("BEGIN PRIVATE KEY"));
-    assertFalse(extractedBody.contains("END PRIVATE KEY"));
-    assertFalse(extractedBody.contains("\n"));
-  }
+        // Then
+        assertFalse(extractedBody.contains("BEGIN PRIVATE KEY"));
+        assertFalse(extractedBody.contains("END PRIVATE KEY"));
+        assertFalse(extractedBody.contains("\n"));
+    }
 }
