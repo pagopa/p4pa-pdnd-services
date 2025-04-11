@@ -2,8 +2,8 @@ package it.gov.pagopa.payhub.pdnd.anpr.connector.c030.config;
 
 import it.gov.pagopa.payhub.anpr.C030.dto.generated.RichiestaE002;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.AnprApiClientConfig;
-import it.gov.pagopa.payhub.pdnd.config.HttpClientConfig;
-import it.gov.pagopa.payhub.pdnd.config.HttpsClientConfig;
+import it.gov.pagopa.payhub.pdnd.config.rest.HttpClientConfig;
+import it.gov.pagopa.payhub.pdnd.config.rest.HttpsClientConfig;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.BasePdndServiceIntegratedApiHolderTest;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;

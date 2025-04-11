@@ -1,6 +1,6 @@
 package it.gov.pagopa.payhub.pdnd.connector.pdnd.config;
 
-import it.gov.pagopa.payhub.pdnd.config.ApiClientConfig;
+import it.gov.pagopa.payhub.pdnd.config.rest.ApiClientConfig;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

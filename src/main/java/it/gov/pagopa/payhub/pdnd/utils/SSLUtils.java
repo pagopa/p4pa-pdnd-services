@@ -1,6 +1,6 @@
 package it.gov.pagopa.payhub.pdnd.utils;
 
-import it.gov.pagopa.payhub.pdnd.config.HttpClientConfig;
+import it.gov.pagopa.payhub.pdnd.config.rest.HttpClientConfig;
 import org.apache.hc.client5.http.ssl.ClientTlsStrategyBuilder;
 import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
 import org.apache.hc.client5.http.ssl.TlsSocketStrategy;

@@ -1,6 +1,6 @@
 package it.gov.pagopa.payhub.pdnd.send.connector;
 
-import it.gov.pagopa.payhub.pdnd.config.ApiClientConfig;
+import it.gov.pagopa.payhub.pdnd.config.rest.ApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import lombok.AllArgsConstructor;
 import lombok.Data;
