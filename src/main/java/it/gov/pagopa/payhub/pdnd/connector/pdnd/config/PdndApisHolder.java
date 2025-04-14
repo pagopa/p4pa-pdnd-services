@@ -1,6 +1,6 @@
 package it.gov.pagopa.payhub.pdnd.connector.pdnd.config;
 
-import it.gov.pagopa.payhub.pdnd.config.RestTemplateConfig;
+import it.gov.pagopa.payhub.pdnd.config.rest.RestTemplateConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.ApiClient;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.api.AuthApi;
 import lombok.extern.slf4j.Slf4j;

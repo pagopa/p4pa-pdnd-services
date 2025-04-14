@@ -4,7 +4,7 @@ import it.gov.pagopa.payhub.anpr.C003.controller.ApiClient;
 import it.gov.pagopa.payhub.anpr.C003.controller.generated.E002ServiceApi;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.AnprApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.BaseAnprServiceApisHolder;
-import it.gov.pagopa.payhub.pdnd.config.HttpClientConfig;
+import it.gov.pagopa.payhub.pdnd.config.rest.HttpClientConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,7 @@
 package it.gov.pagopa.payhub.pdnd.anpr.connector;
 
-import it.gov.pagopa.payhub.pdnd.config.HttpClientConfig;
-import it.gov.pagopa.payhub.pdnd.config.RestTemplateConfig;
+import it.gov.pagopa.payhub.pdnd.config.rest.HttpClientConfig;
+import it.gov.pagopa.payhub.pdnd.config.rest.RestTemplateConfig;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedAuthConfigurer;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
