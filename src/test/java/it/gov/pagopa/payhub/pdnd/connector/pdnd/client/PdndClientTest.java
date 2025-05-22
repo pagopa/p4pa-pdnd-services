@@ -1,9 +1,9 @@
 package it.gov.pagopa.payhub.pdnd.connector.pdnd.client;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.maciejwalkowiak.wiremock.spring.ConfigureWireMock;
-import com.maciejwalkowiak.wiremock.spring.EnableWireMock;
-import com.maciejwalkowiak.wiremock.spring.InjectWireMock;
+import org.wiremock.spring.ConfigureWireMock;
+import org.wiremock.spring.EnableWireMock;
+import org.wiremock.spring.InjectWireMock;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApisHolder;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.dto.ClientCredentialsResponseDTO;
@@ -17,7 +17,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 
 @SpringBootTest
 @EnableWireMock({
-    @ConfigureWireMock(name = "pdnd")
+    @ConfigureWireMock(name = "pdnd", filesUnderClasspath = "wiremock")
 })
 @EnableConfigurationProperties
 class PdndClientTest {

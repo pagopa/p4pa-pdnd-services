@@ -1,11 +1,11 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.4.3"
+    id("org.springframework.boot") version "3.4.5"
     id("io.spring.dependency-management") version "1.1.7"
     jacoco
-    id("org.sonarqube") version "6.0.1.5171"
-    id("com.github.ben-manes.versions") version "0.51.0"
-    id("org.openapi.generator") version "7.10.0"
+    id("org.sonarqube") version "6.1.0.5360"
+    id("com.github.ben-manes.versions") version "0.52.0"
+    id("org.openapi.generator") version "7.13.0"
     id("com.gorylenko.gradle-git-properties") version "2.5.0"
 }
 
@@ -29,16 +29,16 @@ repositories {
     mavenCentral()
 }
 
-val springDocOpenApiVersion = "2.8.5"
+val springDocOpenApiVersion = "2.8.6"
 val openApiToolsVersion = "0.2.6"
 val javaJwtVersion = "4.5.0"
 val jwksRsaVersion = "0.22.1"
-val wiremockVersion = "3.12.0"
-val wiremockSpringBootVersion = "2.1.3"
-val micrometerVersion = "1.4.3"
+val wiremockVersion = "3.13.0"
+val wiremockSpringBootVersion = "3.10.0"
+val micrometerVersion = "1.4.6"
 val bouncycastleVersion = "1.80"
 val caffeineVersion = "3.2.0"
-val httpClientVersion = "5.4.2"
+val httpClientVersion = "5.4.4"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
@@ -68,7 +68,7 @@ dependencies {
     testImplementation("org.mockito:mockito-core")
     testImplementation("org.projectlombok:lombok")
     testImplementation("org.wiremock:wiremock-standalone:$wiremockVersion")
-    testImplementation("com.maciejwalkowiak.spring:wiremock-spring-boot:$wiremockSpringBootVersion")
+    testImplementation("org.wiremock.integrations:wiremock-spring-boot:$wiremockSpringBootVersion")
 }
 
 tasks.withType<Test> {
