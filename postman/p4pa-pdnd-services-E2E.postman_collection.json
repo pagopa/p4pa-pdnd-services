@@ -1,10 +1,11 @@
 {
 	"info": {
-		"_postman_id": "788ce8de-eb45-4b30-b5a3-b8d18ece3fcd",
+		"_postman_id": "e6063905-f686-4ed4-a184-e890600a7f8d",
 		"name": "p4pa-pdnd-services-E2E",
 		"description": "API and Models.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "36568841"
+		"_exporter_id": "15747968",
+		"_collection_link": "https://warped-astronaut-141685.postman.co/workspace/P4PA~9a8b7dd5-97b6-4dd0-b3f5-95f25fd0b455/collection/15747968-e6063905-f686-4ed4-a184-e890600a7f8d?action=share&source=collection_link&creator=15747968"
 	},
 	"item": [
 		{
@@ -404,16 +405,6 @@
 			]
 		}
 	],
-	"auth": {
-		"type": "bearer",
-		"bearer": [
-			{
-				"key": "token",
-				"value": "Bearer {{token}}",
-				"type": "string"
-			}
-		]
-	},
 	"event": [
 		{
 			"listen": "prerequest",
@@ -502,16 +493,6 @@
 		{
 			"key": "fiscalCode",
 			"value": "DNTCRL65S67M126K",
-			"type": "string"
-		},
-		{
-			"key": "token",
-			"value": "",
-			"type": "string"
-		},
-		{
-			"key": "baseUrlAuth",
-			"value": "https://api.dev.p4pa.pagopa.it/payhub-auth",
 			"type": "string"
 		},
 		{
