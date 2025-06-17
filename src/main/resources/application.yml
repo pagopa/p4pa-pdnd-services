@@ -137,11 +137,12 @@ rest:
     base-url: "\${SEND_BASE_URL:https://api.uat.notifichedigitali.it}"
     service:
       base-path: "\${PDND_SERVICE_SEND_BASE_PATH:}"
+      purpose-id: "\${PDND_SERVICE_SEND_PURPOSE_ID:purposeid}"
       client-id: "\${PDND_SERVICE_SEND_CLIENTID:\${PDND_SERVICE_CLIENTID:clientid}}"
       kid: "\${PDND_SERVICE_SEND_KID:\${PDND_SERVICE_KID:kid}}"
-      purpose-id: "\${PDND_SERVICE_SEND_PURPOSE_ID:purposeid}"
       private-key: "\${PDND_SERVICE_SEND_PRIVATEKEY:\${rest.pdnd.default-client.private-key}}"
       public-key: "\${PDND_SERVICE_SEND_PUBLICKEY:\${rest.pdnd.default-client.public-key}}"
+
 cache:
   anpr-ids:
     size: "\${CACHE_ANPR_IDS_SIZE:1000}"
