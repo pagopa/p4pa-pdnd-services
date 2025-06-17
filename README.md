@@ -23,6 +23,10 @@ See [Postman collection](/postman/p4pa-pdnd-services-E2E.postman_collection.json
 * `GET /anpr-service-e002/citizen`: To get citizen data from ANPR;
 * `GET /token`: To obtain a token to use in order to authenticate invocations towards PDND exposed services.
 
+### 📌 Common HTTP status returned:
+* `401`: Invalid access token provided, thus a new login is required;
+* `403`: Trying to access a not authorized resource.
+
 ## 🔎 Monitoring
 See available actuator endpoints through the following path:
 * `/actuator`
