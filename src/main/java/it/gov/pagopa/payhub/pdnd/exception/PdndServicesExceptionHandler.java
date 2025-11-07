@@ -2,6 +2,7 @@ package it.gov.pagopa.payhub.pdnd.exception;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import it.gov.pagopa.payhub.pdnd.dto.generated.PdndServicesErrorDTO;
+import it.gov.pagopa.payhub.pdnd.utils.Utilities;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
@@ -63,7 +64,7 @@ public class PdndServicesExceptionHandler {
         return ResponseEntity
                 .status(httpStatus)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(new PdndServicesErrorDTO(errorEnum, message));
+                .body(new PdndServicesErrorDTO(errorEnum, message, Utilities.getTraceId()));
     }
 
     private static void logException(Exception ex, HttpServletRequest request, HttpStatusCode httpStatus) {
