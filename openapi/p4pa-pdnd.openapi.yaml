@@ -118,6 +118,8 @@ components:
             - PDND_SERVICES_GENERIC_ERROR
         message:
           type: string
+        traceId:
+          type: string
     PdndServicesEnum:
       type: string
       enum:
