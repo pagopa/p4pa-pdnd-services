@@ -13,11 +13,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.restclient.RestTemplateBuilder;
 
 @SpringBootTest
 @EnableWireMock({
-    @ConfigureWireMock(name = "pdnd", filesUnderClasspath = "wiremock")
+    @ConfigureWireMock(name = "pdnd", filesUnderClasspath = "wiremock/pdnd")
 })
 @EnableConfigurationProperties
 class PdndClientTest {
