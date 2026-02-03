@@ -34,19 +34,19 @@ public class PdndServicesExceptionHandler {
 
     @ExceptionHandler({ValidationException.class, HttpMessageNotReadableException.class, MethodArgumentNotValidException.class, MethodArgumentTypeMismatchException.class})
     public ResponseEntity<PdndServicesErrorDTO> handleViolationException(Exception ex, HttpServletRequest request) {
-        return handleException(ex, request, HttpStatus.BAD_REQUEST, PdndServicesErrorDTO.CodeEnum.PDND_SERVICES_BAD_REQUEST);
+        return handleException(ex, request, HttpStatus.BAD_REQUEST, PdndServicesErrorDTO.CategoryEnum.PDND_SERVICES_BAD_REQUEST);
     }
 
     @ExceptionHandler({ServletException.class, ErrorResponseException.class})
     public ResponseEntity<PdndServicesErrorDTO> handleServletException(Exception ex, HttpServletRequest request) {
         HttpStatusCode httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-        PdndServicesErrorDTO.CodeEnum errorCode = PdndServicesErrorDTO.CodeEnum.PDND_SERVICES_GENERIC_ERROR;
+        PdndServicesErrorDTO.CategoryEnum errorCode = PdndServicesErrorDTO.CategoryEnum.PDND_SERVICES_GENERIC_ERROR;
         if (ex instanceof ErrorResponse errorResponse) {
             httpStatus = errorResponse.getStatusCode();
             if (httpStatus.isSameCodeAs(HttpStatus.NOT_FOUND)) {
-                errorCode = PdndServicesErrorDTO.CodeEnum.PDND_SERVICES_NOT_FOUND;
+                errorCode = PdndServicesErrorDTO.CategoryEnum.PDND_SERVICES_NOT_FOUND;
             } else if (httpStatus.is4xxClientError()) {
-                errorCode = PdndServicesErrorDTO.CodeEnum.PDND_SERVICES_BAD_REQUEST;
+                errorCode = PdndServicesErrorDTO.CategoryEnum.PDND_SERVICES_BAD_REQUEST;
             }
         }
         return handleException(ex, request, httpStatus, errorCode);
@@ -54,10 +54,10 @@ public class PdndServicesExceptionHandler {
 
     @ExceptionHandler({RuntimeException.class})
     public ResponseEntity<PdndServicesErrorDTO> handleRuntimeException(RuntimeException ex, HttpServletRequest request) {
-        return handleException(ex, request, HttpStatus.INTERNAL_SERVER_ERROR, PdndServicesErrorDTO.CodeEnum.PDND_SERVICES_GENERIC_ERROR);
+        return handleException(ex, request, HttpStatus.INTERNAL_SERVER_ERROR, PdndServicesErrorDTO.CategoryEnum.PDND_SERVICES_GENERIC_ERROR);
     }
 
-    static ResponseEntity<PdndServicesErrorDTO> handleException(Exception ex, HttpServletRequest request, HttpStatusCode httpStatus, PdndServicesErrorDTO.CodeEnum errorEnum) {
+    static ResponseEntity<PdndServicesErrorDTO> handleException(Exception ex, HttpServletRequest request, HttpStatusCode httpStatus, PdndServicesErrorDTO.CategoryEnum errorEnum) {
         logException(ex, request, httpStatus);
 
         String message = buildReturnedMessage(ex);
