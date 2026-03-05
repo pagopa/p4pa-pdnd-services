@@ -53,11 +53,12 @@ val openApiToolsVersion = "0.2.9"
 val javaJwtVersion = "4.5.1"
 val jwksRsaVersion = "0.23.0"
 val wiremockVersion = "3.13.2"
-val wiremockSpringBootVersion = "4.0.8"
+val wiremockSpringBootVersion = "4.2.0"
 val micrometerVersion = "1.6.3"
 val bouncycastleVersion = "1.83"
 val caffeineVersion = "3.2.3"
 val httpClientVersion = "5.6"
+val httpCoreVersion = "5.4.1"
 val commonsLang3Version = "3.20.0"
 
 // fix cve
@@ -86,6 +87,7 @@ dependencies {
     implementation("org.bouncycastle:bcprov-jdk18on:$bouncycastleVersion")
     implementation("com.github.ben-manes.caffeine:caffeine:$caffeineVersion")
     implementation("org.apache.httpcomponents.client5:httpclient5:$httpClientVersion")
+  implementation("org.apache.httpcomponents.core5:httpcore5:$httpCoreVersion")
 
     // CVE fix
     implementation("tools.jackson.core:jackson-core:$jackson3CoreVersion")

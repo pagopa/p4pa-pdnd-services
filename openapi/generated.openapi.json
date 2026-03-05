@@ -202,7 +202,7 @@
           },
           "postalCode" : {
             "type" : "string",
-            "example" : 64
+            "example" : "64"
           },
           "country" : {
             "type" : "string",
