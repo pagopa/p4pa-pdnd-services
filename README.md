@@ -47,10 +47,10 @@ See [log configured pattern](/src/main/resources/logback-spring.xml).
 
 ### 🌍 External
 * PDND - IDP to authenticate PA services exposed by PDND:
-  * [OpenAPI](openapi/pdnd-v1.openapi.yaml): To obtain access token towards PDND exposed services;
+  * [OpenAPI](openapi/external/pdnd-v1.openapi.yaml): To obtain access token towards PDND exposed services;
 * ANPR:
-  * [C030 OpenAPI](openapi/anprApiC030.openapi.yaml): To retrieve the idAnpr related to a citizen fiscal code;
-  * [C003 OpenAPI](openapi/anprApiC003.openapi.yaml): To retrieve citizen data;
+  * [C030 OpenAPI](openapi/external/anprApiC030.openapi.yaml): To retrieve the idAnpr related to a citizen fiscal code;
+  * [C003 OpenAPI](openapi/external/anprApiC003.openapi.yaml): To retrieve citizen data;
 
 ## 🔧 Configuration
 
