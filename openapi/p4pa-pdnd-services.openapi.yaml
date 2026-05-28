@@ -117,6 +117,7 @@ components:
             - PDND_SERVICES_NOT_FOUND
             - PDND_SERVICES_BAD_REQUEST
             - PDND_SERVICES_GENERIC_ERROR
+            - PDND_SERVICES_TOO_MANY_REQUESTS
         code:
           type: string
         message:
