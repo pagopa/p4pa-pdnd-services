@@ -22,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ServerErrorException;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
@@ -46,13 +48,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 
 @ExtendWith({SpringExtension.class})
-@WebMvcTest(value = {AnprServicesExceptionHandlerTest.TestController.class})
+@WebMvcTest(value = {PdndServicesExceptionHandlerTest.TestController.class})
 @AutoConfigureMockMvc(addFilters = false)
 @ContextConfiguration(classes = {
-        AnprServicesExceptionHandlerTest.TestController.class,
+        PdndServicesExceptionHandlerTest.TestController.class,
         PdndServicesExceptionHandler.class,
         JsonConfig.class})
-class AnprServicesExceptionHandlerTest {
+class PdndServicesExceptionHandlerTest {
 
     public static final String DATA = "data";
     public static final TestRequestBody BODY = new TestRequestBody("bodyData", null, "abc", LocalDateTime.now());
@@ -106,7 +108,7 @@ class AnprServicesExceptionHandlerTest {
     }
 
     private ResultActions performRequest(String data, MediaType accept) throws Exception {
-        return performRequest(data, accept, objectMapper.writeValueAsString(AnprServicesExceptionHandlerTest.BODY));
+        return performRequest(data, accept, objectMapper.writeValueAsString(PdndServicesExceptionHandlerTest.BODY));
     }
 
     private ResultActions performRequest(String data, MediaType accept, String body) throws Exception {
@@ -233,6 +235,19 @@ class AnprServicesExceptionHandlerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.category").value("PDND_SERVICES_GENERIC_ERROR"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code").value("PDND_SERVICES_GENERIC_ERROR"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("[PDND_SERVICES_GENERIC_ERROR] 500 INTERNAL_SERVER_ERROR \"Error\""))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.traceId").value(traceId));
+    }
+
+    @Test
+    void handleHttpClientErrorTooManyRequestsException() throws Exception {
+        doThrow(HttpClientErrorException.create(HttpStatus.TOO_MANY_REQUESTS, "TooManyRequests", null, null, null))
+                .when(requestMappingHandlerAdapterSpy).handle(any(), any(), any());
+
+        performRequest(DATA, MediaType.APPLICATION_JSON)
+                .andExpect(MockMvcResultMatchers.status().isTooManyRequests())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.category").value("PDND_SERVICES_TOO_MANY_REQUESTS"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value("PDND_SERVICES_TOO_MANY_REQUESTS"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("[PDND_SERVICES_TOO_MANY_REQUESTS] 429 TooManyRequests"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.traceId").value(traceId));
     }
 
