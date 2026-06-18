@@ -145,6 +145,11 @@ rest:
       kid: "\${PDND_SERVICE_SEND_KID:\${PDND_SERVICE_KID:kid}}"
       private-key: "\${PDND_SERVICE_SEND_PRIVATEKEY:\${rest.pdnd.default-client.private-key}}"
       public-key: "\${PDND_SERVICE_SEND_PUBLICKEY:\${rest.pdnd.default-client.public-key}}"
+  organization:
+    base-url: "\${ORGANIZATION_BASE_URL:}"
+    max-attempts: "\${ORGANIZATION_MAX_ATTEMPTS:3}" # It's counting also the first attempt
+    wait-time-millis: "\${ORGANIZATION_WAIT_TIME_MILLIS:500}"
+    print-body-when-error: "\${ORGANIZATION_PRINT_BODY_WHEN_ERROR:true}"
 
 cache:
   anpr-ids:
