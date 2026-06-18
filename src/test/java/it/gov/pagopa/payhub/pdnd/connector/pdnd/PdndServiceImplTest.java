@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -61,13 +62,18 @@ class PdndServiceImplTest {
         PdndServiceType service = PdndServiceType.SEND;
         Long organizationId = 1L;
         String subUnitCode = "subUnitCode";
-        PdndAuthData expectedResult = new PdndAuthData(null, null, "TOKEN", LocalDateTime.now().plusMinutes(1), "clientId", "audience", "kid", "basePath", null);
+        LocalDateTime localDateTime = LocalDateTime.of(2026, 6, 18, 12, 0);
+        PdndAuthData expectedResult = new PdndAuthData(null, null, "TOKEN", LocalDateTime.of(2026,6,18,12,1), "clientId", "audience", "kid", "basePath", null);
         pdndService.jwtCache.put(Triple.of(service,organizationId,subUnitCode), expectedResult);
 
-        PdndAuthData result = pdndService.generateToken(service,organizationId,subUnitCode,accessToken);
+        try(MockedStatic<LocalDateTime> localDateTimeMock = Mockito.mockStatic(LocalDateTime.class)) {
+            localDateTimeMock.when(LocalDateTime::now).thenReturn(localDateTime);
 
-        // Then
-        assertSame(expectedResult, result);
+            PdndAuthData result = pdndService.generateToken(service,organizationId,subUnitCode,accessToken);
+
+            // Then
+            assertSame(expectedResult, result);
+        }
     }
 
 }
