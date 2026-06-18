@@ -47,6 +47,10 @@ See [log configured pattern](/src/main/resources/logback-spring.xml).
 
 ## 🔗 Dependencies
 
+### 🧩 Microservices
+* [p4pa-organization](https://github.com/pagopa/p4pa-organization):
+  * To access to domain data and operations;
+
 ### 🌍 External
 * PDND - IDP to authenticate PA services exposed by PDND:
   * [OpenAPI](openapi/external/pdnd-v1.openapi.yaml): To obtain access token towards PDND exposed services;
@@ -95,19 +99,23 @@ See [application.yml](src/main/resources/application.yml) for each configurable 
 | DEFAULT_REST_TIMEOUT_READ_MILLIS                  | Default read timeout (milliseconds)       | 120000  |
 
 ##### 🌍 External services
-| ENV                              | DESCRIPTION                                                                                                                 | DEFAULT                                        |
-|----------------------------------|-----------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
-| PDND_BASE_URL                    | PDND service URL                                                                                                            |                                                |
-| PDND_MAX_ATTEMPTS                | PDND API max attempts                                                                                                       | 3                                              |
-| PDND_WAIT_TIME_MILLIS            | PDND retry waiting time (milliseconds)                                                                                      | 500                                            |
-| PDND_PRINT_BODY_WHEN_ERROR       | To print body when an error occurs                                                                                          | true                                           |
-| PDND_ACCESS_TOKEN_AUDIENCE       | Value set for the claim `aud` of the PDND `clientAssertion` JWT sent during the invocation of the API `createToken` of PDND | auth.uat.interop.pagopa.it/client-assertion    |
-| ANPR_BASE_URL                    | ANPR service base URL concatenated to particular service paths                                                              |                                                |
-| ANPR_MAX_ATTEMPTS                | ANPR API max attempts                                                                                                       | 3                                              |
-| ANPR_WAIT_TIME_MILLIS            | ANPR retry waiting time (milliseconds)                                                                                      | 500                                            |
-| ANPR_PRINT_BODY_WHEN_ERROR       | To print body when an error occurs                                                                                          | true                                           |
-| PDND_SERVICE_ANPR_C003_BASE_PATH | C003 ANPR service path                                                                                                      | /C003-servizioVerificaDichGeneralita/v1        |
-| PDND_SERVICE_ANPR_C030_BASE_PATH | C030 ANPR service path                                                                                                      | /C030-servizioAccertamentoIdUnicoNazionale/v1/ |
+| ENV                                | DESCRIPTION                                                                                                                 | DEFAULT                                        |
+|------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
+| PDND_BASE_URL                      | PDND service URL                                                                                                            |                                                |
+| PDND_MAX_ATTEMPTS                  | PDND API max attempts                                                                                                       | 3                                              |
+| PDND_WAIT_TIME_MILLIS              | PDND retry waiting time (milliseconds)                                                                                      | 500                                            |
+| PDND_PRINT_BODY_WHEN_ERROR         | To print body when an error occurs                                                                                          | true                                           |
+| PDND_ACCESS_TOKEN_AUDIENCE         | Value set for the claim `aud` of the PDND `clientAssertion` JWT sent during the invocation of the API `createToken` of PDND | auth.uat.interop.pagopa.it/client-assertion    |
+| ANPR_BASE_URL                      | ANPR service base URL concatenated to particular service paths                                                              |                                                |
+| ANPR_MAX_ATTEMPTS                  | ANPR API max attempts                                                                                                       | 3                                              |
+| ANPR_WAIT_TIME_MILLIS              | ANPR retry waiting time (milliseconds)                                                                                      | 500                                            |
+| ANPR_PRINT_BODY_WHEN_ERROR         | To print body when an error occurs                                                                                          | true                                           |
+| PDND_SERVICE_ANPR_C003_BASE_PATH   | C003 ANPR service path                                                                                                      | /C003-servizioVerificaDichGeneralita/v1        |
+| PDND_SERVICE_ANPR_C030_BASE_PATH   | C030 ANPR service path                                                                                                      | /C030-servizioAccertamentoIdUnicoNazionale/v1/ |
+| ORGANIZATION_BASE_URL              | Organization microservice URL                                                                                               |                                                |
+| ORGANIZATION_MAX_ATTEMPTS          | Organization API max attempts                                                                                               | 3                                              |
+| ORGANIZATION_WAIT_TIME_MILLIS      | Organization retry waiting time (milliseconds)                                                                              | 500                                            |
+| ORGANIZATION_PRINT_BODY_WHEN_ERROR | To print body when an error occurs                                                                                          | true                                           |
 
 #### 💼 Business logic
 | ENV                               | DESCRIPTION                                                                             | DEFAULT                         |
