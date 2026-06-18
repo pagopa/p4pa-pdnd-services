@@ -4,11 +4,10 @@ import it.gov.pagopa.payhub.anpr.C003.dto.generated.RichiestaE002;
 import it.gov.pagopa.payhub.anpr.C003.dto.generated.RispostaE002OK;
 import it.gov.pagopa.payhub.anpr.C003.dto.generated.TipoCriteriRicercaE002;
 import it.gov.pagopa.payhub.anpr.C003.dto.generated.TipoDatiRichiestaE002;
-import it.gov.pagopa.payhub.pdnd.anpr.connector.AnprApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.c003.client.AnprC003Client;
 import it.gov.pagopa.payhub.pdnd.anpr.service.AnprIdOperationGeneratorService;
-import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.PdndService;
+import it.gov.pagopa.pu.organization.dto.generated.PdndServiceType;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,19 +17,17 @@ import java.time.format.DateTimeFormatter;
 public class AnprC003ServiceImpl implements AnprC003Service {
 
     private final AnprC003Client anprC003Client;
-    private final PdndServiceIntegratedConfig anprC003ServiceConfig;
     private final PdndService pdndService;
     private final AnprIdOperationGeneratorService anprIdOperationGeneratorService;
 
-    public AnprC003ServiceImpl(AnprC003Client anprC003Client, AnprApiClientConfig anprApiClientConfig, PdndService pdndService, AnprIdOperationGeneratorService anprIdOperationGeneratorService) {
+    public AnprC003ServiceImpl(AnprC003Client anprC003Client, PdndService pdndService, AnprIdOperationGeneratorService anprIdOperationGeneratorService) {
         this.anprC003Client = anprC003Client;
-        this.anprC003ServiceConfig = anprApiClientConfig.getServices().getC003();
         this.pdndService = pdndService;
         this.anprIdOperationGeneratorService = anprIdOperationGeneratorService;
     }
 
     @Override
-    public RispostaE002OK getUserData(String idAnpr) {
+    public RispostaE002OK getUserData(String idAnpr, Long organizationId, String subUnitCode, String accessToken) {
         TipoCriteriRicercaE002 searchTypes = TipoCriteriRicercaE002.builder()
                 .idANPR(idAnpr)
                 .build();
@@ -47,7 +44,12 @@ public class AnprC003ServiceImpl implements AnprC003Service {
                 .datiRichiesta(reqDataTypes)
                 .build();
 
-        return anprC003Client.getUserData(request, pdndService.generateToken(anprC003ServiceConfig));
+        return anprC003Client.getUserData(
+                request,
+                pdndService.generateToken(
+                        PdndServiceType.C003,organizationId,subUnitCode,accessToken
+                )
+        );
     }
 }
 

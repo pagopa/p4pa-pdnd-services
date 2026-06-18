@@ -3,6 +3,7 @@ package it.gov.pagopa.payhub.pdnd.connector.organization.client;
 import it.gov.pagopa.payhub.pdnd.connector.organization.config.OrganizationApisHolder;
 import it.gov.pagopa.pu.organization.controller.generated.PdndServiceSearchControllerApi;
 import it.gov.pagopa.pu.organization.dto.generated.PdndService;
+import it.gov.pagopa.pu.organization.dto.generated.PdndServiceType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,38 +38,40 @@ class PdndServiceSearchClientTest {
   }
 
   @Test
-  void whenFindByClientIdThenOk() {
+  void whenFindByClientIdAndServiceTypeThenOk() {
     // Given
     String accessToken = "ACCESS_TOKEN";
     String clientId = "clientId";
+    PdndServiceType pdndServiceType = PdndServiceType.SEND;
     PdndService expectedResult = new PdndService();
 
     Mockito.when(organizationApisHolderMock.getPdndServiceSearchControllerApi(accessToken))
             .thenReturn(pdndServiceSearchControllerApiMock);
-    Mockito.when(pdndServiceSearchControllerApiMock.crudPdndServicesFindByClientId(clientId))
+    Mockito.when(pdndServiceSearchControllerApiMock.crudPdndServicesFindByClientIdAndServiceType(clientId, pdndServiceType))
             .thenReturn(expectedResult);
 
     // When
-    PdndService result = pdndServiceSearchClient.findByClientId(clientId, accessToken);
+    PdndService result = pdndServiceSearchClient.findByClientIdAndServiceType(clientId, pdndServiceType, accessToken);
 
     // Then
     Assertions.assertSame(expectedResult, result);
   }
 
   @Test
-  void givenNotFoundWhenFindByClientIdThenNull() {
+  void givenNotFoundWhenFindByClientIdAndServiceTypeThenNull() {
     // Given
     String accessToken = "ACCESS_TOKEN";
     String clientId = "clientId";
+    PdndServiceType pdndServiceType = PdndServiceType.SEND;
 
     Mockito.when(organizationApisHolderMock.getPdndServiceSearchControllerApi(accessToken))
             .thenReturn(pdndServiceSearchControllerApiMock);
-    Mockito.when(pdndServiceSearchControllerApiMock.crudPdndServicesFindByClientId(clientId))
+    Mockito.when(pdndServiceSearchControllerApiMock.crudPdndServicesFindByClientIdAndServiceType(clientId, pdndServiceType))
             .thenThrow(
                     HttpClientErrorException.create(HttpStatus.NOT_FOUND, "NotFound", null, null, null));
 
     // When
-    PdndService result = pdndServiceSearchClient.findByClientId(clientId, accessToken);
+    PdndService result = pdndServiceSearchClient.findByClientIdAndServiceType(clientId, pdndServiceType, accessToken);
 
     // Then
     Assertions.assertNull(result);

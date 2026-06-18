@@ -192,7 +192,8 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
     modelPackage.set("it.gov.pagopa.payhub.pdnd.dto.generated")
     typeMappings.set(
         mapOf(
-            "PdndAuthData" to "it.gov.pagopa.payhub.pdnd.dto.PdndAuthData"
+            "PdndAuthData" to "it.gov.pagopa.payhub.pdnd.dto.PdndAuthData",
+            "PdndServicesEnum" to "it.gov.pagopa.pu.organization.dto.generated.PdndServiceType"
         )
     )
     configOptions.set(

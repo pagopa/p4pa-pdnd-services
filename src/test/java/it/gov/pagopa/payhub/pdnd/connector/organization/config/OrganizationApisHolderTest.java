@@ -51,7 +51,7 @@ class OrganizationApisHolderTest extends BaseApiHolderTest {
     void whenGetPdndServiceSearchControllerApiThenAuthenticationShouldBeSetInThreadSafeMode() throws InterruptedException {
         assertAuthenticationShouldBeSetInThreadSafeMode(
                 accessToken -> organizationApisHolder.getPdndServiceSearchControllerApi(accessToken)
-                        .crudPdndServicesFindByClientId("clientId"),
+                        .crudPdndServicesFindByClientIdAndServiceType("clientId", PdndServiceType.SEND),
                 new ParameterizedTypeReference<>() {},
                 organizationApisHolder::unload);
     }

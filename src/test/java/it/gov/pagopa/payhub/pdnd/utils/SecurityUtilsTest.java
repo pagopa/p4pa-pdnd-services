@@ -125,4 +125,12 @@ public class SecurityUtilsTest {
   void givenNullUriWhenRemovePiiFromURIThenOk(){
     Assertions.assertNull(SecurityUtils.removePiiFromURI(null));
   }
+
+  public static void configureSecurityContext(String accessToken, String principalName) {
+    SecurityContextHolder.setContext(new SecurityContextImpl(new JwtAuthenticationToken(Jwt
+            .withTokenValue(accessToken)
+            .header("", "")
+            .claim("", "")
+            .build(), null, principalName)));
+  }
 }

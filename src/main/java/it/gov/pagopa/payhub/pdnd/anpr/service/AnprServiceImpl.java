@@ -19,15 +19,15 @@ public class AnprServiceImpl implements AnprService {
     }
 
     @Override
-    public Citizen getCitizenData(String fiscalCode) {
-        RispostaE002OK anprC030Response = anprC030Service.getIdAnprFromFc(fiscalCode);
+    public Citizen getCitizenData(String fiscalCode, Long organizationId, String subUnitCode, String accessToken) {
+        RispostaE002OK anprC030Response = anprC030Service.getIdAnprFromFc(fiscalCode, organizationId, subUnitCode, accessToken);
         String idAnpr = anprC030Response.getListaSoggetti()
                 .getDatiSoggetto()
                 .getFirst()
                 .getIdentificativi()
                 .getIdANPR();
 
-        it.gov.pagopa.payhub.anpr.C003.dto.generated.RispostaE002OK anprC003Response = anprC003Service.getUserData(idAnpr);
+        it.gov.pagopa.payhub.anpr.C003.dto.generated.RispostaE002OK anprC003Response = anprC003Service.getUserData(idAnpr, organizationId, subUnitCode, accessToken);
 
         return AnprResponseMapper.mapToAnprResponse(anprC003Response);
     }

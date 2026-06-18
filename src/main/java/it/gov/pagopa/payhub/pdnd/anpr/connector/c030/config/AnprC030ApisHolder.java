@@ -8,6 +8,7 @@ import it.gov.pagopa.payhub.pdnd.config.rest.HttpClientConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -22,9 +23,10 @@ public class AnprC030ApisHolder extends BaseAnprServiceApisHolder<ApiClient> {
             PdndApiClientConfig pdndApiClientConfig,
             AnprApiClientConfig clientConfig,
             RestTemplateBuilder restTemplateBuilder,
-            HttpClientConfig defaultHttpClientConfig
+            HttpClientConfig defaultHttpClientConfig,
+            @Value("${rest.anpr.services.c030.base-path}") String basePath
     ) {
-        super(pdndApiClientConfig.getConfig(), clientConfig, clientConfig.getServices().getC030(), restTemplateBuilder, defaultHttpClientConfig);
+        super(pdndApiClientConfig.getConfig(), clientConfig, restTemplateBuilder, defaultHttpClientConfig, basePath);
 
         this.e002ServiceApi = new E002ServiceApi(apiClient);
     }

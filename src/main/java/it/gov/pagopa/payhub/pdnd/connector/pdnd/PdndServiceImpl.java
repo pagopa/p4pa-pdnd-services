@@ -2,8 +2,11 @@ package it.gov.pagopa.payhub.pdnd.connector.pdnd;
 
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.service.PdndAuthDataBuilderService;
+import it.gov.pagopa.payhub.pdnd.connector.pdnd.service.PdndIntegratedConfigResolverService;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
+import it.gov.pagopa.pu.organization.dto.generated.PdndServiceType;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,21 +17,24 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PdndServiceImpl implements PdndService {
 
     private final PdndAuthDataBuilderService pdndAuthDataBuilderService;
-    protected final ConcurrentHashMap<PdndServiceIntegratedConfig, PdndAuthData> jwtCache = new ConcurrentHashMap<>();
+    private final PdndIntegratedConfigResolverService pdndIntegratedConfigResolverService;
+    protected final ConcurrentHashMap<Triple<PdndServiceType,Long,String>, PdndAuthData> jwtCache = new ConcurrentHashMap<>();
 
-    public PdndServiceImpl(PdndAuthDataBuilderService pdndAuthDataBuilderService) {
+    public PdndServiceImpl(PdndAuthDataBuilderService pdndAuthDataBuilderService, PdndIntegratedConfigResolverService pdndIntegratedConfigResolverService) {
         this.pdndAuthDataBuilderService = pdndAuthDataBuilderService;
+        this.pdndIntegratedConfigResolverService = pdndIntegratedConfigResolverService;
     }
 
     @Override
-    public PdndAuthData generateToken(PdndServiceIntegratedConfig pdndServiceIntegratedConfig) {
-        return jwtCache.compute(pdndServiceIntegratedConfig, (key, pdndAuthData) -> {
-            log.debug("Check cache for token exists and not expired for {}", pdndServiceIntegratedConfig.getClass().getName());
+    public PdndAuthData generateToken(PdndServiceType pdndServicesEnum, Long organizationId, String subUnitCode, String accessToken) {
+        return jwtCache.compute(Triple.of(pdndServicesEnum,organizationId,subUnitCode), (key, pdndAuthData) -> {
+            log.debug("Check cache for token exists and not expired for triple PdndServiceEnum {} organizationId {} subUnitCode {}", pdndServicesEnum, organizationId, subUnitCode);
             if (pdndAuthData == null || pdndAuthData.getExpiration().isBefore(LocalDateTime.now())) {
+                PdndServiceIntegratedConfig pdndServiceIntegratedConfig = pdndIntegratedConfigResolverService.getIntegratedConfig(key.getLeft(),key.getMiddle(),key.getRight(),accessToken);
                 log.debug("Token for {} not present or expired, generate new one", pdndServiceIntegratedConfig.getClass().getName());
                 return pdndAuthDataBuilderService.build(pdndServiceIntegratedConfig);
             }
-            log.debug("Token for {} is present in cache", pdndServiceIntegratedConfig.getClass().getName());
+            log.debug("Token for triple PdndServiceEnum {} organizationId {} subUnitCode {} is present in cache", pdndServicesEnum, organizationId, subUnitCode);
             return pdndAuthData;
         });
     }

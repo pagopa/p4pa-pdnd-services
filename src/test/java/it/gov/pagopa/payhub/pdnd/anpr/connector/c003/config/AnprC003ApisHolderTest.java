@@ -4,7 +4,6 @@ import it.gov.pagopa.payhub.anpr.C003.dto.generated.RichiestaE002;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.AnprApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.config.rest.HttpClientConfig;
 import it.gov.pagopa.payhub.pdnd.config.rest.HttpsClientConfig;
-import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.BasePdndServiceIntegratedApiHolderTest;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
 import org.junit.jupiter.api.AfterEach;
@@ -36,14 +35,12 @@ class AnprC003ApisHolderTest extends BasePdndServiceIntegratedApiHolderTest {
             .https(HttpsClientConfig.builder()
                     .trustAll(true)
                     .build())
-            .services(AnprApiClientConfig.AnprServicesConfig.builder()
-                    .c003(new PdndServiceIntegratedConfig())
-                    .build())
             .build();
     private final HttpClientConfig httpClientConfig = HttpClientConfig.builder()
             .connectionPool(new HttpClientConfig.HttpClientConnectionPoolConfig())
             .timeout(new HttpClientConfig.HttpClientTimeoutConfig())
             .build();
+    private final String basePath = "basePath";
 
     private AnprC003ApisHolder apisHolder;
 
@@ -56,7 +53,7 @@ class AnprC003ApisHolderTest extends BasePdndServiceIntegratedApiHolderTest {
                 .when(restTemplateMock)
                 .setRequestFactory(Mockito.any());
 
-        apisHolder = new AnprC003ApisHolder(pdndApiClientConfig, pdndServiceIntegratedApiClientConfig, restTemplateBuilderMock, httpClientConfig);
+        apisHolder = new AnprC003ApisHolder(pdndApiClientConfig, pdndServiceIntegratedApiClientConfig, restTemplateBuilderMock, httpClientConfig, basePath);
     }
 
     @AfterEach
@@ -72,7 +69,6 @@ class AnprC003ApisHolderTest extends BasePdndServiceIntegratedApiHolderTest {
     void whenGetE002ServiceApiThenAuthenticationShouldBeSetInThreadSafeMode() throws InterruptedException, IOException, IllegalAccessException {
         assertAuthenticationShouldBeSetInThreadSafeMode(
                 pdndApiClientConfig.getConfig(),
-                pdndServiceIntegratedApiClientConfig.getServices().getC003(),
                 pdndAuthData -> apisHolder.getE002ServiceApi(pdndAuthData)
                         .e002(new RichiestaE002()),
                 new ParameterizedTypeReference<>() {},

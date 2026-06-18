@@ -5,8 +5,8 @@ import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.client.PdndClient;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.dto.ClientCredentialsResponseDTO;
-import it.gov.pagopa.payhub.pdnd.utils.AgidUtils;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
+import it.gov.pagopa.payhub.pdnd.utils.AgidUtils;
 import it.gov.pagopa.payhub.pdnd.utils.CertUtils;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +40,10 @@ public class PdndAuthDataBuilderService {
                 clientAssertion,
                 pdndCredentials.getAccessToken(),
                 now.plusMinutes(Math.min(pdndConfig.getAuthExpirationMinutes(), pdndCredentials.getExpiresIn())),
+                pdndServiceIntegratedConfig.getClientId(),
+                pdndServiceIntegratedConfig.getAudience(),
+                pdndServiceIntegratedConfig.getKid(),
+                pdndServiceIntegratedConfig.getBasePath(),
                 signer
                 );
     }

@@ -14,6 +14,10 @@ public class PdndAuthData {
     private String clientAssertion;
     private String accessToken;
     private LocalDateTime expiration;
+    private String clientId;
+    private String audience;
+    private String kid;
+    private String basePath;
 
     @JsonIgnore
     private RSASSASigner rsaJwsSigner;

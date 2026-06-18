@@ -1,9 +1,8 @@
 package it.gov.pagopa.payhub.pdnd.anpr.connector;
 
+import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedAuthConfigurer;
 import it.gov.pagopa.payhub.pdnd.config.rest.HttpClientConfig;
 import it.gov.pagopa.payhub.pdnd.config.rest.RestTemplateConfig;
-import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedAuthConfigurer;
-import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
 import it.gov.pagopa.payhub.pdnd.utils.SSLUtils;
@@ -24,12 +23,12 @@ public abstract class BaseAnprServiceApisHolder <T> {
     protected BaseAnprServiceApisHolder(
             PdndApiClientConfig.PdndConfig pdndConfig,
             AnprApiClientConfig clientConfig,
-            PdndServiceIntegratedConfig anprServiceConfig,
             RestTemplateBuilder restTemplateBuilder,
-            HttpClientConfig httpClientConfig
+            HttpClientConfig httpClientConfig,
+            String basePath
     ) {
         RestTemplate restTemplate = restTemplateBuilder.build();
-        restTemplate.getInterceptors().add(new PdndServiceIntegratedAuthConfigurer(pdndConfig, anprServiceConfig, pdndAuthDataHolder::get));
+        restTemplate.getInterceptors().add(new PdndServiceIntegratedAuthConfigurer(pdndConfig, pdndAuthDataHolder::get));
 
         if(clientConfig.getHttps().isTrustAll()){
             restTemplate.setRequestFactory(SSLUtils.buildTrustAllSSL(httpClientConfig).build());
@@ -39,7 +38,7 @@ public abstract class BaseAnprServiceApisHolder <T> {
         }
 
         this.apiClient = buildApiClient(restTemplate);
-        setApiClientBasePath(apiClient, clientConfig.getBaseUrl() + anprServiceConfig.getBasePath());
+        setApiClientBasePath(apiClient, clientConfig.getBaseUrl() + basePath);
         setApiClientMaxAttemptsForRetry(apiClient, Math.max(1, clientConfig.getMaxAttempts()));
         setApiClientWaitTimeMillis(apiClient, clientConfig.getWaitTimeMillis());
     }

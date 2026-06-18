@@ -1,6 +1,7 @@
 package it.gov.pagopa.payhub.pdnd.exception;
 
 import it.gov.pagopa.payhub.pdnd.dto.generated.PdndServicesErrorDTO;
+import it.gov.pagopa.payhub.pdnd.exception.custom.NotFoundException;
 import it.gov.pagopa.payhub.pdnd.utils.Utilities;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -47,6 +48,11 @@ public class PdndServicesExceptionHandler {
     @ExceptionHandler(HttpClientErrorException.TooManyRequests.class)
     public ResponseEntity<PdndServicesErrorDTO> handleInvokedHttpClientTooManyRequestsError(Exception ex, HttpServletRequest request) {
         return handleException(ex, request, HttpStatus.TOO_MANY_REQUESTS, PdndServicesErrorDTO.CategoryEnum.PDND_SERVICES_TOO_MANY_REQUESTS);
+    }
+
+    @ExceptionHandler({NotFoundException.class})
+    public ResponseEntity<PdndServicesErrorDTO> handleNotFoundException(Exception ex, HttpServletRequest request) {
+        return handleException(ex, request, HttpStatus.NOT_FOUND, PdndServicesErrorDTO.CategoryEnum.PDND_SERVICES_NOT_FOUND);
     }
 
     @ExceptionHandler({ServletException.class, ErrorResponseException.class})
