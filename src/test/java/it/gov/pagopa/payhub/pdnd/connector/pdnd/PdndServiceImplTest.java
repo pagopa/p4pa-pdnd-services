@@ -15,6 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.time.Month;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 
@@ -62,8 +63,8 @@ class PdndServiceImplTest {
         PdndServiceType service = PdndServiceType.SEND;
         Long organizationId = 1L;
         String subUnitCode = "subUnitCode";
-        LocalDateTime localDateTime = LocalDateTime.of(2026, 6, 18, 12, 0);
-        PdndAuthData expectedResult = new PdndAuthData(null, null, "TOKEN", LocalDateTime.of(2026,6,18,12,1), "clientId", "audience", "kid", "basePath", null);
+        LocalDateTime localDateTime = LocalDateTime.of(2026, Month.JUNE, 18, 12, 0);
+        PdndAuthData expectedResult = new PdndAuthData(null, null, "TOKEN", LocalDateTime.of(2026,Month.JUNE,18,12,1), "clientId", "audience", "kid", "basePath", null);
         pdndService.jwtCache.put(Triple.of(service,organizationId,subUnitCode), expectedResult);
 
         try(MockedStatic<LocalDateTime> localDateTimeMock = Mockito.mockStatic(LocalDateTime.class)) {
