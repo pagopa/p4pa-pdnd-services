@@ -6,6 +6,7 @@ import it.gov.pagopa.payhub.anpr.C030.dto.generated.TipoCriteriRicercaE002;
 import it.gov.pagopa.payhub.anpr.C030.dto.generated.TipoDatiRichiestaE002;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.c030.client.AnprC030Client;
 import it.gov.pagopa.payhub.pdnd.anpr.service.AnprIdOperationGeneratorService;
+import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.PdndService;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
 import it.gov.pagopa.pu.organization.dto.generated.PdndServiceType;
@@ -75,7 +76,7 @@ class AnprC030ServiceTest {
                 .datiRichiesta(reqDataTypes)
                 .build();
 
-        PdndAuthData pdndAuthData = new PdndAuthData(null, null, accessToken, null, "clientId", "audience", "kid", "basePath", null);
+        PdndAuthData pdndAuthData = new PdndAuthData(null, null, accessToken, null, new PdndServiceIntegratedConfig(), "serviceAudience", null);
 
         when(pdndServiceMock.generateToken(PdndServiceType.C030,organizationId,subUnitCode, accessToken))
                 .thenReturn(pdndAuthData);

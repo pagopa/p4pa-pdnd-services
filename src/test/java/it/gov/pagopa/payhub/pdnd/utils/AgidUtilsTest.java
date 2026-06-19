@@ -100,25 +100,22 @@ public class AgidUtilsTest {
     void whenBuildAgidJwtSignatureThenOk() {
         // Given
         String digest = "DIGEST";
-        String clientId = "clientId";
-        String audience = "audience";
-        String kid = "kid";
 
         // When
         String token = AgidUtils.buildAgidJwtSignature(
                 digest,
                 pdndConfig.getAuthExpirationMinutes(),
                 signer,
-                clientId, audience, kid);
+                pdndServiceIntegratedConfig);
 
         // Then
         DecodedJWT decoded = JWT.decode(token);
         JsonAssert.comparator(JsonCompareMode.STRICT).assertIsMatch(
                 Map.of(
                         RegisteredClaims.JWT_ID, decoded.getClaim(RegisteredClaims.JWT_ID),
-                        RegisteredClaims.SUBJECT, clientId,
-                        RegisteredClaims.ISSUER, clientId,
-                        RegisteredClaims.AUDIENCE, audience,
+                        RegisteredClaims.SUBJECT, pdndServiceIntegratedConfig.getClientId(),
+                        RegisteredClaims.ISSUER, pdndServiceIntegratedConfig.getClientId(),
+                        RegisteredClaims.AUDIENCE, pdndServiceIntegratedConfig.getAudience(),
                         RegisteredClaims.ISSUED_AT, decoded.getClaim(RegisteredClaims.ISSUED_AT),
                         RegisteredClaims.EXPIRES_AT, decoded.getClaim(RegisteredClaims.ISSUED_AT).asLong() + 60,
                         "signed_headers", List.of(

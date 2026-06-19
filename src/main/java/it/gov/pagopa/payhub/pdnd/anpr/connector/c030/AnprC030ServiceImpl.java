@@ -30,7 +30,7 @@ public class AnprC030ServiceImpl implements AnprC030Service {
     }
 
     @Override
-    @Cacheable(key = "#fiscalCode + '-' + #organizationId + '-' + #subUnitCode", unless="#result == null")
+    @Cacheable(key = "#fiscalCode", unless="#result == null")
     public RispostaE002OK getIdAnprFromFc(String fiscalCode, Long organizationId, String subUnitCode, String accessToken) {
         TipoCriteriRicercaE002 searchTypes = TipoCriteriRicercaE002.builder()
                 .codiceFiscale(fiscalCode)

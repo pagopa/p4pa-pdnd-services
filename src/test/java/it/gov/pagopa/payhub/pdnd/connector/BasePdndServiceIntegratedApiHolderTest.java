@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.crypto.RSASSASigner;
 import it.gov.pagopa.payhub.pdnd.config.json.JsonConfig;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedAuthConfigurer;
+import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
 import it.gov.pagopa.payhub.pdnd.utils.AgidUtils;
@@ -63,9 +64,11 @@ public abstract class BasePdndServiceIntegratedApiHolderTest {
         Objects.requireNonNull(pdndAuthDataSupplierField).setAccessible(true);
         Supplier<PdndAuthData> pdndAuthDataSupplier = (Supplier<PdndAuthData>)pdndAuthDataSupplierField.get(reqInterceptor);
 
-        String clientId = "clientId";
-        String audience = "audience";
-        String kid = "kid";
+        PdndServiceIntegratedConfig pdndServiceIntegratedConfig = new PdndServiceIntegratedConfig();
+        pdndServiceIntegratedConfig.setClientId("clientId");
+        pdndServiceIntegratedConfig.setAudience("audience");
+        pdndServiceIntegratedConfig.setKid("kid");
+        pdndServiceIntegratedConfig.setBasePath("basePath");
         // Configuring useCases in a single thread
         List<Pair<PdndAuthData, T>> useCases = IntStream.rangeClosed(0, 100)
                 .mapToObj(i -> {
@@ -75,10 +78,8 @@ public abstract class BasePdndServiceIntegratedApiHolderTest {
                                 "CLIENT_ASSERTION_" + i,
                                 "ACCESS_TOKEN_" + i,
                                 null,
-                                clientId,
-                                audience,
-                                kid,
-                                "basePath",
+                                pdndServiceIntegratedConfig,
+                                pdndServiceIntegratedConfig.getAudience(),
                                 jwsSignerMock
                         );
                         T expectedResult =
@@ -102,7 +103,7 @@ public abstract class BasePdndServiceIntegratedApiHolderTest {
                                             try (MockedStatic<AgidUtils> mockedStaticAgidUtils = Mockito.mockStatic(AgidUtils.class)) {
                                                 mockedStaticAgidUtils.when(() ->
                                                                 AgidUtils.buildAgidJwtSignature(Mockito.anyString(), Mockito.same(expectedPdndConfig.getAuthExpirationMinutes()),
-                                                                        Mockito.same(jwsSignerMock), Mockito.same(clientId), Mockito.same(audience), Mockito.same(kid)))
+                                                                        Mockito.same(jwsSignerMock), Mockito.same(pdndServiceIntegratedConfig)))
                                                         .thenAnswer(a -> "AGID_SIGNATURE_OF_DIGEST:" + a.getArgument(0));
                                                 mockedStaticAgidUtils.when(() -> AgidUtils.buildDigest(Mockito.anyString()))
                                                         .thenCallRealMethod();

@@ -40,10 +40,8 @@ public class PdndAuthDataBuilderService {
                 clientAssertion,
                 pdndCredentials.getAccessToken(),
                 now.plusMinutes(Math.min(pdndConfig.getAuthExpirationMinutes(), pdndCredentials.getExpiresIn())),
-                pdndServiceIntegratedConfig.getClientId(),
+                pdndServiceIntegratedConfig,
                 pdndServiceIntegratedConfig.getAudience(),
-                pdndServiceIntegratedConfig.getKid(),
-                pdndServiceIntegratedConfig.getBasePath(),
                 signer
                 );
     }

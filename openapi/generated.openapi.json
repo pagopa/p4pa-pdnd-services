@@ -219,16 +219,7 @@
             "type" : "string",
             "format" : "date-time"
           },
-          "clientId" : {
-            "type" : "string"
-          },
-          "audience" : {
-            "type" : "string"
-          },
-          "kid" : {
-            "type" : "string"
-          },
-          "basePath" : {
+          "serviceAudience" : {
             "type" : "string"
           }
         }

@@ -1,5 +1,6 @@
 package it.gov.pagopa.payhub.pdnd.controller;
 
+import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.PdndService;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
 import it.gov.pagopa.payhub.pdnd.utils.SecurityUtilsTest;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
+import java.time.Month;
 
 @ExtendWith(MockitoExtension.class)
 class PdndControllerImplTest {
@@ -44,13 +46,16 @@ class PdndControllerImplTest {
     PdndServiceType service = PdndServiceType.SEND;
     Long organizationId = 1L;
     String subUnitCode = "subUnitCode";
+    PdndServiceIntegratedConfig pdndServiceIntegratedConfig = PdndServiceIntegratedConfig.builder()
+        .clientId("clientId")
+        .audience("serviceAudience")
+        .kid("kid")
+        .build();
     PdndAuthData mockAuthData = new PdndAuthData("JWTEVIDANCE",
         "ASSERTION","TOKEN",
-        LocalDateTime.now(),
-            "clientId",
-            "audience",
-            "kid",
-            "basePath",
+        LocalDateTime.of(2026, Month.JUNE, 18, 12, 0),
+            pdndServiceIntegratedConfig,
+            pdndServiceIntegratedConfig.getAudience(),
             null
             );
 

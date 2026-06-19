@@ -35,7 +35,7 @@ public class PdndServiceIntegratedAuthConfigurer implements ClientHttpRequestInt
         headers.add(HttpHeaders.CONTENT_ENCODING, StandardCharsets.UTF_8.name());
         headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + pdndAuthData.getAccessToken());
         headers.add("Agid-JWT-TrackingEvidence", pdndAuthData.getAgidJwtTrackingEvidence());
-        headers.add("Agid-JWT-Signature", AgidUtils.buildAgidJwtSignature(digest, pdndConfig.getAuthExpirationMinutes(), pdndAuthData.getRsaJwsSigner(), pdndAuthData.getClientId(), pdndAuthData.getAudience(), pdndAuthData.getKid()));
+        headers.add("Agid-JWT-Signature", AgidUtils.buildAgidJwtSignature(digest, pdndConfig.getAuthExpirationMinutes(), pdndAuthData.getRsaJwsSigner(), pdndAuthData.getPdndServiceIntegratedConfig()));
         headers.add("Digest", digest);
 
         return execution.execute(request, body);

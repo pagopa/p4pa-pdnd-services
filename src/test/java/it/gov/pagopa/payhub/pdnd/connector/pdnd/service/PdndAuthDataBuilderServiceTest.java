@@ -98,10 +98,8 @@ class PdndAuthDataBuilderServiceTest {
                     clientAssertion,
                     accessToken,
                     result.getExpiration(),
-                    pdndServiceConfig.getClientId(),
+                    pdndServiceConfig,
                     pdndServiceConfig.getAudience(),
-                    pdndServiceConfig.getKid(),
-                    pdndServiceConfig.getBasePath(),
                     result.getRsaJwsSigner()
             );
 

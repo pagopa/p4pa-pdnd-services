@@ -2,6 +2,7 @@ package it.gov.pagopa.payhub.pdnd.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.gov.pagopa.payhub.pdnd.config.json.JsonConfig;
+import it.gov.pagopa.payhub.pdnd.exception.custom.NotFoundException;
 import it.gov.pagopa.payhub.pdnd.utils.TestUtils;
 import it.gov.pagopa.payhub.pdnd.utils.UtilitiesTest;
 import jakarta.servlet.ServletException;
@@ -282,6 +283,19 @@ class PdndServicesExceptionHandlerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.category").value("PDND_SERVICES_GENERIC_ERROR"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code").value("ERRORCODE"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("[ERRORCODE] Error"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.traceId").value(traceId));
+    }
+
+    @Test
+    void handleNotFoundException() throws Exception {
+        doThrow(new NotFoundException("NOT_FOUND","Error"))
+                .when(requestMappingHandlerAdapterSpy).handle(any(), any(), any());
+
+        performRequest(DATA, MediaType.APPLICATION_JSON)
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.category").value("PDND_SERVICES_NOT_FOUND"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value("NOT_FOUND"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("[NOT_FOUND] Error"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.traceId").value(traceId));
     }
 }

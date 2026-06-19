@@ -1,6 +1,7 @@
 package it.gov.pagopa.payhub.pdnd.anpr.connector;
 
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedAuthConfigurer;
+import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedStaticConfig;
 import it.gov.pagopa.payhub.pdnd.config.rest.HttpClientConfig;
 import it.gov.pagopa.payhub.pdnd.config.rest.RestTemplateConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
@@ -25,7 +26,7 @@ public abstract class BaseAnprServiceApisHolder <T> {
             AnprApiClientConfig clientConfig,
             RestTemplateBuilder restTemplateBuilder,
             HttpClientConfig httpClientConfig,
-            String basePath
+            PdndServiceIntegratedStaticConfig pdndServiceIntegratedStaticConfig
     ) {
         RestTemplate restTemplate = restTemplateBuilder.build();
         restTemplate.getInterceptors().add(new PdndServiceIntegratedAuthConfigurer(pdndConfig, pdndAuthDataHolder::get));
@@ -38,7 +39,7 @@ public abstract class BaseAnprServiceApisHolder <T> {
         }
 
         this.apiClient = buildApiClient(restTemplate);
-        setApiClientBasePath(apiClient, clientConfig.getBaseUrl() + basePath);
+        setApiClientBasePath(apiClient, clientConfig.getBaseUrl() + pdndServiceIntegratedStaticConfig.getBasePath());
         setApiClientMaxAttemptsForRetry(apiClient, Math.max(1, clientConfig.getMaxAttempts()));
         setApiClientWaitTimeMillis(apiClient, clientConfig.getWaitTimeMillis());
     }

@@ -87,23 +87,23 @@ public class AgidUtils {
         return "SHA-256=" + CryptoUtils.sha256Base64(value);
     }
 
-    public static String buildAgidJwtSignature(String digest, Long expirationMinutes, RSASSASigner rsaJwsSigner, String clientId, String audience, String kid) {
+    public static String buildAgidJwtSignature(String digest, Long expirationMinutes, RSASSASigner rsaJwsSigner, PdndServiceIntegratedConfig pdndServiceIntegratedConfig) {
         return signJwtRSA(
-                        buildAgidJwtSignatureClaims(digest, expirationMinutes, clientId, audience),
-                        kid,
+                        buildAgidJwtSignatureClaims(digest, expirationMinutes, pdndServiceIntegratedConfig),
+                    pdndServiceIntegratedConfig.getKid(),
                         rsaJwsSigner)
                 .serialize();
     }
 
-    private static JWTClaimsSet buildAgidJwtSignatureClaims(String digest, Long expirationMinutes, String clientId, String audience) {
+    private static JWTClaimsSet buildAgidJwtSignatureClaims(String digest, Long expirationMinutes, PdndServiceIntegratedConfig pdndServiceIntegratedConfig) {
         long currentMillis = System.currentTimeMillis();
         long expirationMillis = currentMillis + (expirationMinutes * 60 * 1000);
 
         return new JWTClaimsSet.Builder()
                 .jwtID(UUID.randomUUID().toString())
-                .issuer(clientId)
-                .subject(clientId)
-                .audience(audience)
+                .issuer(pdndServiceIntegratedConfig.getClientId())
+                .subject(pdndServiceIntegratedConfig.getClientId())
+                .audience(pdndServiceIntegratedConfig.getAudience())
                 .issueTime(new Date(currentMillis))
                 .expirationTime(new Date(expirationMillis))
                 .claim("signed_headers", List.of(
