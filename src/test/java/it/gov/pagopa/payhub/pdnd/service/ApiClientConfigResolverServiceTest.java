@@ -4,6 +4,7 @@ import it.gov.pagopa.payhub.pdnd.anpr.connector.AnprApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedStaticConfig;
 import it.gov.pagopa.payhub.pdnd.send.connector.SendApiClientConfig;
 import it.gov.pagopa.pu.organization.dto.generated.PdndServiceType;
+import org.apache.commons.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 class ApiClientConfigResolverServiceTest {
@@ -53,7 +55,7 @@ class ApiClientConfigResolverServiceTest {
   void givenC003ServiceWhenGetIntegratedConfigThenReturnIntegratedConfig() {
     Mockito.when(anprApiClientConfig.getServices()).thenReturn(anprServices);
     Mockito.when(anprServices.getC003()).thenReturn(c003ServiceConfig);
-    PdndServiceIntegratedStaticConfig result = apiClientConfigResolverService.getIntegratedConfig(PdndServiceType.C003);
+    PdndServiceIntegratedStaticConfig result = apiClientConfigResolverService.getIntegratedConfig(PdndServiceType.ANPR_C003);
     assertEquals(c003ServiceConfig, result);
   }
 
@@ -61,7 +63,13 @@ class ApiClientConfigResolverServiceTest {
   void givenC030ServiceWhenGetIntegratedConfigThenReturnIntegratedConfig() {
     Mockito.when(anprApiClientConfig.getServices()).thenReturn(anprServices);
     Mockito.when(anprServices.getC030()).thenReturn(c030ServiceConfig);
-    PdndServiceIntegratedStaticConfig result = apiClientConfigResolverService.getIntegratedConfig(PdndServiceType.C030);
+    PdndServiceIntegratedStaticConfig result = apiClientConfigResolverService.getIntegratedConfig(PdndServiceType.ANPR_C030);
     assertEquals(c030ServiceConfig, result);
+  }
+
+  @Test
+  void givenNullConfigWhenGetIntegratedConfigThenNotImplementedException() {
+    Mockito.when(sendApiClientConfig.getService()).thenReturn(null);
+    assertThrows(NotImplementedException.class, () -> apiClientConfigResolverService.getIntegratedConfig(PdndServiceType.SEND));
   }
 }

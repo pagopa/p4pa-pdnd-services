@@ -96,8 +96,8 @@ class PdndServiceIntegratedConfigResolverServiceTest {
     private static Stream<Arguments> getPdndServiceIntegratedConfigSource() {
         return Stream.of(
                 Arguments.of(PdndServiceType.SEND, new PdndServiceIntegratedStaticConfig("sendBasePath",null)),
-                Arguments.of(PdndServiceType.C003, new PdndServiceIntegratedStaticConfig("anprC003BasePAth","anprC003Audience")),
-                Arguments.of(PdndServiceType.C030, new PdndServiceIntegratedStaticConfig("anprC030BasePAth","anprC030Audience"))
+                Arguments.of(PdndServiceType.ANPR_C003, new PdndServiceIntegratedStaticConfig("anprC003BasePAth","anprC003Audience")),
+                Arguments.of(PdndServiceType.ANPR_C030, new PdndServiceIntegratedStaticConfig("anprC030BasePAth","anprC030Audience"))
         );
     }
 
@@ -136,18 +136,5 @@ class PdndServiceIntegratedConfigResolverServiceTest {
         NotFoundException notFoundException = assertThrows(NotFoundException.class, () -> pdndServiceIntegratedConfigResolverService.getPdndServiceIntegratedConfig(service, organizationId, subUnitCode, accessToken));
 
         assertEquals(ErrorCodeConstants.ERROR_CODE_PDND_CLIENT,notFoundException.getCode());
-    }
-
-    @Test
-    void givenNoPdndServiceIntegratedStaticConfigWhenGetPdndServiceIntegratedConfigThenIllegalStateException() {
-        // Given
-        String accessToken = "accessToken";
-        PdndServiceType service = PdndServiceType.SEND;
-        Long organizationId = 1L;
-        String subUnitCode = "subUnitCode";
-
-        Mockito.when(apiClientConfigResolverServiceMock.getIntegratedConfig(service)).thenReturn(null);
-
-        assertThrows(IllegalStateException.class, () -> pdndServiceIntegratedConfigResolverService.getPdndServiceIntegratedConfig(service, organizationId, subUnitCode, accessToken));
     }
 }

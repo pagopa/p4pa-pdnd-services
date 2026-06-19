@@ -51,7 +51,7 @@ public class AnprC030ServiceImpl implements AnprC030Service {
         return anprC030Client.getIdAnprFromFc(
                 request,
                 pdndService.generateToken(
-                        PdndServiceType.C030, organizationId, subUnitCode, accessToken
+                        PdndServiceType.ANPR_C030, organizationId, subUnitCode, accessToken
                 )
         );
     }

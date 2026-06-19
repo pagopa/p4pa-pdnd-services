@@ -47,7 +47,7 @@ public class AnprC003ServiceImpl implements AnprC003Service {
         return anprC003Client.getUserData(
                 request,
                 pdndService.generateToken(
-                        PdndServiceType.C003,organizationId,subUnitCode,accessToken
+                        PdndServiceType.ANPR_C003,organizationId,subUnitCode,accessToken
                 )
         );
     }

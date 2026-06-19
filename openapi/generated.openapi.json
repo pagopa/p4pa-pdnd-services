@@ -226,7 +226,7 @@
       },
       "PdndServiceType" : {
         "type" : "string",
-        "enum" : [ "SEND", "C003", "C030" ]
+        "enum" : [ "SEND", "ANPR_C003", "ANPR_C030" ]
       },
       "Address" : {
         "type" : "object",

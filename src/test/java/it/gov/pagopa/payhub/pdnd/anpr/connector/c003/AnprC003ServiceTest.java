@@ -77,7 +77,7 @@ class AnprC003ServiceTest {
 
         PdndAuthData pdndAuthData = new PdndAuthData(null, null, accessToken, null, new PdndServiceIntegratedConfig(), "serviceAudience", null);
 
-        when(pdndServiceMock.generateToken(PdndServiceType.C003,organizationId,subUnitCode, accessToken))
+        when(pdndServiceMock.generateToken(PdndServiceType.ANPR_C003,organizationId,subUnitCode, accessToken))
                 .thenReturn(pdndAuthData);
         when(idOperationGeneratorServiceMock.generateId())
                 .thenReturn(idOp);

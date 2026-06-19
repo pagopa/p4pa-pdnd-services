@@ -29,7 +29,7 @@ public class PdndServiceIntegratedConfigResolverService {
   }
 
   public PdndServiceIntegratedConfig getPdndServiceIntegratedConfig(PdndServiceType pdndServicesEnum, Long organizationId, String subUnitCode, String accessToken) {
-    PdndServiceIntegratedStaticConfig pdndServiceIntegratedStaticConfig = resolveStaticConfig(pdndServicesEnum);
+    PdndServiceIntegratedStaticConfig pdndServiceIntegratedStaticConfig = apiClientConfigResolverService.getIntegratedConfig(pdndServicesEnum);
     PdndClientDTO pdndClient = pdndClientService.getPdndClientByOrganizationIdAndPdndServiceType(
             organizationId,
             pdndServicesEnum,
@@ -59,12 +59,4 @@ public class PdndServiceIntegratedConfigResolverService {
             .publicKey(pdndClient.getPublicKey())
             .build();
   }
-
-    private PdndServiceIntegratedStaticConfig resolveStaticConfig(PdndServiceType pdndServicesEnum) {
-      PdndServiceIntegratedStaticConfig pdndServiceIntegratedStaticConfig = apiClientConfigResolverService.getIntegratedConfig(pdndServicesEnum);
-      if(pdndServiceIntegratedStaticConfig == null){
-        throw new IllegalStateException("Missing static configuration for serviceType "+pdndServicesEnum);
-      }
-      return pdndServiceIntegratedStaticConfig;
-    }
 }
