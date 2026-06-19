@@ -97,11 +97,6 @@ rest:
     max-attempts: "\${PDND_MAX_ATTEMPTS:3}" # It's counting also the first attempt
     wait-time-millis: "\${PDND_WAIT_TIME_MILLIS:500}"
     print-body-when-error: "\${PDND_PRINT_BODY_WHEN_ERROR:true}"
-    default-client:
-      client-id: "\${PDND_SERVICE_CLIENTID:clientid}"
-      kid: "\${PDND_SERVICE_KID:kid}"
-      private-key: "\${PDND_SERVICE_PRIVATEKEY:}"
-      public-key: "\${PDND_SERVICE_PUBLICKEY:}"
     config:
       env: "\${ENV:dev}"
       user-id: "\${PDND_AUTH_USERID:pdnd-user}"
@@ -112,39 +107,19 @@ rest:
     max-attempts: "\${PDND_MAX_ATTEMPTS:3}" # It's counting also the first attempt
     wait-time-millis: "\${PDND_WAIT_TIME_MILLIS:500}"
     print-body-when-error: "\${PDND_PRINT_BODY_WHEN_ERROR:true}"
-    default-client:
-      client-id: "\${PDND_SERVICE_ANPR_CLIENTID:\${rest.pdnd.default-client.client-id}}"
-      kid: "\${PDND_SERVICE_ANPR_KID:\${rest.pdnd.default-client.kid}}"
-      private-key: "\${PDND_SERVICE_ANPR_PRIVATEKEY:\${rest.pdnd.default-client.private-key}}"
-      public-key: "\${PDND_SERVICE_ANPR_PUBLICKEY:\${rest.pdnd.default-client.public-key}}"
     https:
       trust-all: "\${ANPR_TRUST_ALL:false}"
     services:
       c003:
         base-path: "\${PDND_SERVICE_ANPR_C003_BASE_PATH:/C003-servizioVerificaDichGeneralita/v1}"
-        purpose-id: "\${PDND_SERVICE_ANPR_C003_PURPOSE_ID:c003purposeid}"
         audience: "\${PDND_SERVICE_ANPR_C003_AUDIENCE:C003audience}"
-        client-id: "\${PDND_SERVICE_ANPR_C003_CLIENTID:\${rest.anpr.default-client.client-id}}"
-        kid: "\${PDND_SERVICE_ANPR_C003_KID:\${rest.anpr.default-client.kid}}"
-        private-key: "\${PDND_SERVICE_ANPR_C003_PRIVATEKEY:\${rest.anpr.default-client.private-key}}"
-        public-key: "\${PDND_SERVICE_ANPR_C003_PUBLICKEY:\${rest.anpr.default-client.public-key}}"
       c030:
         base-path: "\${PDND_SERVICE_ANPR_C030_BASE_PATH:/C030-servizioAccertamentoIdUnicoNazionale/v1/}"
-        purpose-id: "\${PDND_SERVICE_ANPR_C030_PURPOSE_ID:c030purposeid}"
         audience: "\${PDND_SERVICE_ANPR_C030_AUDIENCE:C030audience}"
-        client-id: "\${PDND_SERVICE_ANPR_C030_CLIENTID:\${rest.anpr.default-client.client-id}}"
-        kid: "\${PDND_SERVICE_ANPR_C030_KID:\${rest.anpr.default-client.kid}}"
-        private-key: "\${PDND_SERVICE_ANPR_C030_PRIVATEKEY:\${rest.anpr.default-client.private-key}}"
-        public-key: "\${PDND_SERVICE_ANPR_C030_PUBLICKEY:\${rest.anpr.default-client.public-key}}"
   send:
     base-url: "\${SEND_BASE_URL:https://api.uat.notifichedigitali.it}"
     service:
       base-path: "\${PDND_SERVICE_SEND_BASE_PATH:}"
-      purpose-id: "\${PDND_SERVICE_SEND_PURPOSE_ID:purposeid}"
-      client-id: "\${PDND_SERVICE_SEND_CLIENTID:\${PDND_SERVICE_CLIENTID:clientid}}"
-      kid: "\${PDND_SERVICE_SEND_KID:\${PDND_SERVICE_KID:kid}}"
-      private-key: "\${PDND_SERVICE_SEND_PRIVATEKEY:\${rest.pdnd.default-client.private-key}}"
-      public-key: "\${PDND_SERVICE_SEND_PUBLICKEY:\${rest.pdnd.default-client.public-key}}"
   organization:
     base-url: "\${ORGANIZATION_BASE_URL:}"
     max-attempts: "\${ORGANIZATION_MAX_ATTEMPTS:3}" # It's counting also the first attempt

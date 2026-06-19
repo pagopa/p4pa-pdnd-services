@@ -1,7 +1,7 @@
 package it.gov.pagopa.payhub.pdnd.send.connector;
 
+import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedStaticConfig;
 import it.gov.pagopa.payhub.pdnd.config.rest.ApiClientConfig;
-import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,5 +20,5 @@ import org.springframework.context.annotation.Configuration;
 @EqualsAndHashCode(callSuper = true)
 public class SendApiClientConfig extends ApiClientConfig {
   @NestedConfigurationProperty
-  private PdndServiceIntegratedConfig service;
+  private PdndServiceIntegratedStaticConfig service;
 }

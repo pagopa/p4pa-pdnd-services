@@ -192,7 +192,8 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
     modelPackage.set("it.gov.pagopa.payhub.pdnd.dto.generated")
     typeMappings.set(
         mapOf(
-            "PdndAuthData" to "it.gov.pagopa.payhub.pdnd.dto.PdndAuthData"
+            "PdndAuthData" to "it.gov.pagopa.payhub.pdnd.dto.PdndAuthData",
+            "PdndServicesEnum" to "it.gov.pagopa.pu.organization.dto.generated.PdndServiceType"
         )
     )
     configOptions.set(
@@ -309,6 +310,7 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
 
     generatorName.set("java")
     remoteInputSpec.set("https://raw.githubusercontent.com/pagopa/p4pa-doc/refs/heads/main/openapi/$targetEnv/internal/p4pa-organization.generated.openapi.json")
+//    inputSpec.set("$rootDir/../p4pa-organization/openapi/generated.openapi.json")
     outputDir.set("$projectDir/build/generated")
     apiPackage.set("it.gov.pagopa.pu.organization.controller.generated")
     modelPackage.set("it.gov.pagopa.pu.organization.dto.generated")

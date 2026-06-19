@@ -4,5 +4,5 @@ import it.gov.pagopa.payhub.pdnd.dto.generated.Citizen;
 
 public interface AnprService {
 
-    Citizen getCitizenData(String fiscalCode);
+    Citizen getCitizenData(String fiscalCode, Long organizationId, String subUnitCode, String accessToken);
 }

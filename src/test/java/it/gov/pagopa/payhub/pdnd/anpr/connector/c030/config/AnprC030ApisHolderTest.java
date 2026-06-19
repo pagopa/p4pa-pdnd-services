@@ -2,9 +2,9 @@ package it.gov.pagopa.payhub.pdnd.anpr.connector.c030.config;
 
 import it.gov.pagopa.payhub.anpr.C030.dto.generated.RichiestaE002;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.AnprApiClientConfig;
+import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedStaticConfig;
 import it.gov.pagopa.payhub.pdnd.config.rest.HttpClientConfig;
 import it.gov.pagopa.payhub.pdnd.config.rest.HttpsClientConfig;
-import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.BasePdndServiceIntegratedApiHolderTest;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
 import org.junit.jupiter.api.AfterEach;
@@ -31,11 +31,14 @@ class AnprC030ApisHolderTest extends BasePdndServiceIntegratedApiHolderTest {
                     .authExpirationMinutes(100L)
                     .build())
             .build();
-    private final AnprApiClientConfig pdndServiceIntegratedApiClientConfig = AnprApiClientConfig.builder()
+    private final AnprApiClientConfig anprApiClientConfig = AnprApiClientConfig.builder()
             .baseUrl("http://example.com")
             .https(new HttpsClientConfig())
             .services(AnprApiClientConfig.AnprServicesConfig.builder()
-                    .c030(new PdndServiceIntegratedConfig())
+                    .c030(PdndServiceIntegratedStaticConfig.builder()
+                            .basePath("anprC030BasePath")
+                            .audience("anprC030Audience")
+                            .build())
                     .build())
             .build();
     private final HttpClientConfig httpClientConfig = HttpClientConfig.builder()
@@ -51,7 +54,7 @@ class AnprC030ApisHolderTest extends BasePdndServiceIntegratedApiHolderTest {
         Mockito.when(restTemplateMock.getUriTemplateHandler()).thenReturn(new DefaultUriBuilderFactory());
         Mockito.when(restTemplateMock.getInterceptors()).thenReturn(interceptors);
 
-        apisHolder = new AnprC030ApisHolder(pdndApiClientConfig, pdndServiceIntegratedApiClientConfig, restTemplateBuilderMock, httpClientConfig);
+        apisHolder = new AnprC030ApisHolder(pdndApiClientConfig, anprApiClientConfig, restTemplateBuilderMock, httpClientConfig);
     }
 
     @AfterEach
@@ -67,7 +70,6 @@ class AnprC030ApisHolderTest extends BasePdndServiceIntegratedApiHolderTest {
     void whenGetE002ServiceApiThenAuthenticationShouldBeSetInThreadSafeMode() throws InterruptedException, IOException, IllegalAccessException {
         assertAuthenticationShouldBeSetInThreadSafeMode(
                 pdndApiClientConfig.getConfig(),
-                pdndServiceIntegratedApiClientConfig.getServices().getC030(),
                 pdndAuthData -> apisHolder.getE002ServiceApi(pdndAuthData)
                         .e002(new RichiestaE002()),
                 new ParameterizedTypeReference<>() {},
