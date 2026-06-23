@@ -2,6 +2,7 @@ package it.gov.pagopa.payhub.pdnd.connector.organization;
 
 import it.gov.pagopa.payhub.pdnd.connector.organization.client.PdndServiceSearchClient;
 import it.gov.pagopa.pu.organization.dto.generated.PdndService;
+import it.gov.pagopa.pu.organization.dto.generated.PdndServiceType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,17 +36,18 @@ class PdndServiceServiceImplTest {
     }
 
     @Test
-    void whenFindByClientIdThenOk() {
+    void whenFindByClientIdAndServiceTypeThenOk() {
         // Given
         String accessToken = "accessToken";
         String clientId = "clientId";
+        PdndServiceType pdndServiceType = PdndServiceType.SEND;
 
         PdndService expectedResult = new PdndService();
 
-        Mockito.when(pdndServiceSearchClientMock.findByClientId(clientId,accessToken))
+        Mockito.when(pdndServiceSearchClientMock.findByClientIdAndServiceType(clientId, pdndServiceType,accessToken))
                         .thenReturn(expectedResult);
 
-        PdndService result = pdndServiceService.findByClientId(clientId,accessToken);
+        PdndService result = pdndServiceService.findByClientIdAndServiceType(clientId,pdndServiceType, accessToken);
 
         assertNotNull(result);
         assertEquals(expectedResult, result);

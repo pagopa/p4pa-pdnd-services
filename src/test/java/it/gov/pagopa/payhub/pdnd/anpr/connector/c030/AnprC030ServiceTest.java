@@ -4,17 +4,16 @@ import it.gov.pagopa.payhub.anpr.C030.dto.generated.RichiestaE002;
 import it.gov.pagopa.payhub.anpr.C030.dto.generated.RispostaE002OK;
 import it.gov.pagopa.payhub.anpr.C030.dto.generated.TipoCriteriRicercaE002;
 import it.gov.pagopa.payhub.anpr.C030.dto.generated.TipoDatiRichiestaE002;
-import it.gov.pagopa.payhub.pdnd.anpr.connector.AnprApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.c030.client.AnprC030Client;
 import it.gov.pagopa.payhub.pdnd.anpr.service.AnprIdOperationGeneratorService;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.PdndService;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
+import it.gov.pagopa.pu.organization.dto.generated.PdndServiceType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -31,8 +30,6 @@ class AnprC030ServiceTest {
     @Mock
     private AnprC030Client anprC030ClientMock;
     @Mock
-    private PdndServiceIntegratedConfig pdndServiceIntegratedConfig;
-    @Mock
     private PdndService pdndServiceMock;
     @Mock
     private AnprIdOperationGeneratorService idOperationGeneratorServiceMock;
@@ -41,18 +38,14 @@ class AnprC030ServiceTest {
 
     @BeforeEach
     void init(){
-        AnprApiClientConfig anprApiClientConfigMock = Mockito.mock(AnprApiClientConfig.class, Answers.RETURNS_DEEP_STUBS);
-        when(anprApiClientConfigMock.getServices().getC030())
-                .thenReturn(pdndServiceIntegratedConfig);
 
-        anprC030Service = new AnprC030ServiceImpl(anprC030ClientMock, anprApiClientConfigMock, pdndServiceMock, idOperationGeneratorServiceMock);
+        anprC030Service = new AnprC030ServiceImpl(anprC030ClientMock, pdndServiceMock, idOperationGeneratorServiceMock);
     }
 
     @AfterEach
     void verifyNoMoreInteractions(){
         Mockito.verifyNoMoreInteractions(
                 anprC030ClientMock,
-                pdndServiceIntegratedConfig,
                 pdndServiceMock,
                 idOperationGeneratorServiceMock
         );
@@ -63,6 +56,8 @@ class AnprC030ServiceTest {
         String accessToken = "ACCESSTOKEN";
         String fiscalCode = "DNTCRL65S67M126K";
         String idOp = "IDOP";
+        Long organizationId = 1L;
+        String subUnitCode = "subUnitCode";
         RispostaE002OK expectedResult = new RispostaE002OK();
 
         TipoCriteriRicercaE002 searchTypes = TipoCriteriRicercaE002.builder()
@@ -81,16 +76,16 @@ class AnprC030ServiceTest {
                 .datiRichiesta(reqDataTypes)
                 .build();
 
-        PdndAuthData pdndAuthData = new PdndAuthData(null, null, accessToken, null, null);
+        PdndAuthData pdndAuthData = new PdndAuthData(null, null, accessToken, null, new PdndServiceIntegratedConfig(), "serviceAudience", null);
 
-        when(pdndServiceMock.generateToken(Mockito.same(pdndServiceIntegratedConfig)))
+        when(pdndServiceMock.generateToken(PdndServiceType.ANPR_C030,organizationId,subUnitCode, accessToken))
                 .thenReturn(pdndAuthData);
         when(anprC030ClientMock.getIdAnprFromFc(request, pdndAuthData))
                 .thenReturn(expectedResult);
         when(idOperationGeneratorServiceMock.generateId())
                 .thenReturn(idOp);
 
-        RispostaE002OK result = anprC030Service.getIdAnprFromFc(fiscalCode);
+        RispostaE002OK result = anprC030Service.getIdAnprFromFc(fiscalCode, organizationId, subUnitCode, accessToken);
 
         assertSame(expectedResult, result);
     }

@@ -3,6 +3,9 @@ package it.gov.pagopa.payhub.pdnd.anpr.controller;
 import it.gov.pagopa.payhub.pdnd.anpr.service.AnprService;
 import it.gov.pagopa.payhub.pdnd.dto.generated.Address;
 import it.gov.pagopa.payhub.pdnd.dto.generated.Citizen;
+import it.gov.pagopa.payhub.pdnd.utils.SecurityUtilsTest;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +28,26 @@ class AnprControllerTest {
     private MockMvc mockMvc;
 
     @MockitoBean
-    private AnprService anprService;
+    private AnprService anprServiceMock;
+
+    private final String accessToken = "ACCESSTOKEN";
+    private final String userId = "USERID";
+
+    @BeforeEach
+    void init(){
+        SecurityUtilsTest.configureSecurityContext(accessToken, userId);
+    }
+
+    @AfterEach
+    void verifyNoMoreInteractions(){
+        Mockito.verifyNoMoreInteractions(anprServiceMock);
+    }
 
     @Test
     void givenValidFiscalCodeWhenGetCitizenDataThenReturnCitizenDetails() throws Exception {
         String fiscalCode = "DNTCRL65S67M126K";
+        Long organizationId = 1L;
+        String subUnitCode = "subUnitCode";
         Citizen citizen = Citizen.builder()
                 .firstName("Julieta")
                 .lastName("Lindgren")
@@ -42,14 +60,16 @@ class AnprControllerTest {
                         .build())
                 .build();
 
-        Mockito.when(anprService.getCitizenData(fiscalCode)).thenReturn(citizen);
+        Mockito.when(anprServiceMock.getCitizenData(fiscalCode, organizationId, subUnitCode, accessToken)).thenReturn(citizen);
 
         mockMvc.perform(get("/anpr-service-e002/citizen")
-                        .param("fiscalCode", fiscalCode))
+                        .param("fiscalCode", fiscalCode)
+                        .param("organizationId", organizationId.toString())
+                        .param("subUnitCode", subUnitCode))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName").value("Julieta"))
                 .andExpect(jsonPath("$.lastName").value("Lindgren"));
 
-        Mockito.verify(anprService, Mockito.times(1)).getCitizenData(Mockito.any());
+        Mockito.verify(anprServiceMock).getCitizenData(fiscalCode, organizationId, subUnitCode, accessToken);
     }
 }

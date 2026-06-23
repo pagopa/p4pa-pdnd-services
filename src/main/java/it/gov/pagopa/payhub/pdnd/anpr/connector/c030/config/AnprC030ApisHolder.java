@@ -24,7 +24,7 @@ public class AnprC030ApisHolder extends BaseAnprServiceApisHolder<ApiClient> {
             RestTemplateBuilder restTemplateBuilder,
             HttpClientConfig defaultHttpClientConfig
     ) {
-        super(pdndApiClientConfig.getConfig(), clientConfig, clientConfig.getServices().getC030(), restTemplateBuilder, defaultHttpClientConfig);
+        super(pdndApiClientConfig.getConfig(), clientConfig, restTemplateBuilder, defaultHttpClientConfig, clientConfig.getServices().getC030());
 
         this.e002ServiceApi = new E002ServiceApi(apiClient);
     }

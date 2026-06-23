@@ -35,6 +35,9 @@ class AnprServiceImplTest {
 
     @Test
     void givenValidFiscalCodeAndIdAnprWhenGetCitizenDataThenReturnCitizenDetails() {
+        String accessToken = "accessToken";
+        Long organizationId = 1L;
+        String subUnitCode = "subUnitCode";
         String fiscalCode = "DNTCRL65S67M126K";
         String idAnpr = "d20fcd8e-f228-323c-8924-6405b44879bf";
 
@@ -63,10 +66,10 @@ class AnprServiceImplTest {
                 new it.gov.pagopa.payhub.anpr.C003.dto.generated.TipoDatiSoggettiEnte(List.of(subTypeInfo))
         )));
 
-        Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode)).thenReturn(anprC030Response);
-        Mockito.when(anprC003Service.getUserData(idAnpr)).thenReturn(anprC003Response);
+        Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode, organizationId, subUnitCode, accessToken)).thenReturn(anprC030Response);
+        Mockito.when(anprC003Service.getUserData(idAnpr, organizationId, subUnitCode, accessToken)).thenReturn(anprC003Response);
 
-        Citizen result = pdndService.getCitizenData(fiscalCode);
+        Citizen result = pdndService.getCitizenData(fiscalCode, organizationId, subUnitCode, accessToken);
 
         assertNotNull(result);
         assertEquals("Julieta", result.getFirstName());
@@ -78,6 +81,9 @@ class AnprServiceImplTest {
 
     @Test
     void givenValidFiscalCodeAndInvalidSubjectListWhenGetCitizenDataThenThrowIllegalArgumentException() {
+        String accessToken = "accessToken";
+        Long organizationId = 1L;
+        String subUnitCode = "subUnitCode";
         String fiscalCode = "DNTCRL65S67M126K";
         String idAnpr = "d20fcd8e-f228-323c-8924-6405b44879bf";
 
@@ -95,10 +101,10 @@ class AnprServiceImplTest {
         it.gov.pagopa.payhub.anpr.C003.dto.generated.RispostaE002OK anprC003Response = newC003RispostaE002Ok();
         anprC003Response.setListaSoggetti(null);
 
-        Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode)).thenReturn(anprC030Response);
-        Mockito.when(anprC003Service.getUserData(idAnpr)).thenReturn(anprC003Response);
+        Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode, organizationId, subUnitCode, accessToken)).thenReturn(anprC030Response);
+        Mockito.when(anprC003Service.getUserData(idAnpr, organizationId, subUnitCode, accessToken)).thenReturn(anprC003Response);
 
-        assertThrows(IllegalArgumentException.class, () -> pdndService.getCitizenData(fiscalCode));
+        assertThrows(IllegalArgumentException.class, () -> pdndService.getCitizenData(fiscalCode, organizationId, subUnitCode, accessToken));
     }
 
     private static RispostaE002OK newC030RispostaE002Ok() {
@@ -107,6 +113,9 @@ class AnprServiceImplTest {
 
     @Test
     void givenValidFiscalCodeAndInvalidC003ResponseWhenGetCitizenDataThenThrowIllegalArgumentException() {
+        String accessToken = "accessToken";
+        Long organizationId = 1L;
+        String subUnitCode = "subUnitCode";
         String fiscalCode = "DNTCRL65S67M126K";
         String idAnpr = "d20fcd8e-f228-323c-8924-6405b44879bf";
 
@@ -121,14 +130,17 @@ class AnprServiceImplTest {
         RispostaE002OK anprC030Response = newC030RispostaE002Ok();
         anprC030Response.setListaSoggetti(new TipoListaSoggetti(List.of(subDataTypes)));
 
-        Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode)).thenReturn(anprC030Response);
-        Mockito.when(anprC003Service.getUserData(idAnpr)).thenReturn(null);
+        Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode, organizationId, subUnitCode, accessToken)).thenReturn(anprC030Response);
+        Mockito.when(anprC003Service.getUserData(idAnpr, organizationId, subUnitCode, accessToken)).thenReturn(null);
 
-        assertThrows(IllegalArgumentException.class, () -> pdndService.getCitizenData(fiscalCode));
+        assertThrows(IllegalArgumentException.class, () -> pdndService.getCitizenData(fiscalCode, organizationId, subUnitCode, accessToken));
     }
 
     @Test
     void givenValidFiscalCodeAndInvalidSubDataTypeWhenGetCitizenDataThenThrowIllegalArgumentException() {
+        String accessToken = "accessToken";
+        Long organizationId = 1L;
+        String subUnitCode = "subUnitCode";
         String fiscalCode = "DNTCRL65S67M126K";
         String idAnpr = "d20fcd8e-f228-323c-8924-6405b44879bf";
 
@@ -147,14 +159,17 @@ class AnprServiceImplTest {
 
         anprC003Response.setListaSoggetti(new it.gov.pagopa.payhub.anpr.C003.dto.generated.TipoListaSoggetti(null));
 
-        Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode)).thenReturn(anprC030Response);
-        Mockito.when(anprC003Service.getUserData(idAnpr)).thenReturn(anprC003Response);
+        Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode, organizationId, subUnitCode, accessToken)).thenReturn(anprC030Response);
+        Mockito.when(anprC003Service.getUserData(idAnpr, organizationId, subUnitCode, accessToken)).thenReturn(anprC003Response);
 
-        assertThrows(IllegalArgumentException.class, () -> pdndService.getCitizenData(fiscalCode));
+        assertThrows(IllegalArgumentException.class, () -> pdndService.getCitizenData(fiscalCode, organizationId, subUnitCode, accessToken));
     }
 
     @Test
     void givenValidFiscalCodeAndEmptySubDataTypeWhenGetCitizenDataThenThrowIllegalArgumentException() {
+        String accessToken = "accessToken";
+        Long organizationId = 1L;
+        String subUnitCode = "subUnitCode";
         String fiscalCode = "DNTCRL65S67M126K";
         String idAnpr = "d20fcd8e-f228-323c-8924-6405b44879bf";
 
@@ -173,18 +188,21 @@ class AnprServiceImplTest {
 
         anprC003Response.setListaSoggetti(new it.gov.pagopa.payhub.anpr.C003.dto.generated.TipoListaSoggetti(new ArrayList<>()));
 
-        Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode)).thenReturn(anprC030Response);
-        Mockito.when(anprC003Service.getUserData(idAnpr)).thenReturn(anprC003Response);
+        Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode, organizationId, subUnitCode, accessToken)).thenReturn(anprC030Response);
+        Mockito.when(anprC003Service.getUserData(idAnpr, organizationId, subUnitCode, accessToken)).thenReturn(anprC003Response);
 
-        assertThrows(IllegalArgumentException.class, () -> pdndService.getCitizenData(fiscalCode));
+        assertThrows(IllegalArgumentException.class, () -> pdndService.getCitizenData(fiscalCode, organizationId, subUnitCode, accessToken));
     }
 
     @Test
     void givenServiceUnavailableWhenGetCitizenDataThenThrowRuntimeException() {
+        String accessToken = "accessToken";
+        Long organizationId = 1L;
+        String subUnitCode = "subUnitCode";
         String fiscalCode = "DNTCRL65S67M126K";
 
-        Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode)).thenThrow(new RuntimeException("Service unavailable"));
+        Mockito.when(anprC030Service.getIdAnprFromFc(fiscalCode, organizationId, subUnitCode, accessToken)).thenThrow(new RuntimeException("Service unavailable"));
 
-        assertThrows(RuntimeException.class, () -> pdndService.getCitizenData(fiscalCode));
+        assertThrows(RuntimeException.class, () -> pdndService.getCitizenData(fiscalCode, organizationId, subUnitCode, accessToken));
     }
 }

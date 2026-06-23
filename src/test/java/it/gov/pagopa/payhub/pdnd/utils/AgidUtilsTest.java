@@ -105,8 +105,8 @@ public class AgidUtilsTest {
         String token = AgidUtils.buildAgidJwtSignature(
                 digest,
                 pdndConfig.getAuthExpirationMinutes(),
-                pdndServiceIntegratedConfig,
-                signer);
+                signer,
+                pdndServiceIntegratedConfig);
 
         // Then
         DecodedJWT decoded = JWT.decode(token);

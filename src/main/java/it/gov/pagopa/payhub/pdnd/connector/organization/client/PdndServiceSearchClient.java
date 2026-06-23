@@ -2,6 +2,7 @@ package it.gov.pagopa.payhub.pdnd.connector.organization.client;
 
 import it.gov.pagopa.payhub.pdnd.connector.organization.config.OrganizationApisHolder;
 import it.gov.pagopa.pu.organization.dto.generated.PdndService;
+import it.gov.pagopa.pu.organization.dto.generated.PdndServiceType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -16,12 +17,12 @@ public class PdndServiceSearchClient {
     this.organizationApisHolder = organizationApisHolder;
   }
 
-  public PdndService findByClientId(String clientId, String accessToken) {
+  public PdndService findByClientIdAndServiceType(String clientId, PdndServiceType pdndServiceType, String accessToken) {
     try {
       return organizationApisHolder.getPdndServiceSearchControllerApi(accessToken)
-        .crudPdndServicesFindByClientId(clientId);
+        .crudPdndServicesFindByClientIdAndServiceType(clientId, pdndServiceType);
     } catch (HttpClientErrorException.NotFound e) {
-      log.warn("PdndService with clientId {} not found", clientId);
+      log.warn("PdndService with clientId {} and serviceType {} not found", clientId, pdndServiceType);
       return null;
     }
   }

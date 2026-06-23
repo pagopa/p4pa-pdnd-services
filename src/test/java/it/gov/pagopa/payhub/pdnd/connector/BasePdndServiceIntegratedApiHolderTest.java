@@ -6,8 +6,8 @@ import it.gov.pagopa.payhub.pdnd.config.json.JsonConfig;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedAuthConfigurer;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
-import it.gov.pagopa.payhub.pdnd.utils.AgidUtils;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
+import it.gov.pagopa.payhub.pdnd.utils.AgidUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.mockito.Mock;
@@ -55,7 +55,6 @@ public abstract class BasePdndServiceIntegratedApiHolderTest {
     @SuppressWarnings("unchecked")
     protected <T> void assertAuthenticationShouldBeSetInThreadSafeMode(
             PdndApiClientConfig.PdndConfig expectedPdndConfig,
-            PdndServiceIntegratedConfig expectedPdndServiceIntegratedConfig,
             Function<PdndAuthData, T> apiInvoke,
             ParameterizedTypeReference<T> apiReturnedType,
             Runnable apiUnloader) throws InterruptedException, IOException, IllegalAccessException {
@@ -65,6 +64,11 @@ public abstract class BasePdndServiceIntegratedApiHolderTest {
         Objects.requireNonNull(pdndAuthDataSupplierField).setAccessible(true);
         Supplier<PdndAuthData> pdndAuthDataSupplier = (Supplier<PdndAuthData>)pdndAuthDataSupplierField.get(reqInterceptor);
 
+        PdndServiceIntegratedConfig pdndServiceIntegratedConfig = new PdndServiceIntegratedConfig();
+        pdndServiceIntegratedConfig.setClientId("clientId");
+        pdndServiceIntegratedConfig.setAudience("audience");
+        pdndServiceIntegratedConfig.setKid("kid");
+        pdndServiceIntegratedConfig.setBasePath("basePath");
         // Configuring useCases in a single thread
         List<Pair<PdndAuthData, T>> useCases = IntStream.rangeClosed(0, 100)
                 .mapToObj(i -> {
@@ -74,6 +78,8 @@ public abstract class BasePdndServiceIntegratedApiHolderTest {
                                 "CLIENT_ASSERTION_" + i,
                                 "ACCESS_TOKEN_" + i,
                                 null,
+                                pdndServiceIntegratedConfig,
+                                pdndServiceIntegratedConfig.getAudience(),
                                 jwsSignerMock
                         );
                         T expectedResult =
@@ -95,7 +101,9 @@ public abstract class BasePdndServiceIntegratedApiHolderTest {
                                             HttpHeaders headers = new HttpHeaders();
                                             String body;
                                             try (MockedStatic<AgidUtils> mockedStaticAgidUtils = Mockito.mockStatic(AgidUtils.class)) {
-                                                mockedStaticAgidUtils.when(() -> AgidUtils.buildAgidJwtSignature(Mockito.anyString(), Mockito.same(expectedPdndConfig.getAuthExpirationMinutes()), Mockito.same(expectedPdndServiceIntegratedConfig), Mockito.same(jwsSignerMock)))
+                                                mockedStaticAgidUtils.when(() ->
+                                                                AgidUtils.buildAgidJwtSignature(Mockito.anyString(), Mockito.same(expectedPdndConfig.getAuthExpirationMinutes()),
+                                                                        Mockito.same(jwsSignerMock), Mockito.same(pdndServiceIntegratedConfig)))
                                                         .thenAnswer(a -> "AGID_SIGNATURE_OF_DIGEST:" + a.getArgument(0));
                                                 mockedStaticAgidUtils.when(() -> AgidUtils.buildDigest(Mockito.anyString()))
                                                         .thenCallRealMethod();

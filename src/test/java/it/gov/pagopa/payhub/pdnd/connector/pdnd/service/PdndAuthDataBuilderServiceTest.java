@@ -5,8 +5,8 @@ import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.client.PdndClient;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.dto.ClientCredentialsResponseDTO;
-import it.gov.pagopa.payhub.pdnd.utils.AgidUtils;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
+import it.gov.pagopa.payhub.pdnd.utils.AgidUtils;
 import it.gov.pagopa.payhub.pdnd.utils.CertUtils;
 import it.gov.pagopa.payhub.pdnd.utils.CertUtilsTest;
 import org.junit.jupiter.api.AfterEach;
@@ -98,6 +98,8 @@ class PdndAuthDataBuilderServiceTest {
                     clientAssertion,
                     accessToken,
                     result.getExpiration(),
+                    pdndServiceConfig,
+                    pdndServiceConfig.getAudience(),
                     result.getRsaJwsSigner()
             );
 
