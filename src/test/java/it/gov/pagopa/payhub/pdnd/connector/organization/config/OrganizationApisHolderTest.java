@@ -13,6 +13,8 @@ import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
+import static org.mockito.Mockito.when;
+
 @ExtendWith(MockitoExtension.class)
 class OrganizationApisHolderTest extends BaseApiHolderTest {
     @Mock
@@ -22,8 +24,8 @@ class OrganizationApisHolderTest extends BaseApiHolderTest {
 
     @BeforeEach
     void setUp() {
-        Mockito.when(restTemplateBuilderMock.build()).thenReturn(restTemplateMock);
-        Mockito.when(restTemplateMock.getUriTemplateHandler()).thenReturn(new DefaultUriBuilderFactory());
+        when(restTemplateBuilderMock.build()).thenReturn(restTemplateMock);
+        when(restTemplateMock.getUriTemplateHandler()).thenReturn(new DefaultUriBuilderFactory());
         OrganizationApiClientConfig clientConfig = OrganizationApiClientConfig.builder()
                 .baseUrl("http://example.com")
                 .build();
@@ -42,7 +44,7 @@ class OrganizationApisHolderTest extends BaseApiHolderTest {
     void whenGetPdndClientApiThenAuthenticationShouldBeSetInThreadSafeMode() throws InterruptedException {
         assertAuthenticationShouldBeSetInThreadSafeMode(
                 accessToken -> organizationApisHolder.getPdndClientApi(accessToken)
-                        .getPdndClientByOrganizationIdAndPdndServiceType(1L, PdndServiceType.SEND,"subUnitCode"),
+                        .getUsablePdndClientByOrganizationIdAndPdndServiceType(1L, PdndServiceType.SEND,"subUnitCode"),
                 new ParameterizedTypeReference<>() {},
                 organizationApisHolder::unload);
     }

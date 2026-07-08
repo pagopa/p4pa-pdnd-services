@@ -14,7 +14,7 @@ public class PdndClientServiceImpl implements PdndClientService {
   }
 
   @Override
-  public PdndClientDTO getPdndClientByOrganizationIdAndPdndServiceType(Long organizationId, PdndServiceType serviceType, String subUnitCode, String accessToken) {
-    return pdndClientClient.getPdndClientByOrganizationIdAndPdndServiceType(organizationId, serviceType, subUnitCode, accessToken);
+  public PdndClientDTO getUsablePdndClientByOrganizationIdAndPdndServiceType(Long organizationId, PdndServiceType serviceType, String subUnitCode, String accessToken) {
+    return pdndClientClient.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId, serviceType, subUnitCode, accessToken);
   }
 }
