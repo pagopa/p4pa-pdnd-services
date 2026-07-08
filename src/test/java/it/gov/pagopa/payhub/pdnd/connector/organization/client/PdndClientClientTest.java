@@ -15,6 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 
+import static org.mockito.Mockito.when;
+
 @ExtendWith(MockitoExtension.class)
 class PdndClientClientTest {
   @Mock
@@ -46,9 +48,9 @@ class PdndClientClientTest {
     String subUnitCode = "subUnitCode";
     PdndClientDTO expectedResult = new PdndClientDTO();
 
-    Mockito.when(organizationApisHolderMock.getPdndClientApi(accessToken))
+    when(organizationApisHolderMock.getPdndClientApi(accessToken))
             .thenReturn(pdndClientApiMock);
-    Mockito.when(pdndClientApiMock.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId, pdndServiceType, subUnitCode))
+    when(pdndClientApiMock.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId, pdndServiceType, subUnitCode))
             .thenReturn(expectedResult);
 
     // When
@@ -66,9 +68,9 @@ class PdndClientClientTest {
     PdndServiceType pdndServiceType = PdndServiceType.SEND;
     String subUnitCode = "subUnitCode";
 
-    Mockito.when(organizationApisHolderMock.getPdndClientApi(accessToken))
+    when(organizationApisHolderMock.getPdndClientApi(accessToken))
             .thenReturn(pdndClientApiMock);
-    Mockito.when(pdndClientApiMock.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId, pdndServiceType, subUnitCode))
+    when(pdndClientApiMock.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId, pdndServiceType, subUnitCode))
             .thenThrow(
                     HttpClientErrorException.create(HttpStatus.NOT_FOUND, "NotFound", null, null, null));
 

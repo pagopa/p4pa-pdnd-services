@@ -24,6 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PdndServiceIntegratedConfigResolverServiceTest {
@@ -81,10 +82,10 @@ class PdndServiceIntegratedConfigResolverServiceTest {
         expectedResult.setPrivateKey(pdndClientDTO.getPrivateKey());
         expectedResult.setPublicKey(pdndClientDTO.getPublicKey());
 
-        Mockito.when(apiClientConfigResolverServiceMock.getIntegratedConfig(service)).thenReturn(config);
-        Mockito.when(pdndClientServiceMock.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId,service,subUnitCode,accessToken))
+        when(apiClientConfigResolverServiceMock.getIntegratedConfig(service)).thenReturn(config);
+        when(pdndClientServiceMock.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId,service,subUnitCode,accessToken))
                         .thenReturn(pdndClientDTO);
-        Mockito.when(pdndServiceServiceMock.findByClientIdAndServiceType(pdndClientDTO.getClientId(), service, accessToken))
+        when(pdndServiceServiceMock.findByClientIdAndServiceType(pdndClientDTO.getClientId(), service, accessToken))
                 .thenReturn(pdndService);
 
         PdndServiceIntegratedConfig result = pdndServiceIntegratedConfigResolverService.getPdndServiceIntegratedConfig(service,organizationId,subUnitCode,accessToken);
@@ -110,10 +111,10 @@ class PdndServiceIntegratedConfigResolverServiceTest {
         String subUnitCode = "subUnitCode";
         PdndClientDTO pdndClientDTO = new PdndClientDTO();
 
-        Mockito.when(apiClientConfigResolverServiceMock.getIntegratedConfig(service)).thenReturn(new PdndServiceIntegratedStaticConfig());
-        Mockito.when(pdndClientServiceMock.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId,service,subUnitCode,accessToken))
+        when(apiClientConfigResolverServiceMock.getIntegratedConfig(service)).thenReturn(new PdndServiceIntegratedStaticConfig());
+        when(pdndClientServiceMock.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId,service,subUnitCode,accessToken))
                         .thenReturn(pdndClientDTO);
-        Mockito.when(pdndServiceServiceMock.findByClientIdAndServiceType(pdndClientDTO.getClientId(), service, accessToken))
+        when(pdndServiceServiceMock.findByClientIdAndServiceType(pdndClientDTO.getClientId(), service, accessToken))
                 .thenReturn(null);
 
         NotFoundException notFoundException = assertThrows(NotFoundException.class, () -> pdndServiceIntegratedConfigResolverService.getPdndServiceIntegratedConfig(service, organizationId, subUnitCode, accessToken));
@@ -129,8 +130,8 @@ class PdndServiceIntegratedConfigResolverServiceTest {
         Long organizationId = 1L;
         String subUnitCode = "subUnitCode";
 
-        Mockito.when(apiClientConfigResolverServiceMock.getIntegratedConfig(service)).thenReturn(new PdndServiceIntegratedStaticConfig());
-        Mockito.when(pdndClientServiceMock.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId,service,subUnitCode,accessToken))
+        when(apiClientConfigResolverServiceMock.getIntegratedConfig(service)).thenReturn(new PdndServiceIntegratedStaticConfig());
+        when(pdndClientServiceMock.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId,service,subUnitCode,accessToken))
                         .thenReturn(null);
 
         NotFoundException notFoundException = assertThrows(NotFoundException.class, () -> pdndServiceIntegratedConfigResolverService.getPdndServiceIntegratedConfig(service, organizationId, subUnitCode, accessToken));
