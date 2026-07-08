@@ -82,7 +82,7 @@ class PdndServiceIntegratedConfigResolverServiceTest {
         expectedResult.setPublicKey(pdndClientDTO.getPublicKey());
 
         Mockito.when(apiClientConfigResolverServiceMock.getIntegratedConfig(service)).thenReturn(config);
-        Mockito.when(pdndClientServiceMock.getPdndClientByOrganizationIdAndPdndServiceType(organizationId,service,subUnitCode,accessToken))
+        Mockito.when(pdndClientServiceMock.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId,service,subUnitCode,accessToken))
                         .thenReturn(pdndClientDTO);
         Mockito.when(pdndServiceServiceMock.findByClientIdAndServiceType(pdndClientDTO.getClientId(), service, accessToken))
                 .thenReturn(pdndService);
@@ -111,7 +111,7 @@ class PdndServiceIntegratedConfigResolverServiceTest {
         PdndClientDTO pdndClientDTO = new PdndClientDTO();
 
         Mockito.when(apiClientConfigResolverServiceMock.getIntegratedConfig(service)).thenReturn(new PdndServiceIntegratedStaticConfig());
-        Mockito.when(pdndClientServiceMock.getPdndClientByOrganizationIdAndPdndServiceType(organizationId,service,subUnitCode,accessToken))
+        Mockito.when(pdndClientServiceMock.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId,service,subUnitCode,accessToken))
                         .thenReturn(pdndClientDTO);
         Mockito.when(pdndServiceServiceMock.findByClientIdAndServiceType(pdndClientDTO.getClientId(), service, accessToken))
                 .thenReturn(null);
@@ -130,7 +130,7 @@ class PdndServiceIntegratedConfigResolverServiceTest {
         String subUnitCode = "subUnitCode";
 
         Mockito.when(apiClientConfigResolverServiceMock.getIntegratedConfig(service)).thenReturn(new PdndServiceIntegratedStaticConfig());
-        Mockito.when(pdndClientServiceMock.getPdndClientByOrganizationIdAndPdndServiceType(organizationId,service,subUnitCode,accessToken))
+        Mockito.when(pdndClientServiceMock.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId,service,subUnitCode,accessToken))
                         .thenReturn(null);
 
         NotFoundException notFoundException = assertThrows(NotFoundException.class, () -> pdndServiceIntegratedConfigResolverService.getPdndServiceIntegratedConfig(service, organizationId, subUnitCode, accessToken));

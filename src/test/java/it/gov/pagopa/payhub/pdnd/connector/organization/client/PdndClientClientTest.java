@@ -38,7 +38,7 @@ class PdndClientClientTest {
   }
 
   @Test
-  void whenGetPdndClientByOrganizationIdAndPdndServiceTypeThenOk() {
+  void whenGetUsablePdndClientByOrganizationIdAndPdndServiceTypeThenOk() {
     // Given
     String accessToken = "ACCESS_TOKEN";
     Long organizationId = 1L;
@@ -48,18 +48,18 @@ class PdndClientClientTest {
 
     Mockito.when(organizationApisHolderMock.getPdndClientApi(accessToken))
             .thenReturn(pdndClientApiMock);
-    Mockito.when(pdndClientApiMock.getPdndClientByOrganizationIdAndPdndServiceType(organizationId, pdndServiceType, subUnitCode))
+    Mockito.when(pdndClientApiMock.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId, pdndServiceType, subUnitCode))
             .thenReturn(expectedResult);
 
     // When
-    PdndClientDTO result = pdndClientClient.getPdndClientByOrganizationIdAndPdndServiceType(organizationId,pdndServiceType, subUnitCode, accessToken);
+    PdndClientDTO result = pdndClientClient.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId,pdndServiceType, subUnitCode, accessToken);
 
     // Then
     Assertions.assertSame(expectedResult, result);
   }
 
   @Test
-  void givenNotFoundWhenGetPdndClientByOrganizationIdAndPdndServiceTypeThenNull() {
+  void givenNotFoundWhenGetUsablePdndClientByOrganizationIdAndPdndServiceTypeThenNull() {
     // Given
     String accessToken = "ACCESS_TOKEN";
     Long organizationId = 1L;
@@ -68,12 +68,12 @@ class PdndClientClientTest {
 
     Mockito.when(organizationApisHolderMock.getPdndClientApi(accessToken))
             .thenReturn(pdndClientApiMock);
-    Mockito.when(pdndClientApiMock.getPdndClientByOrganizationIdAndPdndServiceType(organizationId, pdndServiceType, subUnitCode))
+    Mockito.when(pdndClientApiMock.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId, pdndServiceType, subUnitCode))
             .thenThrow(
                     HttpClientErrorException.create(HttpStatus.NOT_FOUND, "NotFound", null, null, null));
 
     // When
-    PdndClientDTO result = pdndClientClient.getPdndClientByOrganizationIdAndPdndServiceType(organizationId,pdndServiceType, subUnitCode, accessToken);
+    PdndClientDTO result = pdndClientClient.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId,pdndServiceType, subUnitCode, accessToken);
 
     // Then
     Assertions.assertNull(result);

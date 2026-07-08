@@ -36,7 +36,7 @@ class PdndClientServiceImplTest {
     }
 
     @Test
-    void whenGetPdndClientByOrganizationIdAndPdndServiceTypeThenExpectedValue() {
+    void whenGetUsablePdndClientByOrganizationIdAndPdndServiceTypeThenExpectedValue() {
         // Given
         String accessToken = "accessToken";
         Long organizationId = 1L;
@@ -45,10 +45,10 @@ class PdndClientServiceImplTest {
 
         PdndClientDTO expectedResult = new PdndClientDTO();
 
-        Mockito.when(pdndClientClientMock.getPdndClientByOrganizationIdAndPdndServiceType(organizationId,service,subUnitCode,accessToken))
+        Mockito.when(pdndClientClientMock.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId,service,subUnitCode,accessToken))
                         .thenReturn(expectedResult);
 
-        PdndClientDTO result = pdndClientService.getPdndClientByOrganizationIdAndPdndServiceType(organizationId, service,subUnitCode,accessToken);
+        PdndClientDTO result = pdndClientService.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId, service,subUnitCode,accessToken);
 
         assertNotNull(result);
         assertEquals(expectedResult, result);
