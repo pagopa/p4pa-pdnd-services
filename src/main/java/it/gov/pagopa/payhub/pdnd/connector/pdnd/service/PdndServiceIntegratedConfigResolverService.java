@@ -30,7 +30,7 @@ public class PdndServiceIntegratedConfigResolverService {
 
   public PdndServiceIntegratedConfig getPdndServiceIntegratedConfig(PdndServiceType pdndServicesEnum, Long organizationId, String subUnitCode, String accessToken) {
     PdndServiceIntegratedStaticConfig pdndServiceIntegratedStaticConfig = apiClientConfigResolverService.getIntegratedConfig(pdndServicesEnum);
-    PdndClientDTO pdndClient = pdndClientService.getPdndClientByOrganizationIdAndPdndServiceType(
+    PdndClientDTO pdndClient = pdndClientService.getUsablePdndClientByOrganizationIdAndPdndServiceType(
             organizationId,
             pdndServicesEnum,
             subUnitCode,

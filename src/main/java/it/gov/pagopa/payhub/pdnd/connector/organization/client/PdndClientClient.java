@@ -17,10 +17,10 @@ public class PdndClientClient {
     this.organizationApisHolder = organizationApisHolder;
   }
 
-  public PdndClientDTO getPdndClientByOrganizationIdAndPdndServiceType(Long organizationId, PdndServiceType serviceType, String subUnitCode, String accessToken) {
+  public PdndClientDTO getUsablePdndClientByOrganizationIdAndPdndServiceType(Long organizationId, PdndServiceType serviceType, String subUnitCode, String accessToken) {
     try {
       return organizationApisHolder.getPdndClientApi(accessToken)
-              .getPdndClientByOrganizationIdAndPdndServiceType(organizationId, serviceType, subUnitCode);
+              .getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId, serviceType, subUnitCode);
     } catch (HttpClientErrorException.NotFound e) {
       log.warn("PdndClient with organizationId {} serviceType {} and subUnitCode {} not found", organizationId, serviceType, subUnitCode);
       return null;

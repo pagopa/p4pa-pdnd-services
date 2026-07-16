@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PdndClientServiceImplTest {
@@ -36,7 +37,7 @@ class PdndClientServiceImplTest {
     }
 
     @Test
-    void whenGetPdndClientByOrganizationIdAndPdndServiceTypeThenExpectedValue() {
+    void whenGetUsablePdndClientByOrganizationIdAndPdndServiceTypeThenExpectedValue() {
         // Given
         String accessToken = "accessToken";
         Long organizationId = 1L;
@@ -45,10 +46,10 @@ class PdndClientServiceImplTest {
 
         PdndClientDTO expectedResult = new PdndClientDTO();
 
-        Mockito.when(pdndClientClientMock.getPdndClientByOrganizationIdAndPdndServiceType(organizationId,service,subUnitCode,accessToken))
+        when(pdndClientClientMock.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId,service,subUnitCode,accessToken))
                         .thenReturn(expectedResult);
 
-        PdndClientDTO result = pdndClientService.getPdndClientByOrganizationIdAndPdndServiceType(organizationId, service,subUnitCode,accessToken);
+        PdndClientDTO result = pdndClientService.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId, service,subUnitCode,accessToken);
 
         assertNotNull(result);
         assertEquals(expectedResult, result);
