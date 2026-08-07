@@ -4,7 +4,7 @@ import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedStaticConfig;
 import it.gov.pagopa.payhub.pdnd.connector.organization.PdndClientService;
 import it.gov.pagopa.payhub.pdnd.connector.organization.PdndServiceService;
-import it.gov.pagopa.payhub.pdnd.exception.custom.NotFoundException;
+import it.gov.pagopa.payhub.pdnd.exception.common.NotFoundException;
 import it.gov.pagopa.payhub.pdnd.service.ApiClientConfigResolverService;
 import it.gov.pagopa.payhub.pdnd.utils.ErrorCodeConstants;
 import it.gov.pagopa.pu.organization.dto.generated.PdndClientDTO;
