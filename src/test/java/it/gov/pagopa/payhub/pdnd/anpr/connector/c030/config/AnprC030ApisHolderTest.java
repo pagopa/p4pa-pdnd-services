@@ -1,12 +1,14 @@
 package it.gov.pagopa.payhub.pdnd.anpr.connector.c030.config;
 
-import it.gov.pagopa.payhub.anpr.C030.dto.generated.RichiestaE002;
+import it.gov.pagopa.anpr.c030.dto.generated.RichiestaE002;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.AnprApiClientConfig;
+import it.gov.pagopa.payhub.pdnd.config.json.JsonConfig;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedStaticConfig;
 import it.gov.pagopa.payhub.pdnd.config.rest.HttpClientConfig;
 import it.gov.pagopa.payhub.pdnd.config.rest.HttpsClientConfig;
 import it.gov.pagopa.payhub.pdnd.connector.BasePdndServiceIntegratedApiHolderTest;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
+import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,8 +22,12 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import java.io.IOException;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 @ExtendWith(MockitoExtension.class)
 class AnprC030ApisHolderTest extends BasePdndServiceIntegratedApiHolderTest {
+
     @Mock
     private RestTemplateBuilder restTemplateBuilderMock;
 
@@ -30,9 +36,11 @@ class AnprC030ApisHolderTest extends BasePdndServiceIntegratedApiHolderTest {
                     .audience("PDNDAUDIENCE")
                     .authExpirationMinutes(100L)
                     .build())
+            .maxAttempts(3)
             .build();
     private final AnprApiClientConfig anprApiClientConfig = AnprApiClientConfig.builder()
             .baseUrl("http://example.com")
+            .maxAttempts(3)
             .https(new HttpsClientConfig())
             .services(AnprApiClientConfig.AnprServicesConfig.builder()
                     .c030(PdndServiceIntegratedStaticConfig.builder()
@@ -50,11 +58,13 @@ class AnprC030ApisHolderTest extends BasePdndServiceIntegratedApiHolderTest {
 
     @BeforeEach
     void setUp() {
-        Mockito.when(restTemplateBuilderMock.build()).thenReturn(restTemplateMock);
-        Mockito.when(restTemplateMock.getUriTemplateHandler()).thenReturn(new DefaultUriBuilderFactory());
-        Mockito.when(restTemplateMock.getInterceptors()).thenReturn(interceptors);
+        when(restTemplateBuilderMock.build()).thenReturn(restTemplateMock);
+        when(restTemplateMock.getUriTemplateHandler()).thenReturn(new DefaultUriBuilderFactory());
+        when(restTemplateMock.getInterceptors()).thenReturn(interceptors);
 
-        apisHolder = new AnprC030ApisHolder(pdndApiClientConfig, anprApiClientConfig, restTemplateBuilderMock, httpClientConfig);
+        apisHolder = new AnprC030ApisHolder(pdndApiClientConfig, anprApiClientConfig, restTemplateBuilderMock, httpClientConfig, new JsonConfig().objectMapperJackson3());
+
+        verifyHttpClientErrorJsonBodyHandlerConfiguration(apisHolder.getE002ServiceApi(mock(PdndAuthData.class)));
     }
 
     @AfterEach
@@ -63,6 +73,15 @@ class AnprC030ApisHolderTest extends BasePdndServiceIntegratedApiHolderTest {
                 restTemplateBuilderMock,
                 restTemplateMock,
                 jwsSignerMock
+        );
+    }
+
+    @Test
+    void testRetryConfiguration() {
+        assertRetry(anprApiClientConfig,
+                pdndAuthData -> apisHolder.getE002ServiceApi(pdndAuthData)
+                        .e002(new RichiestaE002()),
+                new ParameterizedTypeReference<>() {}
         );
     }
 

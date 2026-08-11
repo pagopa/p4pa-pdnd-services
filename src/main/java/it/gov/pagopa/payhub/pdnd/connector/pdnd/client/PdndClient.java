@@ -1,8 +1,8 @@
 package it.gov.pagopa.payhub.pdnd.connector.pdnd.client;
 
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApisHolder;
-import it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.api.AuthApi;
-import it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.dto.ClientCredentialsResponseDTO;
+import it.gov.pagopa.pdnd.client.generated.AuthApi;
+import it.gov.pagopa.pdnd.dto.generated.ClientCredentialsResponseDTO;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,7 +14,7 @@ public class PdndClient {
   private final AuthApi authApi;
 
   public PdndClient(PdndApisHolder pdndApisHolder) {
-    authApi = pdndApisHolder.getBrokerEntityControllerApi();
+    authApi = pdndApisHolder.getAuthApi();
   }
 
   public ClientCredentialsResponseDTO getAccessToken(String clientId, String clientAssertion) {

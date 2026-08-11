@@ -1,5 +1,6 @@
 package it.gov.pagopa.payhub.pdnd.connector.organization.config;
 
+import it.gov.pagopa.payhub.pdnd.config.json.JsonConfig;
 import it.gov.pagopa.payhub.pdnd.connector.BaseApiHolderTest;
 import it.gov.pagopa.pu.organization.dto.generated.PdndServiceType;
 import org.junit.jupiter.api.AfterEach;
@@ -17,19 +18,25 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class OrganizationApisHolderTest extends BaseApiHolderTest {
+
     @Mock
     private RestTemplateBuilder restTemplateBuilderMock;
 
-    private OrganizationApisHolder organizationApisHolder;
+    private OrganizationApisHolder apisHolder;
+    private OrganizationApiClientConfig apiClientConfig;
 
     @BeforeEach
     void setUp() {
         when(restTemplateBuilderMock.build()).thenReturn(restTemplateMock);
         when(restTemplateMock.getUriTemplateHandler()).thenReturn(new DefaultUriBuilderFactory());
-        OrganizationApiClientConfig clientConfig = OrganizationApiClientConfig.builder()
+
+        apiClientConfig = OrganizationApiClientConfig.builder()
                 .baseUrl("http://example.com")
+                .maxAttempts(3)
                 .build();
-        organizationApisHolder = new OrganizationApisHolder(clientConfig, restTemplateBuilderMock);
+        apisHolder = new OrganizationApisHolder(apiClientConfig, restTemplateBuilderMock, new JsonConfig().objectMapperJackson3());
+
+        verifyHttpClientErrorJsonBodyHandlerConfiguration(apisHolder.getPdndClientApi(null));
     }
 
     @AfterEach
@@ -41,21 +48,30 @@ class OrganizationApisHolderTest extends BaseApiHolderTest {
     }
 
     @Test
+    void testRetryConfiguration() {
+        assertRetry(apiClientConfig,
+                accessToken -> apisHolder.getPdndClientApi(accessToken)
+                        .getUsablePdndClientByOrganizationIdAndPdndServiceType(1L, PdndServiceType.SEND,"subUnitCode"),
+                new ParameterizedTypeReference<>() {}
+        );
+    }
+
+    @Test
     void whenGetPdndClientApiThenAuthenticationShouldBeSetInThreadSafeMode() throws InterruptedException {
         assertAuthenticationShouldBeSetInThreadSafeMode(
-                accessToken -> organizationApisHolder.getPdndClientApi(accessToken)
+                accessToken -> apisHolder.getPdndClientApi(accessToken)
                         .getUsablePdndClientByOrganizationIdAndPdndServiceType(1L, PdndServiceType.SEND,"subUnitCode"),
                 new ParameterizedTypeReference<>() {},
-                organizationApisHolder::unload);
+                apisHolder::unload);
     }
 
     @Test
     void whenGetPdndServiceSearchControllerApiThenAuthenticationShouldBeSetInThreadSafeMode() throws InterruptedException {
         assertAuthenticationShouldBeSetInThreadSafeMode(
-                accessToken -> organizationApisHolder.getPdndServiceSearchControllerApi(accessToken)
+                accessToken -> apisHolder.getPdndServiceSearchControllerApi(accessToken)
                         .crudPdndServicesFindByClientIdAndServiceType("clientId", PdndServiceType.SEND),
                 new ParameterizedTypeReference<>() {},
-                organizationApisHolder::unload);
+                apisHolder::unload);
     }
 }
 

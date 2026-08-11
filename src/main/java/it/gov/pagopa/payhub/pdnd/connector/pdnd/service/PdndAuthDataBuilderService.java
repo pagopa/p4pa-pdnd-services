@@ -4,7 +4,8 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.client.PdndClient;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
-import it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.dto.ClientCredentialsResponseDTO;
+import it.gov.pagopa.payhub.pdnd.utils.Constants;
+import it.gov.pagopa.pdnd.dto.generated.ClientCredentialsResponseDTO;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
 import it.gov.pagopa.payhub.pdnd.utils.AgidUtils;
 import it.gov.pagopa.payhub.pdnd.utils.CertUtils;
@@ -29,7 +30,7 @@ public class PdndAuthDataBuilderService {
 
     public PdndAuthData build(PdndServiceIntegratedConfig pdndServiceIntegratedConfig){
         RSASSASigner signer = buildJwsSigner(pdndServiceIntegratedConfig);
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(Constants.ZONEID);
 
         String agidJwtTrackingEvidence = AgidUtils.buildAgidJwtTrackingEvidence(pdndConfig, pdndServiceIntegratedConfig, signer);
         String clientAssertion = AgidUtils.buildPdndClientAssertion(pdndConfig, pdndServiceIntegratedConfig, agidJwtTrackingEvidence, signer);

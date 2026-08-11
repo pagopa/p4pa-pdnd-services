@@ -1,7 +1,8 @@
 package it.gov.pagopa.payhub.pdnd.connector.organization.client;
 
 import it.gov.pagopa.payhub.pdnd.connector.organization.config.OrganizationApisHolder;
-import it.gov.pagopa.pu.organization.controller.generated.PdndClientApi;
+import it.gov.pagopa.payhub.pdnd.exception.common.RestInvokeNotFoundException;
+import it.gov.pagopa.pu.organization.client.generated.PdndClientApi;
 import it.gov.pagopa.pu.organization.dto.generated.PdndClientDTO;
 import it.gov.pagopa.pu.organization.dto.generated.PdndServiceType;
 import org.junit.jupiter.api.AfterEach;
@@ -13,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.client.HttpClientErrorException;
 
 import static org.mockito.Mockito.when;
 
@@ -71,8 +71,7 @@ class PdndClientClientTest {
     when(organizationApisHolderMock.getPdndClientApi(accessToken))
             .thenReturn(pdndClientApiMock);
     when(pdndClientApiMock.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId, pdndServiceType, subUnitCode))
-            .thenThrow(
-                    HttpClientErrorException.create(HttpStatus.NOT_FOUND, "NotFound", null, null, null));
+            .thenThrow(new RestInvokeNotFoundException("APPNAME", HttpStatus.NOT_FOUND, "ERROR", "ERRORCODE", "ERRORMESSAGE"));
 
     // When
     PdndClientDTO result = pdndClientClient.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId,pdndServiceType, subUnitCode, accessToken);

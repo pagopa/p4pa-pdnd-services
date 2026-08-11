@@ -5,25 +5,29 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import it.gov.pagopa.payhub.pdnd.config.json.JsonConfig;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedAuthConfigurer;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
+import it.gov.pagopa.payhub.pdnd.config.rest.ApiClientConfig;
+import it.gov.pagopa.payhub.pdnd.config.rest.HttpClientErrorJsonBodyHandler;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
 import it.gov.pagopa.payhub.pdnd.utils.AgidUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.mock.http.client.MockClientHttpResponse;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.*;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +41,9 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
+import static org.mockito.Mockito.*;
+
+@Slf4j
 public abstract class BasePdndServiceIntegratedApiHolderTest {
 
     @Mock
@@ -47,6 +54,36 @@ public abstract class BasePdndServiceIntegratedApiHolderTest {
     protected RSASSASigner jwsSignerMock;
     @Mock
     protected Void voidMock;
+
+    protected void verifyHttpClientErrorJsonBodyHandlerConfiguration(Object api) {
+        @SuppressWarnings("rawtypes")
+        ArgumentCaptor<HttpClientErrorJsonBodyHandler> captor = ArgumentCaptor.forClass(HttpClientErrorJsonBodyHandler.class);
+        verify(restTemplateMock)
+                .setErrorHandler(captor.capture());
+
+        HttpClientErrorJsonBodyHandler<?> errorHandler = captor.getValue();
+        String apiPackage = api
+                .getClass().getPackageName()
+                .replace(".client", "")
+                .replace(".generated", "");
+
+        Assertions.assertEquals(
+                apiPackage,
+                errorHandler.getErrorDtoClass().getPackageName()
+                        .replace(".dto", "")
+                        .replace(".generated", "")
+        );
+
+        Assertions.assertEquals(
+                apiPackage
+                        .replaceFirst("it\\.gov\\.pagopa\\.(pu\\.)?", "")
+                        .replace(".", ""),
+                errorHandler.getApplicationName()
+                        .toLowerCase()
+                        .replace("_","")
+                        .replace("-", "")
+        );
+    }
 
     protected List<ClientHttpRequestInterceptor> interceptors = new ArrayList<>();
 
@@ -88,9 +125,9 @@ public abstract class BasePdndServiceIntegratedApiHolderTest {
                                         : Long.class.equals(apiReturnedType.getType()) ? (T) Long.valueOf(0L)
                                         : apiReturnedType.getType().getTypeName().startsWith(List.class.getName()) ? (T) List.of()
                                         : Void.class.equals(apiReturnedType.getType()) ? (T) voidMock
-                                        : (T) Mockito.mock(Class.forName(apiReturnedType.getType().getTypeName()));
+                                        : (T) mock(Class.forName(apiReturnedType.getType().getTypeName()));
 
-                        Mockito.doReturn(ResponseEntity.ok(expectedResult))
+                        doReturn(ResponseEntity.ok(expectedResult))
                                 .when(restTemplateMock)
                                 .exchange(
                                         Mockito.argThat(req -> {
@@ -111,11 +148,11 @@ public abstract class BasePdndServiceIntegratedApiHolderTest {
                                                 body = objectMapper.writeValueAsString(req.getBody());
                                                 byte[] bodyBytes = body.getBytes(StandardCharsets.UTF_8);
 
-                                                HttpRequest httpRequestMock = Mockito.mock(HttpRequest.class);
-                                                Mockito.when(httpRequestMock.getHeaders()).thenReturn(headers);
+                                                HttpRequest httpRequestMock = mock(HttpRequest.class);
+                                                when(httpRequestMock.getHeaders()).thenReturn(headers);
 
                                                 reqInterceptor.intercept(httpRequestMock, bodyBytes, interceptorRequestExecutionMock);
-                                                Mockito.verify(interceptorRequestExecutionMock)
+                                                verify(interceptorRequestExecutionMock)
                                                         .execute(httpRequestMock, bodyBytes);
                                             } catch (Exception e) {
                                                 throw new RuntimeException(e);
@@ -170,9 +207,72 @@ public abstract class BasePdndServiceIntegratedApiHolderTest {
 
         apiUnloader.run();
 
-        Mockito.verify(restTemplateMock, Mockito.times(useCases.size()))
+        verify(restTemplateMock, times(useCases.size()))
                 .exchange(Mockito.any(), Mockito.<ParameterizedTypeReference<?>>any());
-        Mockito.verify(interceptorRequestExecutionMock, Mockito.times(useCases.size()))
+        verify(interceptorRequestExecutionMock, times(useCases.size()))
                 .execute(Mockito.any(), Mockito.any());
+    }
+
+    /**
+     * To assert if the ApiClient is working as expected. Set a test just once per *ApiHolder class (not for each exposed API)
+     */
+    protected <T> void assertRetry(ApiClientConfig apiClientConfig, Function<PdndAuthData, T> apiInvoke, ParameterizedTypeReference<T> apiReturnedType) {
+        Assertions.assertTrue(apiClientConfig.getMaxAttempts() > 1, "Please set at least 2 max attempt");
+
+        ResponseErrorHandler errorHandler = Mockito.mockingDetails(restTemplateMock)
+                .getInvocations()
+                .stream()
+                .filter(i -> i.getMethod().getName().equals("setErrorHandler"))
+                .map(i -> (ResponseErrorHandler) i.getArgument(0))
+                .findFirst()
+                .orElse(null);
+
+        PdndServiceIntegratedConfig pdndServiceIntegratedConfig = new PdndServiceIntegratedConfig();
+        pdndServiceIntegratedConfig.setClientId("clientId");
+        pdndServiceIntegratedConfig.setAudience("audience");
+        pdndServiceIntegratedConfig.setKid("kid");
+        pdndServiceIntegratedConfig.setBasePath("basePath");
+
+        PdndAuthData pdndAuthData = new PdndAuthData(
+                "AGID_JWT_TRACKING_EVIDENCE",
+                "CLIENT_ASSERTION",
+                "ACCESS_TOKEN",
+                null,
+                pdndServiceIntegratedConfig,
+                pdndServiceIntegratedConfig.getAudience(),
+                jwsSignerMock
+        );
+
+        for (HttpStatus httpStatus : HttpStatus.values()) {
+            if (httpStatus.is5xxServerError() || httpStatus.isSameCodeAs(HttpStatus.TOO_MANY_REQUESTS)) {
+                HttpStatusCodeException exception = httpStatus.is5xxServerError()
+                        ? new HttpServerErrorException(httpStatus)
+                        : new HttpClientErrorException(httpStatus);
+
+                Mockito.doAnswer(i -> {
+                            if (errorHandler != null) {
+                                errorHandler.handleError(URI.create("http://example.com"), HttpMethod.GET, new MockClientHttpResponse(new byte[0], httpStatus));
+                                return null;
+                            } else {
+                                throw exception;
+                            }
+                        })
+                        .when(restTemplateMock)
+                        .exchange(
+                                Mockito.any(),
+                                Mockito.eq(apiReturnedType));
+
+                Assertions.assertThrows(RuntimeException.class, () -> apiInvoke.apply(pdndAuthData));
+
+                try {
+                    verify(restTemplateMock, times(apiClientConfig.getMaxAttempts()))
+                            .exchange(Mockito.any(), Mockito.eq(apiReturnedType));
+                    Mockito.clearInvocations(restTemplateMock);
+                } catch (Throwable e) {
+                    log.error("Error occurred verifying retry for httpStatus {}: {}", httpStatus, e.getMessage());
+                    throw e;
+                }
+            }
+        }
     }
 }
