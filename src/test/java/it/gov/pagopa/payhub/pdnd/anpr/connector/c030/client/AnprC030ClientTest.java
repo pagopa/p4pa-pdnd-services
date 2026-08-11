@@ -1,8 +1,8 @@
 package it.gov.pagopa.payhub.pdnd.anpr.connector.c030.client;
 
-import it.gov.pagopa.payhub.anpr.C030.controller.generated.E002ServiceApi;
-import it.gov.pagopa.payhub.anpr.C030.dto.generated.RichiestaE002;
-import it.gov.pagopa.payhub.anpr.C030.dto.generated.RispostaE002OK;
+import it.gov.pagopa.anpr.c030.client.generated.E002ServiceApi;
+import it.gov.pagopa.anpr.c030.dto.generated.RichiestaE002;
+import it.gov.pagopa.anpr.c030.dto.generated.RispostaE002OK;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.c030.config.AnprC030ApisHolder;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
 import org.junit.jupiter.api.AfterEach;
@@ -13,6 +13,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AnprC030ClientTest {
@@ -39,13 +42,13 @@ class AnprC030ClientTest {
     @Test
     void whenGetIdAnprFromFcThenInvokeWithAccessToken() {
         // Given
-        PdndAuthData pdndAuthData = Mockito.mock(PdndAuthData.class);
+        PdndAuthData pdndAuthData = mock(PdndAuthData.class);
         RichiestaE002 request = new RichiestaE002();
         RispostaE002OK expectedResult = new RispostaE002OK();
 
-        Mockito.when(apisHolder.getE002ServiceApi(Mockito.same(pdndAuthData)))
+        when(apisHolder.getE002ServiceApi(Mockito.same(pdndAuthData)))
                 .thenReturn(e002ServiceApiMock);
-        Mockito.when(e002ServiceApiMock.e002(request))
+        when(e002ServiceApiMock.e002(request))
                 .thenReturn(expectedResult);
 
         // When

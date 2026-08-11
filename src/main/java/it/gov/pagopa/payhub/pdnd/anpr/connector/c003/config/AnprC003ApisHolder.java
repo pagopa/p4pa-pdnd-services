@@ -1,16 +1,22 @@
 package it.gov.pagopa.payhub.pdnd.anpr.connector.c003.config;
 
-import it.gov.pagopa.payhub.anpr.C003.controller.ApiClient;
-import it.gov.pagopa.payhub.anpr.C003.controller.generated.E002ServiceApi;
+import it.gov.pagopa.anpr.c003.client.generated.E002ServiceApi;
+import it.gov.pagopa.anpr.c003.dto.generated.RispostaKO;
+import it.gov.pagopa.anpr.c003.generated.ApiClient;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.AnprApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.BaseAnprServiceApisHolder;
 import it.gov.pagopa.payhub.pdnd.config.rest.HttpClientConfig;
+import it.gov.pagopa.payhub.pdnd.config.rest.HttpClientErrorJsonBodyHandler;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
+import tools.jackson.databind.json.JsonMapper;
+
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -22,9 +28,22 @@ public class AnprC003ApisHolder extends BaseAnprServiceApisHolder<ApiClient> {
             PdndApiClientConfig pdndApiClientConfig,
             AnprApiClientConfig clientConfig,
             RestTemplateBuilder restTemplateBuilder,
-            HttpClientConfig defaultHttpClientConfig
+            HttpClientConfig defaultHttpClientConfig,
+            JsonMapper jsonMapper
     ) {
-        super(pdndApiClientConfig.getConfig(), clientConfig, restTemplateBuilder, defaultHttpClientConfig, clientConfig.getServices().getC003());
+        super(
+                pdndApiClientConfig.getConfig(), clientConfig,
+                restTemplateBuilder,
+                defaultHttpClientConfig, clientConfig.getServices().getC003(),
+                new HttpClientErrorJsonBodyHandler<>(jsonMapper, "ANPR-C003", clientConfig.isPrintBodyWhenError(),
+                        RispostaKO.class, null,
+                        r -> CollectionUtils.isEmpty(r.getListaErrori())
+                        ? "UNKNOWN ERROR"
+                                : r.getListaErrori().stream()
+                                .map(e -> e.getCodiceErroreAnomalia() + " - " + e.getTestoErroreAnomalia())
+                                .collect(Collectors.joining(","))
+                )
+        );
 
         this.e002ServiceApi = new E002ServiceApi(apiClient);
     }

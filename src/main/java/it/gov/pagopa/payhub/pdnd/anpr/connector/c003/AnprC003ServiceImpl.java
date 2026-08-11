@@ -1,12 +1,13 @@
 package it.gov.pagopa.payhub.pdnd.anpr.connector.c003;
 
-import it.gov.pagopa.payhub.anpr.C003.dto.generated.RichiestaE002;
-import it.gov.pagopa.payhub.anpr.C003.dto.generated.RispostaE002OK;
-import it.gov.pagopa.payhub.anpr.C003.dto.generated.TipoCriteriRicercaE002;
-import it.gov.pagopa.payhub.anpr.C003.dto.generated.TipoDatiRichiestaE002;
+import it.gov.pagopa.anpr.c003.dto.generated.RichiestaE002;
+import it.gov.pagopa.anpr.c003.dto.generated.RispostaE002OK;
+import it.gov.pagopa.anpr.c003.dto.generated.TipoCriteriRicercaE002;
+import it.gov.pagopa.anpr.c003.dto.generated.TipoDatiRichiestaE002;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.c003.client.AnprC003Client;
 import it.gov.pagopa.payhub.pdnd.anpr.service.AnprIdOperationGeneratorService;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.PdndService;
+import it.gov.pagopa.payhub.pdnd.utils.Constants;
 import it.gov.pagopa.pu.organization.dto.generated.PdndServiceType;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,7 @@ public class AnprC003ServiceImpl implements AnprC003Service {
                 .build();
 
         TipoDatiRichiestaE002 reqDataTypes = TipoDatiRichiestaE002.builder()
-                .dataRiferimentoRichiesta(DateTimeFormatter.ISO_DATE.format(LocalDate.now()))
+                .dataRiferimentoRichiesta(DateTimeFormatter.ISO_DATE.format(LocalDate.now(Constants.ZONEID)))
                 .motivoRichiesta("1")
                 .casoUso("C003")
                 .build();

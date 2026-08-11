@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 import java.time.Month;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PdndServiceImplTest {
@@ -42,12 +44,12 @@ class PdndServiceImplTest {
         Long organizationId = 1L;
         String subUnitCode = "subUnitCode";
         PdndServiceIntegratedConfig serviceConfig = new PdndServiceIntegratedConfig();
-        PdndAuthData expectedResult = Mockito.mock(PdndAuthData.class);
+        PdndAuthData expectedResult = mock(PdndAuthData.class);
 
         // When
-        Mockito.when(pdndServiceIntegratedConfigResolverServiceMock.getPdndServiceIntegratedConfig(service,organizationId,subUnitCode,accessToken))
+        when(pdndServiceIntegratedConfigResolverServiceMock.getPdndServiceIntegratedConfig(service,organizationId,subUnitCode,accessToken))
                         .thenReturn(serviceConfig);
-        Mockito.when(pdndAuthDataBuilderServiceMock.build(Mockito.same(serviceConfig)))
+        when(pdndAuthDataBuilderServiceMock.build(Mockito.same(serviceConfig)))
                 .thenReturn(expectedResult);
 
         PdndAuthData result = pdndService.generateToken(service,organizationId,subUnitCode,accessToken);

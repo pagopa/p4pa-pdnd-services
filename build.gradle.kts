@@ -61,7 +61,7 @@ val caffeineVersion = "3.2.4"
 val httpClientVersion = "5.6.1"
 val httpCoreVersion = "5.4.2"
 val kafkaAppender = "0.2.0-RC2"
-val lz4JavaVersion = "1.11.0"
+val lz4JavaVersion = "1.11.1"
 val commonsLang3Version = "3.20.0"
 
 dependencies {
@@ -166,15 +166,6 @@ tasks.register("dependenciesBuild") {
     )
 }
 
-var targetEnv = when (Objects.requireNonNullElse(
-    System.getProperty("targetBranch"),
-    grgit.branch.current().name
-)) {
-    "uat" -> "uat"
-    "main" -> "main"
-    else -> "develop"
-}
-
 configure<SourceSetContainer> {
     named("main") {
         java.srcDir("$projectDir/build/generated/src/main/java")
@@ -218,6 +209,15 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
     )
 }
 
+var targetEnv = when (Objects.requireNonNullElse(
+    System.getProperty("targetBranch"),
+    grgit.branch.current().name
+)) {
+    "uat" -> "uat"
+    "main" -> "main"
+    else -> "develop"
+}
+
 tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("openApiGeneratePdndClient") {
     group = "openapi"
     description = "description"
@@ -225,8 +225,9 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
     generatorName.set("java")
     inputSpec.set("$rootDir/openapi/external/pdnd-v1.openapi.yaml")
     outputDir.set("$projectDir/build/generated")
-    apiPackage.set("it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.api")
-    modelPackage.set("it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.dto")
+    invokerPackage.set("it.gov.pagopa.pdnd.generated")
+    apiPackage.set("it.gov.pagopa.pdnd.client.generated")
+    modelPackage.set("it.gov.pagopa.pdnd.dto.generated")
     modelNameSuffix.set("DTO")
     configOptions.set(
         mapOf(
@@ -257,8 +258,9 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
     generatorName.set("java")
     inputSpec.set("$rootDir/openapi/external/anprApiC030.openapi.yaml")
     outputDir.set("$projectDir/build/generated")
-    apiPackage.set("it.gov.pagopa.payhub.anpr.C030.controller.generated")
-    modelPackage.set("it.gov.pagopa.payhub.anpr.C030.dto.generated")
+    invokerPackage.set("it.gov.pagopa.anpr.c030.generated")
+    apiPackage.set("it.gov.pagopa.anpr.c030.client.generated")
+    modelPackage.set("it.gov.pagopa.anpr.c030.dto.generated")
     configOptions.set(
         mapOf(
             "swaggerAnnotations" to "false",
@@ -288,8 +290,9 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
     generatorName.set("java")
     inputSpec.set("$rootDir/openapi/external/anprApiC003.openapi.yaml")
     outputDir.set("$projectDir/build/generated")
-    apiPackage.set("it.gov.pagopa.payhub.anpr.C003.controller.generated")
-    modelPackage.set("it.gov.pagopa.payhub.anpr.C003.dto.generated")
+    invokerPackage.set("it.gov.pagopa.anpr.c003.generated")
+    apiPackage.set("it.gov.pagopa.anpr.c003.client.generated")
+    modelPackage.set("it.gov.pagopa.anpr.c003.dto.generated")
     configOptions.set(
         mapOf(
             "swaggerAnnotations" to "false",
@@ -320,7 +323,8 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
     generatorName.set("java")
     remoteInputSpec.set("https://raw.githubusercontent.com/pagopa/p4pa-doc/refs/heads/main/openapi/$targetEnv/internal/p4pa-organization.generated.openapi.json")
     outputDir.set("$projectDir/build/generated")
-    apiPackage.set("it.gov.pagopa.pu.organization.controller.generated")
+    invokerPackage.set("it.gov.pagopa.pu.organization.generated")
+    apiPackage.set("it.gov.pagopa.pu.organization.client.generated")
     modelPackage.set("it.gov.pagopa.pu.organization.dto.generated")
     configOptions.set(
         mapOf(

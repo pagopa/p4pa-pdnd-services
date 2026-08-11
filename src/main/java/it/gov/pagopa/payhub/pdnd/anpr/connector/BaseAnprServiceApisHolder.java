@@ -3,7 +3,7 @@ package it.gov.pagopa.payhub.pdnd.anpr.connector;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedAuthConfigurer;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedStaticConfig;
 import it.gov.pagopa.payhub.pdnd.config.rest.HttpClientConfig;
-import it.gov.pagopa.payhub.pdnd.config.rest.RestTemplateConfig;
+import it.gov.pagopa.payhub.pdnd.config.rest.HttpClientErrorJsonBodyHandler;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
 import it.gov.pagopa.payhub.pdnd.utils.SSLUtils;
@@ -26,7 +26,8 @@ public abstract class BaseAnprServiceApisHolder <T> {
             AnprApiClientConfig clientConfig,
             RestTemplateBuilder restTemplateBuilder,
             HttpClientConfig httpClientConfig,
-            PdndServiceIntegratedStaticConfig pdndServiceIntegratedStaticConfig
+            PdndServiceIntegratedStaticConfig pdndServiceIntegratedStaticConfig,
+            HttpClientErrorJsonBodyHandler<?> errorHandler
     ) {
         RestTemplate restTemplate = restTemplateBuilder.build();
         restTemplate.getInterceptors().add(new PdndServiceIntegratedAuthConfigurer(pdndConfig, pdndAuthDataHolder::get));
@@ -34,9 +35,7 @@ public abstract class BaseAnprServiceApisHolder <T> {
         if(clientConfig.getHttps().isTrustAll()){
             restTemplate.setRequestFactory(SSLUtils.buildTrustAllSSL(httpClientConfig).build());
         }
-        if (clientConfig.isPrintBodyWhenError()) {
-            restTemplate.setErrorHandler(RestTemplateConfig.bodyPrinterWhenError("ANPR"));
-        }
+        restTemplate.setErrorHandler(errorHandler);
 
         this.apiClient = buildApiClient(restTemplate);
         setApiClientBasePath(apiClient, clientConfig.getBaseUrl() + pdndServiceIntegratedStaticConfig.getBasePath());

@@ -4,11 +4,11 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import it.gov.pagopa.payhub.pdnd.config.pdnd.PdndServiceIntegratedConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.client.PdndClient;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
-import it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.dto.ClientCredentialsResponseDTO;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
 import it.gov.pagopa.payhub.pdnd.utils.AgidUtils;
 import it.gov.pagopa.payhub.pdnd.utils.CertUtils;
 import it.gov.pagopa.payhub.pdnd.utils.CertUtilsTest;
+import it.gov.pagopa.pdnd.dto.generated.ClientCredentialsResponseDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +25,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDateTime;
+
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PdndAuthDataBuilderServiceTest {
@@ -78,7 +80,7 @@ class PdndAuthDataBuilderServiceTest {
             agidUtilsMockedStatic.when(() -> AgidUtils.buildPdndClientAssertion(Mockito.same(pdndConfig), Mockito.same(pdndServiceConfig), Mockito.same(agidJwtTrackingEvidence), Mockito.argThat(signerMatcher)))
                     .thenReturn(clientAssertion);
 
-            Mockito.when(pdndClientMock.getAccessToken(pdndServiceConfig.getClientId(), clientAssertion))
+            when(pdndClientMock.getAccessToken(pdndServiceConfig.getClientId(), clientAssertion))
                     .thenReturn(new ClientCredentialsResponseDTO(accessToken, null, accessTokenExpiresIn));
 
             LocalDateTime dateTimeBeforeTest = LocalDateTime.now();
