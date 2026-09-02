@@ -1,6 +1,6 @@
 package it.gov.pagopa.payhub.pdnd.anpr.service;
 
-import it.gov.pagopa.payhub.anpr.C030.dto.generated.RispostaE002OK;
+import it.gov.pagopa.anpr.c030.dto.generated.RispostaE002OK;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.c003.AnprC003Service;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.c030.AnprC030Service;
 import it.gov.pagopa.payhub.pdnd.anpr.mapper.AnprResponseMapper;
@@ -27,7 +27,7 @@ public class AnprServiceImpl implements AnprService {
                 .getIdentificativi()
                 .getIdANPR();
 
-        it.gov.pagopa.payhub.anpr.C003.dto.generated.RispostaE002OK anprC003Response = anprC003Service.getUserData(idAnpr, organizationId, subUnitCode, accessToken);
+        it.gov.pagopa.anpr.c003.dto.generated.RispostaE002OK anprC003Response = anprC003Service.getUserData(idAnpr, organizationId, subUnitCode, accessToken);
 
         return AnprResponseMapper.mapToAnprResponse(anprC003Response);
     }

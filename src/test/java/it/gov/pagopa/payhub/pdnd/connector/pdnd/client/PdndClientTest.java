@@ -1,24 +1,25 @@
 package it.gov.pagopa.payhub.pdnd.connector.pdnd.client;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import org.wiremock.spring.ConfigureWireMock;
-import org.wiremock.spring.EnableWireMock;
-import org.wiremock.spring.InjectWireMock;
+import it.gov.pagopa.payhub.pdnd.config.json.JsonConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApiClientConfig;
 import it.gov.pagopa.payhub.pdnd.connector.pdnd.config.PdndApisHolder;
-import it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.dto.ClientCredentialsResponseDTO;
+import it.gov.pagopa.pdnd.dto.generated.ClientCredentialsResponseDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.restclient.RestTemplateBuilder;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.wiremock.spring.ConfigureWireMock;
+import org.wiremock.spring.EnableWireMock;
+import org.wiremock.spring.InjectWireMock;
 
 @SpringBootTest
-@EnableWireMock({
+@EnableWireMock(
     @ConfigureWireMock(name = "pdnd", filesUnderClasspath = "wiremock/pdnd")
-})
+)
 @EnableConfigurationProperties
 class PdndClientTest {
 
@@ -35,7 +36,7 @@ class PdndClientTest {
     PdndApiClientConfig clientConfig = PdndApiClientConfig.builder()
             .baseUrl(wireMockServer.baseUrl())
             .build();
-    pdndClient = new PdndClient(new PdndApisHolder(clientConfig, restTemplateBuilder));
+    pdndClient = new PdndClient(new PdndApisHolder(clientConfig, restTemplateBuilder, new JsonConfig().objectMapperJackson3()));
   }
 
   @Test

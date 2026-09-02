@@ -6,12 +6,12 @@ import java.util.*
 
 plugins {
     java
-    id("org.springframework.boot") version "4.1.0"
+    id("org.springframework.boot") version "4.1.1"
     id("io.spring.dependency-management") version "1.1.7"
     jacoco
-    id("org.sonarqube") version "7.3.1.8318"
+    id("org.sonarqube") version "7.4.0.8496"
     id("com.github.ben-manes.versions") version "0.54.0"
-    id("org.openapi.generator") version "7.23.0"
+    id("org.openapi.generator") version "7.25.0"
     id("com.gorylenko.gradle-git-properties") version "4.0.1"
     id("com.github.jk1.dependency-license-report") version "3.1.4"
     id("org.ajoberstar.grgit") version "5.3.2"
@@ -41,28 +41,29 @@ licenseReport {
     outputDir = "$projectDir/dependency-licenses"
     filters = arrayOf(SpdxLicenseBundleNormalizer())
 }
-tasks.classes {
-    finalizedBy(tasks.generateLicenseReport)
+tasks.dependencies {
+  finalizedBy(tasks.generateLicenseReport)
 }
 
 repositories {
     mavenCentral()
 }
 
-val springDocOpenApiVersion = "3.0.3"
-val openApiToolsVersion = "0.2.10"
-val javaJwtVersion = "4.5.2"
+val springDocOpenApiVersion = "3.1.0"
+val openApiToolsVersion = "0.2.11"
+val javaJwtVersion = "4.6.0"
 val jwksRsaVersion = "0.24.1"
 val wiremockVersion = "3.13.2"
-val wiremockSpringBootVersion = "4.2.1"
-val micrometerVersion = "1.7.0"
-val bouncycastleVersion = "1.84"
+val wiremockSpringBootVersion = "4.2.2"
+val micrometerVersion = "1.7.1"
+val bouncycastleVersion = "1.85.2"
 val caffeineVersion = "3.2.4"
-val httpClientVersion = "5.6.1"
-val httpCoreVersion = "5.4.2"
+val httpClientVersion = "5.6.4"
+val httpCoreVersion = "5.4.3"
 val kafkaAppender = "0.2.0-RC2"
-val lz4JavaVersion = "1.11.0"
+val lz4JavaVersion = "1.11.2"
 val commonsLang3Version = "3.20.0"
+val podamVersion = "8.0.2.RELEASE"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webmvc")
@@ -85,6 +86,7 @@ dependencies {
     implementation("org.bouncycastle:bcprov-jdk18on:$bouncycastleVersion")
     implementation("com.github.ben-manes.caffeine:caffeine:$caffeineVersion")
     implementation("org.apache.httpcomponents.client5:httpclient5:$httpClientVersion")
+    implementation("org.apache.httpcomponents.core5:httpcore5-h2:$httpCoreVersion")
     implementation("org.apache.httpcomponents.core5:httpcore5:$httpCoreVersion")
     implementation("com.github.danielwegener:logback-kafka-appender:$kafkaAppender") {
         exclude(group = "org.lz4", module = "lz4-java")
@@ -103,6 +105,7 @@ dependencies {
     testImplementation("org.projectlombok:lombok")
     testImplementation("org.wiremock:wiremock-standalone:$wiremockVersion")
     testImplementation("org.wiremock.integrations:wiremock-spring-boot:$wiremockSpringBootVersion")
+    testImplementation("uk.co.jemos.podam:podam:$podamVersion")
 }
 
 tasks.withType<Test> {
@@ -166,15 +169,6 @@ tasks.register("dependenciesBuild") {
     )
 }
 
-var targetEnv = when (Objects.requireNonNullElse(
-    System.getProperty("targetBranch"),
-    grgit.branch.current().name
-)) {
-    "uat" -> "uat"
-    "main" -> "main"
-    else -> "develop"
-}
-
 configure<SourceSetContainer> {
     named("main") {
         java.srcDir("$projectDir/build/generated/src/main/java")
@@ -218,6 +212,15 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
     )
 }
 
+var targetEnv = when (Objects.requireNonNullElse(
+    System.getProperty("targetBranch"),
+    grgit.branch.current().name
+)) {
+    "uat" -> "uat"
+    "main" -> "main"
+    else -> "develop"
+}
+
 tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("openApiGeneratePdndClient") {
     group = "openapi"
     description = "description"
@@ -225,8 +228,9 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
     generatorName.set("java")
     inputSpec.set("$rootDir/openapi/external/pdnd-v1.openapi.yaml")
     outputDir.set("$projectDir/build/generated")
-    apiPackage.set("it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.api")
-    modelPackage.set("it.gov.pagopa.payhub.pdnd.connector.pdnd.generated.dto")
+    invokerPackage.set("it.gov.pagopa.pdnd.generated")
+    apiPackage.set("it.gov.pagopa.pdnd.client.generated")
+    modelPackage.set("it.gov.pagopa.pdnd.dto.generated")
     modelNameSuffix.set("DTO")
     configOptions.set(
         mapOf(
@@ -257,8 +261,9 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
     generatorName.set("java")
     inputSpec.set("$rootDir/openapi/external/anprApiC030.openapi.yaml")
     outputDir.set("$projectDir/build/generated")
-    apiPackage.set("it.gov.pagopa.payhub.anpr.C030.controller.generated")
-    modelPackage.set("it.gov.pagopa.payhub.anpr.C030.dto.generated")
+    invokerPackage.set("it.gov.pagopa.anpr.c030.generated")
+    apiPackage.set("it.gov.pagopa.anpr.c030.client.generated")
+    modelPackage.set("it.gov.pagopa.anpr.c030.dto.generated")
     configOptions.set(
         mapOf(
             "swaggerAnnotations" to "false",
@@ -288,8 +293,9 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
     generatorName.set("java")
     inputSpec.set("$rootDir/openapi/external/anprApiC003.openapi.yaml")
     outputDir.set("$projectDir/build/generated")
-    apiPackage.set("it.gov.pagopa.payhub.anpr.C003.controller.generated")
-    modelPackage.set("it.gov.pagopa.payhub.anpr.C003.dto.generated")
+    invokerPackage.set("it.gov.pagopa.anpr.c003.generated")
+    apiPackage.set("it.gov.pagopa.anpr.c003.client.generated")
+    modelPackage.set("it.gov.pagopa.anpr.c003.dto.generated")
     configOptions.set(
         mapOf(
             "swaggerAnnotations" to "false",
@@ -320,7 +326,8 @@ tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("ope
     generatorName.set("java")
     remoteInputSpec.set("https://raw.githubusercontent.com/pagopa/p4pa-doc/refs/heads/main/openapi/$targetEnv/internal/p4pa-organization.generated.openapi.json")
     outputDir.set("$projectDir/build/generated")
-    apiPackage.set("it.gov.pagopa.pu.organization.controller.generated")
+    invokerPackage.set("it.gov.pagopa.pu.organization.generated")
+    apiPackage.set("it.gov.pagopa.pu.organization.client.generated")
     modelPackage.set("it.gov.pagopa.pu.organization.dto.generated")
     configOptions.set(
         mapOf(

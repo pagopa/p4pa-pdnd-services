@@ -1,7 +1,7 @@
 package it.gov.pagopa.payhub.pdnd.anpr.connector.c030.client;
 
-import it.gov.pagopa.payhub.anpr.C030.dto.generated.RichiestaE002;
-import it.gov.pagopa.payhub.anpr.C030.dto.generated.RispostaE002OK;
+import it.gov.pagopa.anpr.c030.dto.generated.RichiestaE002;
+import it.gov.pagopa.anpr.c030.dto.generated.RispostaE002OK;
 import it.gov.pagopa.payhub.pdnd.anpr.connector.c030.config.AnprC030ApisHolder;
 import it.gov.pagopa.payhub.pdnd.dto.PdndAuthData;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,8 @@
 package it.gov.pagopa.payhub.pdnd.connector.organization.client;
 
 import it.gov.pagopa.payhub.pdnd.connector.organization.config.OrganizationApisHolder;
-import it.gov.pagopa.pu.organization.controller.generated.PdndServiceSearchControllerApi;
+import it.gov.pagopa.payhub.pdnd.exception.common.RestInvokeNotFoundException;
+import it.gov.pagopa.pu.organization.client.generated.PdndServiceSearchControllerApi;
 import it.gov.pagopa.pu.organization.dto.generated.PdndService;
 import it.gov.pagopa.pu.organization.dto.generated.PdndServiceType;
 import org.junit.jupiter.api.AfterEach;
@@ -13,7 +14,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.client.HttpClientErrorException;
+
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PdndServiceSearchClientTest {
@@ -45,9 +47,9 @@ class PdndServiceSearchClientTest {
     PdndServiceType pdndServiceType = PdndServiceType.SEND;
     PdndService expectedResult = new PdndService();
 
-    Mockito.when(organizationApisHolderMock.getPdndServiceSearchControllerApi(accessToken))
+    when(organizationApisHolderMock.getPdndServiceSearchControllerApi(accessToken))
             .thenReturn(pdndServiceSearchControllerApiMock);
-    Mockito.when(pdndServiceSearchControllerApiMock.crudPdndServicesFindByClientIdAndServiceType(clientId, pdndServiceType))
+    when(pdndServiceSearchControllerApiMock.crudPdndServicesFindByClientIdAndServiceType(clientId, pdndServiceType))
             .thenReturn(expectedResult);
 
     // When
@@ -64,11 +66,10 @@ class PdndServiceSearchClientTest {
     String clientId = "clientId";
     PdndServiceType pdndServiceType = PdndServiceType.SEND;
 
-    Mockito.when(organizationApisHolderMock.getPdndServiceSearchControllerApi(accessToken))
+    when(organizationApisHolderMock.getPdndServiceSearchControllerApi(accessToken))
             .thenReturn(pdndServiceSearchControllerApiMock);
-    Mockito.when(pdndServiceSearchControllerApiMock.crudPdndServicesFindByClientIdAndServiceType(clientId, pdndServiceType))
-            .thenThrow(
-                    HttpClientErrorException.create(HttpStatus.NOT_FOUND, "NotFound", null, null, null));
+    when(pdndServiceSearchControllerApiMock.crudPdndServicesFindByClientIdAndServiceType(clientId, pdndServiceType))
+            .thenThrow(new RestInvokeNotFoundException("APPNAME", HttpStatus.NOT_FOUND, "ERROR", "ERRORCODE", "ERRORMESSAGE"));
 
     // When
     PdndService result = pdndServiceSearchClient.findByClientIdAndServiceType(clientId, pdndServiceType, accessToken);
