@@ -1,503 +1,535 @@
 {
-	"info": {
-		"_postman_id": "e6063905-f686-4ed4-a184-e890600a7f8d",
-		"name": "p4pa-pdnd-services-E2E",
-		"description": "API and Models.",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "15747968",
-		"_collection_link": "https://warped-astronaut-141685.postman.co/workspace/P4PA~9a8b7dd5-97b6-4dd0-b3f5-95f25fd0b455/collection/15747968-e6063905-f686-4ed4-a184-e890600a7f8d?action=share&source=collection_link&creator=15747968"
-	},
-	"item": [
-		{
-			"name": "00_login",
-			"item": [
-				{
-					"name": "00_authtoken jwt",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm=instrumentPmMethod(pm);\r",
-									"\r",
-									"pm.test(\"p4paAuth - 01_authtoken - Responses with 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"p4paAuth - 01_authtoken jwt - Verify response body\", function () {\r",
-									"    let jsonResponse = pm.response.json();\r",
-									"\r",
-									"    pm.expect(jsonResponse).have.property(\"access_token\")\r",
-									"    pm.expect(jsonResponse).have.property(\"token_type\")\r",
-									"    pm.expect(jsonResponse).have.property(\"expires_in\")\r",
-									"});\r",
-									"\r",
-									"let jsonResponse = pm.response.json();\r",
-									"pm.collectionVariables.set(\"accessToken\", jsonResponse.access_token);\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{p4paAuthBaseUrl}}/oauth/token?client_id=piattaforma-unitaria&grant_type=urn:ietf:params:oauth:grant-type:token-exchange&subject_token={{tokenExchange_subjectToken}}&subject_issuer={{tokenExchange_issuer}}&scope=openid&subject_token_type=urn:ietf:params:oauth:token-type:jwt",
-							"host": [
-								"{{p4paAuthBaseUrl}}"
-							],
-							"path": [
-								"oauth",
-								"token"
-							],
-							"query": [
-								{
-									"key": "client_id",
-									"value": "piattaforma-unitaria"
-								},
-								{
-									"key": "grant_type",
-									"value": "urn:ietf:params:oauth:grant-type:token-exchange"
-								},
-								{
-									"key": "subject_token",
-									"value": "{{tokenExchange_subjectToken}}"
-								},
-								{
-									"key": "subject_issuer",
-									"value": "{{tokenExchange_issuer}}"
-								},
-								{
-									"key": "scope",
-									"value": "openid"
-								},
-								{
-									"key": "subject_token_type",
-									"value": "urn:ietf:params:oauth:token-type:jwt"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "00_getVoucherToken",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{pdndServicesBaseUrl}}/token?service=C003",
-							"host": [
-								"{{pdndServicesBaseUrl}}"
-							],
-							"path": [
-								"token"
-							],
-							"query": [
-								{
-									"key": "service",
-									"value": "C003"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "01_citizen",
-			"item": [
-				{
-					"name": "01_getCitizenData",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"PDND - 02_getCitizenData - Responses with 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"MyPay - 02_getCitizenData - check response and reading citizen data\", function () {\r",
-									"    let jsonResponse = pm.response.json();\r",
-									"\r",
-									"    pm.expect(jsonResponse).to.have.property(\"firstName\", \"Norris\");\r",
-									"    pm.expect(jsonResponse).to.have.property(\"lastName\", \"Jones\");\r",
-									"    pm.expect(jsonResponse).to.have.property(\"dateOfBirth\", \"2005-07-28\");\r",
-									"    \r",
-									"    pm.expect(jsonResponse).to.have.property(\"address\");\r",
-									"    pm.expect(jsonResponse.address).to.have.property(\"street\", \"Barabara Passage\");\r",
-									"    pm.expect(jsonResponse.address).to.have.property(\"city\", \"Roma\");\r",
-									"    pm.expect(jsonResponse.address).to.have.property(\"postalCode\", \"00100\");\r",
-									"    pm.expect(jsonResponse.address).to.have.property(\"country\", \"Italia\");\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{pdndServicesBaseUrl}}/anpr-service-e002/citizen?fiscalCode={{fiscalCode}}",
-							"host": [
-								"{{pdndServicesBaseUrl}}"
-							],
-							"path": [
-								"anpr-service-e002",
-								"citizen"
-							],
-							"query": [
-								{
-									"key": "fiscalCode",
-									"value": "{{fiscalCode}}"
-								}
-							]
-						},
-						"description": "Returns detailed information about a citizen based on their fiscal code."
-					},
-					"response": [
-						{
-							"name": "OK",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Accept",
-										"value": "application/json"
-									},
-									{
-										"key": "Authorization",
-										"value": "Bearer <token>",
-										"description": "Added as a part of security scheme: bearer"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/anpr-service-e002/citizen?fiscalCode=<string>",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"anpr-service-e002",
-										"citizen"
-									],
-									"query": [
-										{
-											"key": "fiscalCode",
-											"value": "<string>",
-											"description": "(Required) The fiscal code of the citizen"
-										}
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n  \"firstName\": \"<string>\",\n  \"lastName\": \"<string>\",\n  \"dateOfBirth\": \"<string>\",\n  \"address\": {\n    \"street\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"country\": \"<string>\"\n  }\n}"
-						},
-						{
-							"name": "Invalid request",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer <token>",
-										"description": "Added as a part of security scheme: bearer"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/anpr-service-e002/citizen?fiscalCode=<string>",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"anpr-service-e002",
-										"citizen"
-									],
-									"query": [
-										{
-											"key": "fiscalCode",
-											"value": "<string>",
-											"description": "(Required) The fiscal code of the citizen"
-										}
-									]
-								}
-							},
-							"status": "Bad Request",
-							"code": 400,
-							"_postman_previewlanguage": "text",
-							"header": [],
-							"cookie": [],
-							"body": ""
-						},
-						{
-							"name": "Forbidden",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer <token>",
-										"description": "Added as a part of security scheme: bearer"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/anpr-service-e002/citizen?fiscalCode=<string>",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"anpr-service-e002",
-										"citizen"
-									],
-									"query": [
-										{
-											"key": "fiscalCode",
-											"value": "<string>",
-											"description": "(Required) The fiscal code of the citizen"
-										}
-									]
-								}
-							},
-							"status": "Forbidden",
-							"code": 403,
-							"_postman_previewlanguage": "text",
-							"header": [],
-							"cookie": [],
-							"body": ""
-						},
-						{
-							"name": "Citizen not found",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer <token>",
-										"description": "Added as a part of security scheme: bearer"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/anpr-service-e002/citizen?fiscalCode=<string>",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"anpr-service-e002",
-										"citizen"
-									],
-									"query": [
-										{
-											"key": "fiscalCode",
-											"value": "<string>",
-											"description": "(Required) The fiscal code of the citizen"
-										}
-									]
-								}
-							},
-							"status": "Not Found",
-							"code": 404,
-							"_postman_previewlanguage": "text",
-							"header": [],
-							"cookie": [],
-							"body": ""
-						},
-						{
-							"name": "Internal server error",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer <token>",
-										"description": "Added as a part of security scheme: bearer"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/anpr-service-e002/citizen?fiscalCode=<string>",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"anpr-service-e002",
-										"citizen"
-									],
-									"query": [
-										{
-											"key": "fiscalCode",
-											"value": "<string>",
-											"description": "(Required) The fiscal code of the citizen"
-										}
-									]
-								}
-							},
-							"status": "Internal Server Error",
-							"code": 500,
-							"_postman_previewlanguage": "text",
-							"header": [],
-							"cookie": [],
-							"body": ""
-						}
-					]
-				}
-			],
-			"auth": {
-				"type": "bearer",
-				"bearer": [
-					{
-						"key": "token",
-						"value": "{{accessToken}}",
-						"type": "string"
-					}
-				]
-			},
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"type": "text/javascript",
-						"packages": {},
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"packages": {},
-						"exec": [
-							""
-						]
-					}
-				}
-			]
-		}
-	],
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"packages": {},
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"packages": {},
-				"exec": [
-					"// START COMMON UTILITIES",
-					"",
-					"// global variable to use in order to skip tests",
-					"skipTests=false;",
-					"",
-					"// method to be invoked as first thing inside tests in order to instrument the \"pm\" variable:",
-					"// eg: pm = pm=instrumentPmMethod(pm);",
-					"instrumentPmMethod = (pm) => {",
-					"    const pmProxy = {",
-					"        get: function(pm, key) {",
-					"            if (key == 'test') {",
-					"                return (skipTests ? pm.test.skip : pm.test);",
-					"            }",
-					"            return pm[key];",
-					"        }",
-					"    };",
-					"",
-					"    return new Proxy(pm, pmProxy);",
-					"}",
-					"",
-					"// function to be used in order to retry the current request, configuring a maximum number of attempts and a fixed delay between each invoke",
-					"retryRequest = (pm, setTimeout, waitingMillis = 1000, maxAttempts = 30) => {",
-					"    if(!pm || !setTimeout){",
-					"        throw new Error(\"Invalid invoke to retryRequest function! Some required parameters are undefined: pm=\" + pm + \", setTimeout=\" + setTimeout)",
-					"    }",
-					"",
-					"    const retryVariableName = \"retry_\" + pm.info.requestId",
-					"    const attempt = (pm.variables.get(retryVariableName) ?? 0) + 1;",
-					"    if(attempt < maxAttempts) {",
-					"        console.info(pm.info.requestName + \" not ready, retrying [attempt \" + attempt + \"/\" + maxAttempts + \"] after \" + waitingMillis + \" ms\");",
-					"        pm.variables.set(retryVariableName, attempt)",
-					"        pm.execution.setNextRequest(pm.info.requestId);",
-					"        return setTimeout(()=>{}, waitingMillis);",
-					"    } else {",
-					"        pm.test(pm.info.requestName + \" not ready\", () => pm.expect.fail(attempt + \" attempts\"));",
-					"    }",
-					"}",
-					"",
-					"// function to be used in order to retry the current request until it returns a known response HTTP status code",
-					"retryWhenStatusCode = (pm, setTimeout, statusCode, waitingMillis, maxAttempts) => {",
-					"    if(pm.response.code == statusCode){",
-					"        console.log(\"Obtained \" + statusCode + \"! Performing retry...\")",
-					"        skipTests=true;",
-					"        return retryRequest(pm, setTimeout, waitingMillis, maxAttempts)",
-					"    }",
-					"}",
-					"",
-					"// XML utilities",
-					"xml2js = require('xml2js');",
-					"",
-					"parseXmlResponse = (response) => {",
-					"    let body;",
-					"    xml2js.parseString(response.text(), {",
-					"            ignoreAttrs: true, ",
-					"            explicitArray: false,",
-					"        }, function (err, result) {",
-					"            if(err){",
-					"                console.error(err)",
-					"            }",
-					"        body = result;",
-					"    });",
-					"    return body;",
-					"};"
-				]
-			}
-		}
-	],
-	"variable": [
-		{
-			"key": "fiscalCode",
-			"value": "DNTCRL65S67M126K",
-			"type": "string"
-		},
-		{
-			"key": "accessToken",
-			"value": ""
-		}
-	]
+  "info": {
+    "_postman_id": "bd5285c0-f750-4eb2-a065-809df8914999",
+    "name": "p4pa-pdnd-services-E2E",
+    "description": "API and Models.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "15747968",
+    "_collection_link": "https://go.postman.co/collection/15747968-bd5285c0-f750-4eb2-a065-809df8914999?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "00_login",
+      "item": [
+        {
+          "name": "00_authtoken jwt",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm=instrumentPmMethod(pm);\r",
+                  "\r",
+                  "pm.test(\"p4paAuth - 01_authtoken - Responses with 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"p4paAuth - 01_authtoken jwt - Verify response body\", function () {\r",
+                  "    let jsonResponse = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(jsonResponse).have.property(\"access_token\")\r",
+                  "    pm.expect(jsonResponse).have.property(\"token_type\")\r",
+                  "    pm.expect(jsonResponse).have.property(\"expires_in\")\r",
+                  "});\r",
+                  "\r",
+                  "let jsonResponse = pm.response.json();\r",
+                  "pm.collectionVariables.set(\"accessToken\", jsonResponse.access_token);\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{p4paAuthBaseUrl}}/oauth/token?client_id=piattaforma-unitaria&grant_type=urn:ietf:params:oauth:grant-type:token-exchange&subject_token={{tokenExchange_subjectToken}}&subject_issuer={{tokenExchange_issuer}}&scope=openid&subject_token_type=urn:ietf:params:oauth:token-type:jwt",
+              "host": [
+                "{{p4paAuthBaseUrl}}"
+              ],
+              "path": [
+                "oauth",
+                "token"
+              ],
+              "query": [
+                {
+                  "key": "client_id",
+                  "value": "piattaforma-unitaria"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "urn:ietf:params:oauth:grant-type:token-exchange"
+                },
+                {
+                  "key": "subject_token",
+                  "value": "{{tokenExchange_subjectToken}}"
+                },
+                {
+                  "key": "subject_issuer",
+                  "value": "{{tokenExchange_issuer}}"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid"
+                },
+                {
+                  "key": "subject_token_type",
+                  "value": "urn:ietf:params:oauth:token-type:jwt"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "00_getUserInfo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Auth - getUserInfo - Responses with 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Auth - getUserInfo - Verify response body\", function () {\r\n    let jsonResponse = pm.response.json();\r\n\r\n    pm.expect(jsonResponse).have.property(\"userId\")\r\n    pm.expect(jsonResponse).have.property(\"mappedExternalUserId\")\r\n    pm.expect(jsonResponse).have.property(\"name\")\r\n    pm.expect(jsonResponse).have.property(\"familyName\")\r\n    pm.expect(jsonResponse).have.property(\"fiscalCode\").to.eq(\"DMEMPY15L21L736U\")\r\n    pm.expect(jsonResponse).have.property(\"issuer\").to.eq(pm.environment.get(\"tokenExchange_issuer\"))\r\n    pm.expect(jsonResponse).have.property(\"organizationAccess\")\r\n    pm.expect(jsonResponse).to.have.property(\"brokerId\").that.is.a(\"number\");\r\n    pm.expect(jsonResponse).to.have.property(\"brokerFiscalCode\").that.is.a(\"string\");\r\n    pm.expect(jsonResponse).to.have.property(\"canManageUsers\").that.is.a(\"boolean\");\r\n    \r\n    jsonResponse.organizations.forEach(org => {\r\n        pm.expect(org).have.property(\"operatorId\")\r\n        pm.expect(org).have.property(\"organizationId\").that.is.a(\"number\");\r\n        if(org.organizationIpaCode == \"IPA_TEST_2\"){\r\n            pm.expect(org.roles).have.property(\"length\").to.eq(1)\r\n            pm.expect(org).have.property(\"email\")\r\n            pm.expect(org.roles[0]).to.eq(\"ROLE_ADMIN\")\r\n            pm.collectionVariables.set(\"organizationId\",org.organizationId)\r\n        }\r\n    });\r\n\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{p4paAuthBaseUrl}}/oauth/userinfo",
+              "host": [
+                "{{p4paAuthBaseUrl}}"
+              ],
+              "path": [
+                "oauth",
+                "userinfo"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "00_getVoucherToken",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{accessToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{pdndServicesBaseUrl}}/token?organizationId={{organizationId}}&service=ANPR_C003",
+              "host": [
+                "{{pdndServicesBaseUrl}}"
+              ],
+              "path": [
+                "token"
+              ],
+              "query": [
+                {
+                  "key": "organizationId",
+                  "value": "{{organizationId}}"
+                },
+                {
+                  "key": "service",
+                  "value": "ANPR_C003"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "01_citizen",
+      "item": [
+        {
+          "name": "01_getCitizenData",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"PDND - 02_getCitizenData - Responses with 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"MyPay - 02_getCitizenData - check response and reading citizen data\", function () {\r\n    let jsonResponse = pm.response.json();\r\n\r\n    pm.expect(jsonResponse).to.have.property(\"firstName\", \"Norris\");\r\n    pm.expect(jsonResponse).to.have.property(\"lastName\", \"Jones\");\r\n    pm.expect(jsonResponse).to.have.property(\"dateOfBirth\", \"2005-07-28\");\r\n    \r\n    pm.expect(jsonResponse).to.have.property(\"address\");\r\n    pm.expect(jsonResponse.address).to.have.property(\"street\", \"Barabara Passage\");\r\n    pm.expect(jsonResponse.address).to.have.property(\"city\", \"Roma\");\r\n    pm.expect(jsonResponse.address).to.have.property(\"postalCode\", \"00100\");\r\n    pm.expect(jsonResponse.address).to.have.property(\"country\", \"Italia\");\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{pdndServicesBaseUrl}}/anpr-service-e002/citizen?organizationId={{organizationId}}&fiscalCode={{fiscalCode}}",
+              "host": [
+                "{{pdndServicesBaseUrl}}"
+              ],
+              "path": [
+                "anpr-service-e002",
+                "citizen"
+              ],
+              "query": [
+                {
+                  "key": "organizationId",
+                  "value": "{{organizationId}}"
+                },
+                {
+                  "key": "fiscalCode",
+                  "value": "{{fiscalCode}}"
+                }
+              ]
+            },
+            "description": "Returns detailed information about a citizen based on their fiscal code."
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer <token>",
+                    "description": "Added as a part of security scheme: bearer"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/anpr-service-e002/citizen?fiscalCode=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "anpr-service-e002",
+                    "citizen"
+                  ],
+                  "query": [
+                    {
+                      "key": "fiscalCode",
+                      "value": "<string>",
+                      "description": "(Required) The fiscal code of the citizen"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"firstName\": \"<string>\",\n  \"lastName\": \"<string>\",\n  \"dateOfBirth\": \"<string>\",\n  \"address\": {\n    \"street\": \"<string>\",\n    \"city\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"country\": \"<string>\"\n  }\n}"
+            },
+            {
+              "name": "Invalid request",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer <token>",
+                    "description": "Added as a part of security scheme: bearer"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/anpr-service-e002/citizen?fiscalCode=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "anpr-service-e002",
+                    "citizen"
+                  ],
+                  "query": [
+                    {
+                      "key": "fiscalCode",
+                      "value": "<string>",
+                      "description": "(Required) The fiscal code of the citizen"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            },
+            {
+              "name": "Forbidden",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer <token>",
+                    "description": "Added as a part of security scheme: bearer"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/anpr-service-e002/citizen?fiscalCode=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "anpr-service-e002",
+                    "citizen"
+                  ],
+                  "query": [
+                    {
+                      "key": "fiscalCode",
+                      "value": "<string>",
+                      "description": "(Required) The fiscal code of the citizen"
+                    }
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            },
+            {
+              "name": "Citizen not found",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer <token>",
+                    "description": "Added as a part of security scheme: bearer"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/anpr-service-e002/citizen?fiscalCode=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "anpr-service-e002",
+                    "citizen"
+                  ],
+                  "query": [
+                    {
+                      "key": "fiscalCode",
+                      "value": "<string>",
+                      "description": "(Required) The fiscal code of the citizen"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            },
+            {
+              "name": "Internal server error",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer <token>",
+                    "description": "Added as a part of security scheme: bearer"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/anpr-service-e002/citizen?fiscalCode=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "anpr-service-e002",
+                    "citizen"
+                  ],
+                  "query": [
+                    {
+                      "key": "fiscalCode",
+                      "value": "<string>",
+                      "description": "(Required) The fiscal code of the citizen"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{accessToken}}",
+            "type": "string"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "exec": [
+              ""
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [
+          "// START COMMON UTILITIES",
+          "",
+          "// global variable to use in order to skip tests",
+          "skipTests=false;",
+          "",
+          "// method to be invoked as first thing inside tests in order to instrument the \"pm\" variable:",
+          "// eg: pm = pm=instrumentPmMethod(pm);",
+          "instrumentPmMethod = (pm) => {",
+          "    const pmProxy = {",
+          "        get: function(pm, key) {",
+          "            if (key == 'test') {",
+          "                return (skipTests ? pm.test.skip : pm.test);",
+          "            }",
+          "            return pm[key];",
+          "        }",
+          "    };",
+          "",
+          "    return new Proxy(pm, pmProxy);",
+          "}",
+          "",
+          "// function to be used in order to retry the current request, configuring a maximum number of attempts and a fixed delay between each invoke",
+          "retryRequest = (pm, setTimeout, waitingMillis = 1000, maxAttempts = 30) => {",
+          "    if(!pm || !setTimeout){",
+          "        throw new Error(\"Invalid invoke to retryRequest function! Some required parameters are undefined: pm=\" + pm + \", setTimeout=\" + setTimeout)",
+          "    }",
+          "",
+          "    const retryVariableName = \"retry_\" + pm.info.requestId",
+          "    const attempt = (pm.variables.get(retryVariableName) ?? 0) + 1;",
+          "    if(attempt < maxAttempts) {",
+          "        console.info(pm.info.requestName + \" not ready, retrying [attempt \" + attempt + \"/\" + maxAttempts + \"] after \" + waitingMillis + \" ms\");",
+          "        pm.variables.set(retryVariableName, attempt)",
+          "        pm.execution.setNextRequest(pm.info.requestId);",
+          "        return setTimeout(()=>{}, waitingMillis);",
+          "    } else {",
+          "        pm.test(pm.info.requestName + \" not ready\", () => pm.expect.fail(attempt + \" attempts\"));",
+          "    }",
+          "}",
+          "",
+          "// function to be used in order to retry the current request until it returns a known response HTTP status code",
+          "retryWhenStatusCode = (pm, setTimeout, statusCode, waitingMillis, maxAttempts) => {",
+          "    if(pm.response.code == statusCode){",
+          "        console.log(\"Obtained \" + statusCode + \"! Performing retry...\")",
+          "        skipTests=true;",
+          "        return retryRequest(pm, setTimeout, waitingMillis, maxAttempts)",
+          "    }",
+          "}",
+          "",
+          "// XML utilities",
+          "xml2js = require('xml2js');",
+          "",
+          "parseXmlResponse = (response) => {",
+          "    let body;",
+          "    xml2js.parseString(response.text(), {",
+          "            ignoreAttrs: true, ",
+          "            explicitArray: false,",
+          "        }, function (err, result) {",
+          "            if(err){",
+          "                console.error(err)",
+          "            }",
+          "        body = result;",
+          "    });",
+          "    return body;",
+          "};"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "fiscalCode",
+      "value": "DNTCRL65S67M126K"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "organizationId",
+      "value": ""
+    }
+  ]
 }
