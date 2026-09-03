@@ -202,9 +202,3 @@ components:
           type: string
         message:
           type: string
-    PdndServicesEnum:
-      type: string
-      enum:
-        - SEND
-        - C003
-        - C030
