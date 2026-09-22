@@ -19,7 +19,7 @@ See [p4pa-doc](https://github.com/pagopa/p4pa-doc) for further documentation.
 See [OpenAPI](openapi/generated.openapi.json), exposed through the following path:
 * `/swagger-ui/index.html`
 
-See [Postman collection](/postman/p4pa-pdnd-services-E2E.postman_collection.json) and [Postman Environment](https://pagopa.atlassian.net/wiki/spaces/SPAC/pages/1094615081/Environment+collection+postman).
+See [Postman collection](postman/p4pa-pdnd-services-E2E.postman_collection.json) and [Postman Environment](https://pagopa.atlassian.net/wiki/spaces/SPAC/pages/1094615081/Environment+collection+postman).
 
 ### 📌 Relevant APIs
 * `GET /anpr-service-e002/citizen`: To get citizen data from ANPR;
@@ -44,7 +44,7 @@ See available actuator endpoints through the following path:
 Further endpoints are exposed through the JMX console.
 
 ## ✏️ Logging
-See [log configured pattern](/src/main/resources/logback-spring.xml).
+See [log configured pattern](src/main/resources/logback-spring.xml).
 
 ## 🔗 Dependencies
 
@@ -99,6 +99,14 @@ See [application.yml](src/main/resources/application.yml) for each configurable 
 | DEFAULT_REST_TIMEOUT_CONNECT_MILLIS               | Default connection timeout (milliseconds) | 120000  |
 | DEFAULT_REST_TIMEOUT_READ_MILLIS                  | Default read timeout (milliseconds)       | 120000  |
 
+##### 🧩 Microservices
+| ENV                                | DESCRIPTION                                    | DEFAULT |
+|------------------------------------|------------------------------------------------|---------|
+| ORGANIZATION_BASE_URL              | Organization microservice URL                  |         |
+| ORGANIZATION_MAX_ATTEMPTS          | Organization API max attempts                  | 3       |
+| ORGANIZATION_WAIT_TIME_MILLIS      | Organization retry waiting time (milliseconds) | 500     |
+| ORGANIZATION_PRINT_BODY_WHEN_ERROR | To print body when an error occurs             | true    |
+
 ##### 🌍 External services
 | ENV                                | DESCRIPTION                                                                                                                 | DEFAULT                                        |
 |------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|
@@ -113,10 +121,6 @@ See [application.yml](src/main/resources/application.yml) for each configurable 
 | ANPR_PRINT_BODY_WHEN_ERROR         | To print body when an error occurs                                                                                          | true                                           |
 | PDND_SERVICE_ANPR_C003_BASE_PATH   | C003 ANPR service path                                                                                                      | /C003-servizioVerificaDichGeneralita/v1        |
 | PDND_SERVICE_ANPR_C030_BASE_PATH   | C030 ANPR service path                                                                                                      | /C030-servizioAccertamentoIdUnicoNazionale/v1/ |
-| ORGANIZATION_BASE_URL              | Organization microservice URL                                                                                               |                                                |
-| ORGANIZATION_MAX_ATTEMPTS          | Organization API max attempts                                                                                               | 3                                              |
-| ORGANIZATION_WAIT_TIME_MILLIS      | Organization retry waiting time (milliseconds)                                                                              | 500                                            |
-| ORGANIZATION_PRINT_BODY_WHEN_ERROR | To print body when an error occurs                                                                                          | true                                           |
 
 #### 💼 Business logic
 | ENV                               | DESCRIPTION                                                                             | DEFAULT                         |
