@@ -10,7 +10,6 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     jacoco
     id("org.sonarqube") version "7.4.0.8496"
-    id("com.github.ben-manes.versions") version "0.54.0"
     id("org.openapi.generator") version "7.25.0"
     id("com.gorylenko.gradle-git-properties") version "4.0.1"
     id("com.github.jk1.dependency-license-report") version "3.1.4"
@@ -42,7 +41,7 @@ licenseReport {
     filters = arrayOf(SpdxLicenseBundleNormalizer())
 }
 tasks.dependencies {
-  finalizedBy(tasks.generateLicenseReport)
+    finalizedBy(tasks.generateLicenseReport)
 }
 
 repositories {
@@ -153,6 +152,25 @@ val projectInfo = mapOf(
     "version" to project.version
 )
 
+configure<SourceSetContainer> {
+    named("main") {
+        java.srcDir("$projectDir/build/generated/src/main/java")
+    }
+}
+
+springBoot {
+    buildInfo()
+    mainClass.value("it.gov.pagopa.payhub.pdnd.PayhubPdndApplication")
+}
+
+tasks.named<com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask>("dependencyUpdates") {
+    revision = "release"
+    outputFormatter = "json"
+    checkForGradleUpdate = false
+    checkEmbeddedKotlin = false
+    rejectPreReleases = true
+}
+
 tasks {
     val processResources by getting(ProcessResources::class) {
         filesMatching("**/application.yml") {
@@ -177,17 +195,6 @@ tasks.register("dependenciesBuild") {
         "openApiGenerateAnprApiC003",
         "openApiGenerateORGANIZATION"
     )
-}
-
-configure<SourceSetContainer> {
-    named("main") {
-        java.srcDir("$projectDir/build/generated/src/main/java")
-    }
-}
-
-springBoot {
-    buildInfo()
-    mainClass.value("it.gov.pagopa.payhub.pdnd.PayhubPdndApplication")
 }
 
 tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("openApiGeneratePDNDSERVICES") {
