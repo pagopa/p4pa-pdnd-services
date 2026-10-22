@@ -69,7 +69,7 @@ class PdndServiceSearchClientTest {
     when(organizationApisHolderMock.getPdndServiceSearchControllerApi(accessToken))
             .thenReturn(pdndServiceSearchControllerApiMock);
     when(pdndServiceSearchControllerApiMock.crudPdndServicesFindByClientIdAndServiceType(clientId, pdndServiceType))
-            .thenThrow(new RestInvokeNotFoundException("APPNAME", HttpStatus.NOT_FOUND, "ERROR", "ERRORCODE", "ERRORMESSAGE"));
+            .thenThrow(new RestInvokeNotFoundException("APPNAME", HttpStatus.NOT_FOUND, "ERROR", "ERRORCODE", "ERRORMESSAGE", "BODY"));
 
     // When
     PdndService result = pdndServiceSearchClient.findByClientIdAndServiceType(clientId, pdndServiceType, accessToken);
