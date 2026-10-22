@@ -54,7 +54,8 @@ val javaJwtVersion = "4.6.1"
 val jwksRsaVersion = "0.24.1"
 val wiremockVersion = "3.13.2"
 val wiremockSpringBootVersion = "4.2.2"
-val micrometerVersion = "1.7.1"
+val micrometerOtelBridgeVersion = "1.7.1"
+val micrometerPrometheusVersion = "1.17.1"
 val bouncycastleVersion = "1.86"
 val caffeineVersion = "3.3.0"
 val httpClientVersion = "5.6.4"
@@ -83,8 +84,8 @@ dependencies {
     }
     implementation("org.apache.commons:commons-lang3:$commonsLang3Version")
     implementation("org.openapitools:jackson-databind-nullable:$openApiToolsVersion")
-    implementation("io.micrometer:micrometer-tracing-bridge-otel:$micrometerVersion")
-    implementation("io.micrometer:micrometer-registry-prometheus")
+    implementation("io.micrometer:micrometer-tracing-bridge-otel:$micrometerOtelBridgeVersion")
+    implementation("io.micrometer:micrometer-registry-prometheus:$micrometerPrometheusVersion")
     implementation("com.auth0:java-jwt:$javaJwtVersion")
     implementation("com.auth0:jwks-rsa:$jwksRsaVersion")
     implementation("org.bouncycastle:bcprov-jdk18on:$bouncycastleVersion")
