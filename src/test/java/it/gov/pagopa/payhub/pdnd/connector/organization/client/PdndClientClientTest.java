@@ -71,7 +71,7 @@ class PdndClientClientTest {
     when(organizationApisHolderMock.getPdndClientApi(accessToken))
             .thenReturn(pdndClientApiMock);
     when(pdndClientApiMock.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId, pdndServiceType, subUnitCode))
-            .thenThrow(new RestInvokeNotFoundException("APPNAME", HttpStatus.NOT_FOUND, "ERROR", "ERRORCODE", "ERRORMESSAGE"));
+            .thenThrow(new RestInvokeNotFoundException("APPNAME", HttpStatus.NOT_FOUND, "ERROR", "ERRORCODE", "ERRORMESSAGE", "BODY"));
 
     // When
     PdndClientDTO result = pdndClientClient.getUsablePdndClientByOrganizationIdAndPdndServiceType(organizationId,pdndServiceType, subUnitCode, accessToken);
